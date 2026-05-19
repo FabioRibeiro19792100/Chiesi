@@ -33,7 +33,7 @@ const CLUSTERS = {
     defaultSize: 10,
     defaultTurmas: 1,
     context:
-      "Define prioridades e aloca recursos. Fala de transformação digital no nível estratégico, ainda sem estrutura para operacionalizar essa visão para toda a organização.",
+      "Define prioridades e aloca recursos. Fala de transformação digital no nível estratégico e orienta a construção dessa visão para toda a organização.",
     focus:
       "Visão estratégica, tomada de decisão sob ambiguidade e cultura de experimentação",
     deepening:
@@ -59,7 +59,7 @@ const CLUSTERS = {
     defaultSize: 50,
     defaultTurmas: 1,
     context:
-      "Ambiente operacional com rotinas físicas consolidadas. O briefing identifica esse grupo como público do programa, mas não detalha o que a digitalização significa especificamente para esse contexto.",
+      "Ambiente operacional com rotinas físicas consolidadas. O briefing identifica esse grupo como público do programa e abre espaço para detalhar como a digitalização se aplica especificamente a esse contexto.",
     focus:
       "Digitalização de processos operacionais, rastreabilidade e dados de produção",
     deepening:
@@ -130,7 +130,7 @@ const MODULES = [
     optional: true,
     groups: ["comite", "escritorio", "fabrica", "fv"],
     proposal:
-      "Os conceitos do manifesto ágil aplicados à realidade da Chiesi. O módulo trabalha comportamentos e rotinas concretas que aumentam efetividade operacional sem exigir reestruturação de times ou processos.",
+      "Os conceitos do manifesto ágil aplicados à realidade da Chiesi. O módulo trabalha comportamentos e rotinas concretas que aumentam efetividade operacional com incorporação progressiva à dinâmica dos times e processos.",
   },
   {
     id: "m5",
@@ -153,17 +153,17 @@ const CONTEXTO = [
     title: "A Chiesi no Brasil",
     paragraphs: [
       "A Chiesi é uma multinacional italiana com operação consolidada no Brasil. O time é formado majoritariamente por profissionais de longa data, pessoas que conhecem o negócio com profundidade, construíram relações duradouras com médicos e operam com foco no físico: visitas, amostras, eventos presenciais, materiais impressos.",
-      "Há cerca de três anos, a organização passou a receber colaboradores com perfil mais digital. Esses dois grupos convivem hoje na mesma estrutura, sem uma linguagem comum sobre o que significa operar digitalmente no contexto da Chiesi.",
-      "A liderança global coloca transformação digital entre as prioridades estratégicas. No Brasil, essa diretriz chega de forma macro, presente no discurso, ainda sem estrutura para descer para o dia a dia das equipes. Quando projetos digitais entram em pauta, a cobrança é por resultado imediato, num ritmo que colide com o tempo necessário para mudança cultural acontecer.",
+      "Há cerca de três anos, a organização passou a receber colaboradores com perfil mais digital. Esses perfis convivem hoje na mesma estrutura e pedem uma linguagem comum sobre o que significa operar digitalmente no contexto da Chiesi.",
+      "A liderança global coloca transformação digital entre as prioridades estratégicas. No Brasil, essa diretriz chega de forma macro, presente no discurso, e pede tradução para o dia a dia das equipes. Quando projetos digitais entram em pauta, a cobrança por resultado imediato convive com o tempo de consolidação que a mudança cultural pede.",
     ],
   },
   {
     label: "Objetivos",
     title: "Expectativas e recomendações da Chiesi",
     paragraphs: [
-      "A Chiesi foi explícita no briefing: o programa não pode ser informativo. O risco de não mudar foi nomeado internamente como ineficiência operacional e perda de oportunidade comercial.",
-      "A liderança global tem intenção de estruturar um change management global, mas com foco restrito a CRM para a força de vendas. O programa que a Chiesi Brasil está buscando é mais amplo, cobre toda a organização e vai além de uma ferramenta específica.",
-      "Os módulos sugeridos no briefing não são obrigatórios. O documento deixa explícito que quer recomendações, uma abertura para propor uma arquitetura diferente da que foi esboçada internamente.",
+      "A Chiesi quer um programa aplicado à rotina, capaz de gerar decisões, novos hábitos de trabalho e ganho operacional. A mudança é tratada internamente como alavanca para eficiência e oportunidade comercial.",
+      "A liderança global desenha um change management com foco em CRM para a força de vendas. A Chiesi Brasil busca uma jornada mais abrangente, orientada para toda a organização e conectada à evolução das práticas de trabalho.",
+      "Os módulos sugeridos no briefing funcionam como referência inicial. O documento abre espaço para recomendação de arquitetura e convida uma proposta construída a partir das prioridades reais da jornada.",
       "A Chiesi quer que o programa contemple experiências e boas práticas já implementadas na indústria farmacêutica e na área da saúde.",
     ],
   },
@@ -190,16 +190,16 @@ const BRIEFING_TIMING = [
 
 const CONTEXTO_OBJECTIVES = [
   {
-    title: "Não pode ser informativo",
-    text: "A Chiesi foi explícita no briefing: o programa não pode ser informativo. O risco de não mudar foi nomeado internamente como ineficiência operacional e perda de oportunidade comercial.",
+    title: "Aplicação na rotina",
+    text: "A Chiesi quer um programa aplicado à rotina, capaz de gerar decisões, novos hábitos de trabalho e ganho operacional. A mudança é tratada internamente como alavanca para eficiência e oportunidade comercial.",
   },
   {
-    title: "Escopo mais amplo que CRM",
-    text: "A liderança global tem intenção de estruturar um change management global, mas com foco restrito a CRM para a força de vendas. O programa que a Chiesi Brasil está buscando é mais amplo, cobre toda a organização e vai além de uma ferramenta específica.",
+    title: "Escopo organizacional",
+    text: "A liderança global desenha um change management com foco em CRM para a força de vendas. A Chiesi Brasil busca uma jornada mais abrangente, orientada para toda a organização e conectada à evolução das práticas de trabalho.",
   },
   {
     title: "Arquitetura aberta a recomendação",
-    text: "Os módulos sugeridos no briefing não são obrigatórios. O documento deixa explícito que quer recomendações, uma abertura para propor uma arquitetura diferente da que foi esboçada internamente.",
+    text: "Os módulos sugeridos no briefing funcionam como referência inicial. O documento abre espaço para recomendação de arquitetura e convida uma proposta construída a partir das prioridades reais da jornada.",
   },
   {
     title: "Referências do setor",
@@ -247,7 +247,7 @@ const SOLUCAO = [
     systemIntro: {
       label: "E2W",
       title: "O sistema por trás do diagnóstico",
-      text: "O E2W é o sistema proprietário da Mastertech de gestão de capital humano. Ele não é uma plataforma de cursos nem um sistema de avaliação de performance. É a infraestrutura que permite mapear competências, alinhar metas entre colaborador e liderança, gerar planos de desenvolvimento e acompanhar evolução ao longo do tempo com uma régua comum de proficiência.",
+      text: "O E2W é o sistema proprietário da Mastertech para gestão de capital humano. Ele estrutura o mapeamento de competências, o alinhamento de metas entre colaborador e liderança, a geração de planos de desenvolvimento e o acompanhamento da evolução ao longo do tempo com uma régua comum de proficiência.",
     },
     blocks: [
       {
@@ -272,11 +272,11 @@ const SOLUCAO = [
       {
         label: "Como se calibra",
         icon: "calibrate",
-        lead: "A leitura inicial não é solta. Ela passa por validação antes de virar base do programa.",
+        lead: "A leitura inicial segue um processo de validação antes de orientar o programa.",
         items: [
           {
             title: "Leitura revisada",
-            text: "A autoavaliação é confrontada com a visão da liderança para evitar distorções de percepção.",
+            text: "A autoavaliação é combinada à visão da liderança para construir uma leitura convergente do ponto de partida.",
           },
           {
             title: "Meta ajustada",
@@ -284,7 +284,7 @@ const SOLUCAO = [
           },
           {
             title: "Base confiável",
-            text: "O programa parte de prioridades já validadas, e não de percepções isoladas.",
+            text: "O programa parte de prioridades já validadas e organizadas em uma base comum de desenvolvimento.",
           },
         ],
       },
@@ -313,7 +313,7 @@ const SOLUCAO = [
     label: "Acompanhamento",
     title: "Gestão por dados em tempo real",
     intro:
-      "O E2W não termina no diagnóstico inicial. Ele continua operando durante toda a jornada, acompanhando a evolução de cada colaborador e transformando essas leituras em decisões de desenvolvimento.",
+      "O E2W acompanha toda a jornada, registra a evolução de cada colaborador e transforma essas leituras em decisões de desenvolvimento.",
     streams: [
       {
         title: "Atualização individual",
@@ -328,7 +328,7 @@ const SOLUCAO = [
       {
         title: "Aprofundamentos orientados por dados",
         icon: "data",
-        text: "Quando os dados apontam lacunas que os 6 encontros não cobriram, o E2W orienta aprofundamentos adicionais. Esses encontros não são definidos no início. Eles emergem do que o sistema aprende ao longo da jornada.",
+        text: "Os dados revelam lacunas específicas e orientam aprofundamentos adicionais. Esses encontros surgem a partir do que o sistema aprende ao longo da jornada e ampliam a precisão do desenvolvimento.",
       },
     ],
   },
@@ -348,22 +348,22 @@ const CONTENT_LOGIC_CARDS = [
   {
     title: "Aplicação prática",
     icon: "spark",
-    text: "Cada encontro traduz o conteúdo em decisões, rotinas e entregas concretas, em vez de operar como uma trilha apenas informativa.",
+    text: "Cada encontro traduz o conteúdo em decisões, rotinas e entregas concretas, com aplicação direta na operação.",
   },
 ];
 
 const PROPOSAL_PRINCIPLES = [
   {
-    title: "Padrão + personalização",
-    text: "A proposta trabalha uma base comum para toda a organização, mas calibra exemplos, casos e aprofundamentos para a realidade de cada público.",
+    title: "Base comum com calibração por público",
+    text: "A proposta organiza uma base comum para toda a organização e calibra exemplos, casos e aprofundamentos para a realidade de cada público.",
   },
   {
     title: "Aprendizagem aplicada à operação",
-    text: "Os encontros foram pensados para gerar decisões, entregas e mudanças de rotina, e não para funcionar como uma trilha apenas informativa.",
+    text: "Os encontros foram desenhados para gerar decisões, entregas e mudanças de rotina, com aplicação direta nas práticas de trabalho.",
   },
   {
-    title: "Sistema como infraestrutura da jornada",
-    text: "A proposta incorpora uma camada sistêmica para conectar diagnóstico, acompanhamento e leitura gerencial, em vez de tratar os encontros como peças isoladas.",
+    title: "Infraestrutura sistêmica da jornada",
+    text: "A proposta incorpora uma camada sistêmica que conecta diagnóstico, acompanhamento e leitura gerencial ao longo de toda a jornada.",
   },
 ];
 
@@ -374,7 +374,7 @@ const PROPOSAL_EXECUTION_STEPS = [
   },
   {
     title: "Fechamento comercial",
-    text: "Alinhamento de investimento, condições do E2W, eventuais ajustes finais de composição e sinalização de go / no-go.",
+    text: "Alinhamento de investimento, condições do E2W, ajustes finais de composição e decisão de aprovação da proposta.",
   },
   {
     title: "Alinhamento de cronograma",
@@ -423,7 +423,7 @@ const PROPOSAL_STRUCTURE_CAPABILITIES = [
   {
     layer: "E2W",
     composition: "Diagnóstico, acompanhamento e leitura gerencial",
-    role: "Funciona como a camada sistêmica que sustenta a leitura inicial, acompanha evolução ao longo da jornada e transforma evidências em visibilidade gerencial.",
+    role: "Sustenta a leitura inicial, acompanha a evolução ao longo da jornada e transforma evidências em visibilidade gerencial.",
   },
 ];
 
@@ -443,7 +443,7 @@ function CardIcon({ type, size = "md" }) {
 
   return (
     <span className={`card-icon card-icon-${size}`} aria-hidden="true">
-      <Icon size={28} strokeWidth={1.35} />
+      <Icon size={28} strokeWidth={1.0} />
     </span>
   );
 }
@@ -653,10 +653,10 @@ function App() {
       name: "Workshop Comitê Executivo",
       detail: `${workshopTurmas} turma(s) · ${adminPricing.workshopMeetings} encontro · ${hours}h`,
       composition: [
-        `${adminPricing.workshopMeetings} encontro por turma`,
-        `${adminPricing.workshopHours}h por encontro`,
-        `${adminPricing.workshopMeetings * adminPricing.workshopHours}h por turma × ${formatCurrency(adminPricing.workshopHourly)}/h = ${formatCurrency(workshopValorPorTurma)}`,
-        `${formatCurrency(workshopValorPorTurma)} × ${workshopTurmas} turma(s)`,
+        `${workshopTurmas} turma(s)`,
+        `${adminPricing.workshopMeetings * adminPricing.workshopHours}h por turma`,
+        `${formatCurrency(workshopValorPorTurma)} por turma`,
+        `${formatCurrency(value)} no total`,
       ],
       value,
     });
@@ -707,13 +707,11 @@ function App() {
       const valorBase = moduleBaseHours * hourlyRate;
       value = valorBase * multiplier;
       composition = [
-        `${ENCONTROS} episódios`,
         `${formatHours(moduleBaseHours)} de conteúdo`,
-        `${formatHours(moduleBaseHours)} × ${formatCurrency(hourlyRate)}/h = ${formatCurrency(valorBase)}`,
-        "Conteúdos gravados para disponibilização em LMS interno",
-        "Inclui roteiro, gravação e edição",
+        `${formatCurrency(hourlyRate)}/h`,
+        `${formatCurrency(value)} no total`,
         ...(settings.content === "customizado"
-          ? [`${formatCurrency(valorBase)} + 20% de customização`]
+          ? ["Inclui adicional de customização"]
           : []),
       ];
     } else {
@@ -722,12 +720,12 @@ function App() {
       const valorBase = valorPorTurma * turmasTotais;
       value = valorBase * multiplier;
       composition = [
-        `${ENCONTROS} encontros por turma`,
+        `${turmasTotais} turma(s)`,
         `${formatHours(moduleBaseHours)} por turma`,
-        `${formatHours(moduleBaseHours)} × ${formatCurrency(hourlyRate)}/h = ${formatCurrency(valorPorTurma)}`,
-        `${formatCurrency(valorPorTurma)} × ${turmasTotais} turma(s)`,
+        `${formatCurrency(valorPorTurma)} por turma`,
+        `${formatCurrency(value)} no total`,
         ...(settings.content === "customizado"
-          ? [`${formatCurrency(valorBase)} + 20% de customização`]
+          ? ["Inclui adicional de customização"]
           : []),
       ];
     }
@@ -1074,6 +1072,11 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function printProposal() {
+    if (typeof window === "undefined" || !proposalReady) return;
+    window.print();
+  }
+
   function showScreen(nextScreen) {
     setScreen(nextScreen);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1361,16 +1364,16 @@ function App() {
               <div className="section-body">
                 <p>
                   Cada grupo traz perguntas diferentes para o tema da transformação digital.
-                  Tratar todos da mesma forma produziria um programa genérico, que é exatamente
-                  o que a Chiesi diz que não quer.
+                  Essa variação pede uma arquitetura calibrada por público e sustenta uma jornada
+                  com linguagem comum e aplicações específicas.
                 </p>
               </div>
               <div className="num-grid">
-                {Object.values(CLUSTERS).map((cluster) => (
+                {Object.entries(CLUSTERS).map(([clusterId, cluster]) => (
                   <div className="num-item" key={cluster.label}>
                     <div className="num-text">
                       <strong>{cluster.label}</strong>
-                      <div className="num-meta">{cluster.defaultSize} colaboradores</div>
+                      <div className="num-meta">{clusterSizes[clusterId]} colaboradores</div>
                       {cluster.context}
                     </div>
                   </div>
@@ -1513,7 +1516,7 @@ function App() {
               <div className="section-body">
                 <p className="editorial-caput">
                   O programa combina uma base comum para toda a organização com calibração
-                  específica por público. O E2W faz essa ponte entre prioridade institucional
+                  específica por público. O E2W organiza essa ponte entre prioridade institucional
                   e realidade de cada grupo.
                 </p>
               </div>
@@ -1537,8 +1540,8 @@ function App() {
                 <div className="matrix-intro-label">Leitura comparativa</div>
                 <p className="matrix-intro-text">
                   A matriz abaixo mostra como essa base comum se desdobra por público. O
-                  conteúdo central permanece o mesmo, mas a ênfase e o aprofundamento
-                  respondem a lacunas diferentes em cada grupo.
+                  conteúdo central percorre todos os grupos e a ênfase de cada trilha responde
+                  às lacunas prioritárias de cada contexto.
                 </p>
               </div>
               <div className="group-matrix-shell">
@@ -1608,8 +1611,8 @@ function App() {
                 <p>
                   A Chiesi passa a ter acesso a uma leitura gerencial contínua do programa em
                   quatro níveis: individual, por grupo, do programa e institucional. Os
-                  indicadores não são gerados ao final. Eles existem desde o início como dado
-                  nativo do E2W.
+                  indicadores existem desde o início como dado nativo do E2W e sustentam uma
+                  leitura contínua da evolução da jornada.
                 </p>
               </div>
               <div className="card-grid">
@@ -1723,13 +1726,13 @@ function App() {
               </div>
               <div className={`eco-card ${scAtivo ? "active" : ""}`}>
                 <div className="eco-header" onClick={() => setScAtivo((current) => !current)}>
+                  <div className="eco-toggle"></div>
                   <div className="eco-header-left">
-                <div className="eco-tag">Sistema</div>
+                    <div className="eco-tag">Sistema</div>
                     <div className="eco-name">
                       Sistema de desenvolvimento de competências
                     </div>
                   </div>
-                  <div className="eco-toggle"></div>
                 </div>
                 <div className="eco-body">
                   <div className="eco-conds">
@@ -2245,13 +2248,16 @@ function App() {
                 {item.label}
               </a>
             ))}
+            <button className="btn-ghost proposal-print-btn" onClick={printProposal}>
+              Exportar PDF
+            </button>
           </aside>
 
         <div className="proposal-doc">
           <section className="proposal-section fade section-anchor" id="proposal-briefing">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <FileStack size={34} strokeWidth={1.35} />
+                <FileStack size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">Síntese do briefing recebido</div>
@@ -2268,16 +2274,16 @@ function App() {
                 <div className="proposal-card-label">Contexto</div>
                 <ul className="proposal-list">
                   <li>Operação consolidada, com forte herança presencial e maturidade digital desigual entre os públicos.</li>
-                  <li>Transformação digital como prioridade estratégica, ainda sem tradução homogênea para a rotina das equipes.</li>
+                  <li>Transformação digital como prioridade estratégica, com necessidade de tradução homogênea para a rotina das equipes.</li>
                   <li>Necessidade de mudança cultural real convivendo com pressão por resultado em horizonte curto.</li>
                 </ul>
               </div>
               <div className="proposal-summary-card">
                 <div className="proposal-card-label">Pedido</div>
                 <ul className="proposal-list">
-                  <li>Programa para toda a organização, e não apenas uma intervenção pontual na força de vendas.</li>
+                  <li>Programa para toda a organização, com desdobramento coordenado entre os diferentes públicos.</li>
                   <li>Assessment, workshop executivo, trilha principal, change management e KPIs de efetividade.</li>
-                  <li>Abertura para recomendação de arquitetura, em vez de execução literal do esboço original.</li>
+                  <li>Arquitetura orientada por recomendação, construída a partir das prioridades reais do briefing.</li>
                 </ul>
               </div>
             </div>
@@ -2286,7 +2292,7 @@ function App() {
           <section className="proposal-section fade section-anchor" id="proposal-logic">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <Lightbulb size={34} strokeWidth={1.35} />
+                <Lightbulb size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">Como pensamos a proposta</div>
@@ -2320,7 +2326,7 @@ function App() {
           <section className="proposal-section fade section-anchor" id="proposal-structure">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <Network size={34} strokeWidth={1.35} />
+                <Network size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">A estrutura da proposta</div>
@@ -2330,7 +2336,7 @@ function App() {
                 <p className="proposal-caput">
                   {scAtivo
                     ? "A proposta combina uma jornada principal, formada por workshop e trilha por públicos, com o E2W como camada sistêmica de sustentação."
-                    : "A proposta combina workshop executivo e trilha por públicos. Nesta configuração, a jornada opera sem a camada sistêmica do E2W."}
+                    : "A proposta combina workshop executivo e trilha por públicos como núcleo da jornada nesta configuração."}
                 </p>
               </div>
             </div>
@@ -2364,13 +2370,13 @@ function App() {
           <section className="proposal-section fade section-anchor" id="proposal-publics">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <UsersRound size={34} strokeWidth={1.35} />
+                <UsersRound size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">Públicos participantes</div>
                 <h2 className="proposal-title">Objetivos de cada área</h2>
                 <p className="proposal-caput">
-                  Os grupos entram no mesmo programa, mas com volume e foco dominante diferentes.
+                  Os grupos entram na mesma jornada com volume e foco dominante ajustados à realidade de cada área.
                 </p>
               </div>
             </div>
@@ -2394,7 +2400,7 @@ function App() {
           <section className="proposal-section fade section-anchor" id="proposal-offer">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <TableProperties size={34} strokeWidth={1.35} />
+                <TableProperties size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">Entrega e investimento</div>
@@ -2467,7 +2473,7 @@ function App() {
           <section className="proposal-section fade section-anchor" id="proposal-calendar">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <CalendarRange size={34} strokeWidth={1.35} />
+                <CalendarRange size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">Execução</div>
@@ -2504,13 +2510,13 @@ function App() {
           <section className="proposal-section fade section-anchor" id="proposal-steps">
             <div className="proposal-head">
               <div className="proposal-icon">
-                <CircleCheckBig size={34} strokeWidth={1.35} />
+                <CircleCheckBig size={34} strokeWidth={1.0} />
               </div>
               <div>
                 <div className="proposal-kicker">Próximos passos</div>
                 <h2 className="proposal-title">Pontos para debate após leitura da proposta</h2>
                 <p className="proposal-caput">
-                  Antes do início oficial da jornada, a proposta pede uma sequência curta de validações comerciais e operacionais.
+                  A aprovação da proposta abre uma sequência curta de validações comerciais e operacionais para ativação da jornada.
                 </p>
               </div>
             </div>
