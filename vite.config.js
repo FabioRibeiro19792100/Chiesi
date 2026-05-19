@@ -4,7 +4,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 function codexPersistencePlugin() {
-  const filePath = path.resolve(".local/chiesi-proposta-config.json");
+  const filePath = path.resolve("data/chiesi-proposta-config.json");
+  const legacyFilePath = path.resolve(".local/chiesi-proposta-config.json");
   const endpoint = "/__persist/chiesi-proposta-config";
 
   async function readPersisted() {
@@ -12,12 +13,17 @@ function codexPersistencePlugin() {
       const raw = await readFile(filePath, "utf-8");
       return JSON.parse(raw);
     } catch {
-      return {
-        version: 2,
-        admin: null,
-        scenario: null,
-        savedAt: null,
-      };
+      try {
+        const legacyRaw = await readFile(legacyFilePath, "utf-8");
+        return JSON.parse(legacyRaw);
+      } catch {
+        return {
+          version: 2,
+          admin: null,
+          scenario: null,
+          savedAt: null,
+        };
+      }
     }
   }
 
