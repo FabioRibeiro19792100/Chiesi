@@ -16,6 +16,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import versionedConfig from "../data/chiesi-proposta-config.json";
 
 const PRECO_HORA_WORKSHOP = 6600;
 const PRECO_SC_IMPL = 12000;
@@ -665,6 +666,7 @@ const SCENARIO_STORAGE_KEY = "chiesi-proposta-scenario-config";
 const SCENARIO_STORAGE_BACKUP_KEY = "chiesi-proposta-scenario-config-backup";
 const STORAGE_VERSION = 2;
 const PERSIST_ENDPOINT = "/__persist/chiesi-proposta-config";
+const VERSIONED_PERSISTENCE = versionedConfig || {};
 
 function createInitialAdminState() {
   return {
@@ -721,7 +723,7 @@ function mergeScenarioState(defaults, parsed) {
 }
 
 function loadPersistedAdminState() {
-  const defaults = createInitialAdminState();
+  const defaults = mergeAdminState(createInitialAdminState(), VERSIONED_PERSISTENCE.admin);
   if (typeof window === "undefined") return defaults;
 
   try {
@@ -737,7 +739,7 @@ function loadPersistedAdminState() {
 }
 
 function loadPersistedScenarioState() {
-  const defaults = createInitialScenarioState();
+  const defaults = mergeScenarioState(createInitialScenarioState(), VERSIONED_PERSISTENCE.scenario);
   if (typeof window === "undefined") return defaults;
 
   try {
@@ -776,7 +778,9 @@ function App() {
   const [moduleSettings, setModuleSettings] = useState(persistedScenarioState.moduleSettings);
   const [adminPricing, setAdminPricing] = useState(persistedAdminState.adminPricing);
   const [adminModuleParams, setAdminModuleParams] = useState(persistedAdminState.adminModuleParams);
-  const [adminSavedAt, setAdminSavedAt] = useState(null);
+  const [adminSavedAt, setAdminSavedAt] = useState(() =>
+    VERSIONED_PERSISTENCE.savedAt ? new Date(VERSIONED_PERSISTENCE.savedAt) : null
+  );
   const [hasHydratedPersistence, setHasHydratedPersistence] = useState(false);
 
   useEffect(() => {
@@ -784,6 +788,10 @@ function App() {
 
     async function hydrateFromFile() {
       if (typeof window === "undefined") return;
+      if (!import.meta.env.DEV) {
+        setHasHydratedPersistence(true);
+        return;
+      }
 
       try {
         const response = await fetch(PERSIST_ENDPOINT, {
@@ -883,6 +891,7 @@ function App() {
   ]);
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return;
     if (typeof window === "undefined" || !hasHydratedPersistence) return;
 
     const payload = {
