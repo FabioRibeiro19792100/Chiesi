@@ -215,6 +215,13 @@ const CONTEXTO_INDEX = [
   { id: "contexto-escopo", label: "Escopo" },
 ];
 
+const MASTERTECH_INDEX = [
+  { id: "mastertech-visao", label: "Quem somos" },
+  { id: "mastertech-jornada", label: "Como evoluímos" },
+  { id: "mastertech-metodo", label: "Como atuamos" },
+  { id: "mastertech-farma", label: "Experiência farmacêutica" },
+];
+
 const SOLUCAO_INDEX = [
   { id: "solucao-diagnostico", label: "Diagnóstico" },
   { id: "solucao-conteudos", label: "Organização da trilha" },
@@ -243,6 +250,114 @@ const PROPOSAL_INDEX = [
   { id: "proposal-offer", label: "Entrega e investimento" },
   { id: "proposal-calendar", label: "Execução" },
   { id: "proposal-steps", label: "Próximos passos" },
+  { id: "proposal-mastertech", label: "Quem é a Mastertech" },
+];
+
+const MASTERTECH_STATS = [
+  {
+    label: "Fundação",
+    value: "2015",
+    text: "Dez anos de atuação em educação corporativa, transformação digital e cultura de mudança.",
+  },
+  {
+    label: "Escala",
+    value: "200+",
+    text: "Clientes corporativos de diferentes portes e setores ao longo da última década.",
+  },
+  {
+    label: "Especialidade",
+    value: "B2B",
+    text: "Programas, consultoria, formação aplicada e construção de soluções para transformação organizacional.",
+  },
+  {
+    label: "Produto",
+    value: "E2W",
+    text: "Sistema SaaS de gestão de capital humano que estrutura diagnóstico, evolução e leitura gerencial.",
+  },
+];
+
+const MASTERTECH_TIMELINE = [
+  {
+    phase: "Início",
+    title: "Software house com DNA de produto",
+    text: "A Mastertech nasceu em 2015 construindo soluções digitais e repertório técnico em tecnologia, produto e inovação.",
+  },
+  {
+    phase: "Virada",
+    title: "Escola orientada para o mercado",
+    text: "A operação migrou para educação, formando profissionais e organizando trilhas conectadas às mudanças do trabalho.",
+  },
+  {
+    phase: "Expansão",
+    title: "Atuação corporativa consultiva",
+    text: "O escopo passou a incluir programas proprietários, formação sob medida, laboratórios de inovação e desenho consultivo.",
+  },
+  {
+    phase: "Atual",
+    title: "Empresa de IA com produto SaaS",
+    text: "Mais recentemente, a Mastertech evoluiu para uma empresa de IA com sistemas próprios, tendo o E2W como principal produto.",
+  },
+];
+
+const MASTERTECH_PILLARS = [
+  {
+    icon: "calibrate",
+    title: "Diagnóstico",
+    text: "A leitura sempre começa pelo contexto da empresa, pelas lacunas prioritárias e pelo que precisa ser personalizado na solução.",
+  },
+  {
+    icon: "spark",
+    title: "Desenvolvimento da solução",
+    text: "É o eixo em que entram formações, criação de conteúdo, laboratórios, programas remotos e presenciais e ativações consultivas.",
+  },
+  {
+    icon: "data",
+    title: "Governança",
+    text: "A terceira frente consolida o processo com gestão, acompanhamento e sustentação para a mudança gerar efeito real.",
+  },
+];
+
+const MASTERTECH_CLIENTS = [
+  "Itaú",
+  "Bradesco",
+  "Santander",
+  "Citi",
+  "Natura",
+  "Nestlé",
+  "Heineken",
+  "Bayer",
+  "Roche",
+  "IBM",
+  "Meta",
+  "Visa",
+  "Accenture",
+  "Porto Seguro",
+  "Roblox",
+  "Globo",
+  "British Council",
+];
+
+const MASTERTECH_PHARMA_CASES = [
+  {
+    client: "Bayer",
+    text: "Relacionamento longevo com iniciativas em dados, análise de dados, agilidade e design thinking para construção de produtos em oncologia.",
+  },
+  {
+    client: "Daiichi Sankyo",
+    text: "Ativações ao longo de três anos, incluindo construção de produtos e uma trilha ampla de transformação digital com workshops ao longo de um ano.",
+  },
+  {
+    client: "Roche",
+    text: "Trabalho voltado a team building e fortalecimento de dinâmica de equipe.",
+  },
+  {
+    client: "Novo Nordisk",
+    text: "Projeto de comunicação digital para a força de vendas, com foco em repertório aplicado à rotina comercial.",
+  },
+  {
+    client: "Amgen",
+    text: "Atuação específica em criação de produtos, conectada ao contexto do setor farmacêutico.",
+  },
 ];
 
 const ECOSYSTEM_LINE_NAME = "E2W";
@@ -549,6 +664,7 @@ const ADMIN_STORAGE_BACKUP_KEY = "chiesi-proposta-admin-config-backup";
 const SCENARIO_STORAGE_KEY = "chiesi-proposta-scenario-config";
 const SCENARIO_STORAGE_BACKUP_KEY = "chiesi-proposta-scenario-config-backup";
 const STORAGE_VERSION = 2;
+const PERSIST_ENDPOINT = "/__persist/chiesi-proposta-config";
 
 function createInitialAdminState() {
   return {
@@ -647,6 +763,7 @@ function App() {
   const [proposalReady, setProposalReady] = useState(false);
   const [entryMode, setEntryMode] = useState("cover");
   const [activeContextAnchor, setActiveContextAnchor] = useState(CONTEXTO_INDEX[0].id);
+  const [activeMastertechAnchor, setActiveMastertechAnchor] = useState(MASTERTECH_INDEX[0].id);
   const [activeSolutionAnchor, setActiveSolutionAnchor] = useState(SOLUCAO_INDEX[0].id);
   const [activeConfigAnchor, setActiveConfigAnchor] = useState(CONFIG_INDEX[0].id);
   const [activeProposalAnchor, setActiveProposalAnchor] = useState(PROPOSAL_INDEX[0].id);
@@ -663,7 +780,56 @@ function App() {
   const [hasHydratedPersistence, setHasHydratedPersistence] = useState(false);
 
   useEffect(() => {
-    setHasHydratedPersistence(true);
+    let cancelled = false;
+
+    async function hydrateFromFile() {
+      if (typeof window === "undefined") return;
+
+      try {
+        const response = await fetch(PERSIST_ENDPOINT, {
+          headers: { Accept: "application/json" },
+        });
+        if (!response.ok) throw new Error("Persistencia indisponivel");
+
+        const payload = await response.json();
+        if (cancelled) return;
+
+        if (payload?.admin) {
+          const mergedAdminState = mergeAdminState(createInitialAdminState(), payload.admin);
+          setClusterSizes(mergedAdminState.clusterSizes);
+          setAdminPricing(mergedAdminState.adminPricing);
+          setAdminModuleParams(mergedAdminState.adminModuleParams);
+        }
+
+        if (payload?.scenario) {
+          const mergedScenarioState = mergeScenarioState(
+            createInitialScenarioState(),
+            payload.scenario
+          );
+          setScAtivo(mergedScenarioState.scAtivo);
+          setClusters(mergedScenarioState.clusters);
+          setMods(mergedScenarioState.mods);
+          setWorkshopTurmas(mergedScenarioState.workshopTurmas);
+          setModuleSettings(mergedScenarioState.moduleSettings);
+        }
+
+        if (payload?.savedAt) {
+          setAdminSavedAt(new Date(payload.savedAt));
+        }
+      } catch {
+        // Mantem o fallback local atual quando o endpoint nao estiver disponivel.
+      } finally {
+        if (!cancelled) {
+          setHasHydratedPersistence(true);
+        }
+      }
+    }
+
+    hydrateFromFile();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -679,7 +845,6 @@ function App() {
       const serialized = JSON.stringify(nextAdminState);
       window.localStorage.setItem(ADMIN_STORAGE_KEY, serialized);
       window.localStorage.setItem(ADMIN_STORAGE_BACKUP_KEY, serialized);
-      setAdminSavedAt(new Date());
     } catch (error) {
       console.warn("Nao foi possivel persistir configuracao localmente.", error);
     }
@@ -714,6 +879,51 @@ function App() {
     mods,
     workshopTurmas,
     moduleSettings,
+    hasHydratedPersistence,
+  ]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !hasHydratedPersistence) return;
+
+    const payload = {
+      version: STORAGE_VERSION,
+      savedAt: new Date().toISOString(),
+      admin: {
+        version: STORAGE_VERSION,
+        clusterSizes,
+        adminPricing,
+        adminModuleParams,
+      },
+      scenario: {
+        version: STORAGE_VERSION,
+        scAtivo,
+        clusters,
+        mods,
+        workshopTurmas,
+        moduleSettings,
+      },
+    };
+
+    fetch(PERSIST_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(() => {
+        setAdminSavedAt(new Date(payload.savedAt));
+      })
+      .catch((error) => {
+        console.warn("Nao foi possivel persistir configuracao em arquivo local.", error);
+      });
+  }, [
+    scAtivo,
+    clusters,
+    mods,
+    clusterSizes,
+    workshopTurmas,
+    moduleSettings,
+    adminPricing,
+    adminModuleParams,
     hasHydratedPersistence,
   ]);
 
@@ -1038,6 +1248,33 @@ function App() {
   }, [screen]);
 
   useEffect(() => {
+    if (screen !== "mastertech") return;
+
+    const sections = MASTERTECH_INDEX.map((item) => document.getElementById(item.id)).filter(Boolean);
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (visible[0]) {
+          setActiveMastertechAnchor(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-120px 0px -55% 0px",
+        threshold: [0.15, 0.35, 0.6],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [screen]);
+
+  useEffect(() => {
     if (screen !== "solucao") return;
 
     const sections = SOLUCAO_INDEX.map((item) => document.getElementById(item.id)).filter(Boolean);
@@ -1249,6 +1486,9 @@ function App() {
           <button className={`nav-tab ${screen === "contexto" ? "active" : ""}`} onClick={() => showScreen("contexto")}>
             CONTEXTO
           </button>
+          <button className={`nav-tab ${screen === "mastertech" ? "active" : ""}`} onClick={() => showScreen("mastertech")}>
+            MASTERTECH
+          </button>
           <button className={`nav-tab ${screen === "solucao" ? "active" : ""}`} onClick={() => showScreen("solucao")}>
             DESENHO DA SOLUÇÃO
           </button>
@@ -1391,14 +1631,169 @@ function App() {
                   )}
                   {sectionId === "contexto-escopo" ? (
                     <div className="cta-row">
-                      <button className="btn-cta" onClick={() => showScreen("solucao")}>
-                        Ver a solução →
+                      <button className="btn-cta" onClick={() => showScreen("mastertech")}>
+                        Ver a Mastertech →
                       </button>
                     </div>
                   ) : null}
                 </section>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section id="tela-mastertech" className={`screen ${screen === "mastertech" ? "active" : ""}`}>
+        <div className="hero">
+          <div className="hero-grid"></div>
+          <div className="hero-inner">
+            <h1 className="hero-title">Quem é a Mastertech</h1>
+            <p className="hero-sub">
+              Dez anos de atuação em educação corporativa, transformação digital, inovação e cultura ágil.
+            </p>
+          </div>
+        </div>
+
+        <div className="editorial-layout">
+          <aside className="section-index" aria-label="Índice da seção">
+            <div className="section-index-kicker">Nesta seção</div>
+            {MASTERTECH_INDEX.map((item) => (
+              <a
+                className={`section-index-link ${activeMastertechAnchor === item.id ? "active" : ""}`}
+                href={`#${item.id}`}
+                key={item.id}
+                onClick={() => setActiveMastertechAnchor(item.id)}
+              >
+                {item.label}
+              </a>
+            ))}
+          </aside>
+
+          <div className="editorial-main">
+            <section className="section section-anchor" id="mastertech-visao">
+              <div className="section-label">Quem somos</div>
+              <h2 className="section-title">Uma escola que flui</h2>
+              <div className="section-body">
+                <p>
+                  Fundada em 2015, a Mastertech é uma empresa de educação especializada em transformação digital,
+                  inovação e cultura ágil. Ao longo de dez anos, consolidou uma atuação corporativa que combina
+                  diagnóstico, desenho de soluções e execução aplicada à realidade de cada organização.
+                </p>
+              </div>
+              <div className="mastertech-stats-grid">
+                {MASTERTECH_STATS.map((item) => (
+                  <div className="mastertech-stat-card" key={item.label}>
+                    <div className="mastertech-stat-label">{item.label}</div>
+                    <div className="mastertech-stat-value">{item.value}</div>
+                    <p className="mastertech-stat-text">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="section section-anchor" id="mastertech-jornada">
+              <div className="section-label">Como evoluímos</div>
+              <h2 className="section-title">Da base técnica à operação consultiva e de produto</h2>
+              <div className="mastertech-timeline">
+                {MASTERTECH_TIMELINE.map((item) => (
+                  <div className="mastertech-timeline-item" key={item.title}>
+                    <div className="mastertech-timeline-phase">{item.phase}</div>
+                    <div className="mastertech-timeline-title">{item.title}</div>
+                    <p className="mastertech-timeline-text">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="section section-anchor" id="mastertech-metodo">
+              <div className="section-label">Como atuamos</div>
+              <h2 className="section-title">Três pilares organizam a forma de trabalhar da Mastertech</h2>
+              <div className="follow-flow mastertech-pillars-flow">
+                {MASTERTECH_PILLARS.map((item) => (
+                  <div className="follow-step mastertech-pillar-card" key={item.title}>
+                    <CardIcon type={item.icon} size="lg" />
+                    <div className="follow-step-head">
+                      <div className="follow-kicker">{item.title}</div>
+                    </div>
+                    <p>{item.text}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="content-logic-note">
+                <div className="content-logic-note-label">Nesta proposta</div>
+                <p className="content-logic-note-text">
+                  O que está sendo oferecido à Chiesi concentra principalmente os dois primeiros pilares:
+                  o diagnóstico de contexto e o eixo central de desenvolvimento da solução.
+                </p>
+              </div>
+            </section>
+
+            <section className="section section-anchor" id="mastertech-farma">
+              <div className="section-label">Credenciais</div>
+              <h2 className="section-title">Clientes corporativos e experiência farmacêutica</h2>
+              <div className="section-body">
+                <p>
+                  Ao longo da última década, a Mastertech atendeu mais de 200 clientes corporativos de diferentes
+                  portes e setores. Entre as relações construídas nesse percurso estão projetos em serviços
+                  financeiros, consumo, tecnologia, indústria, mídia e educação, além de uma presença recorrente
+                  no setor farmacêutico.
+                </p>
+              </div>
+              <div className="brief-grid">
+                <div className="brief-panel">
+                  <div className="brief-panel-label">Alguns dos nossos clientes corporativos</div>
+                  <p className="mastertech-client-line">
+                    {MASTERTECH_CLIENTS.map((client, index) => (
+                      <span className="mastertech-client-inline" key={client}>
+                        {client}
+                        {index < MASTERTECH_CLIENTS.length - 1 ? " · " : ""}
+                      </span>
+                    ))}
+                  </p>
+                </div>
+                <div className="brief-panel brief-panel-timing">
+                  <div className="brief-panel-label">Leitura do portfólio</div>
+                  <div className="brief-timing">
+                    <div className="brief-timing-item">
+                      Atuação em programas corporativos de diferentes portes, formatos e graus de profundidade.
+                    </div>
+                    <div className="brief-timing-item">
+                      Experiência em transformação digital, inovação, dados, agilidade, comunicação e criação de produtos.
+                    </div>
+                    <div className="brief-timing-item">
+                      Repertório aplicado tanto em formação quanto em desenho consultivo de soluções.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="content-logic-note mastertech-pharma-band">
+                <div className="content-logic-note-label">Setor farmacêutico</div>
+                <p className="content-logic-note-text">
+                  Dentro desse histórico, a Mastertech acumulou experiências específicas com Bayer, Roche,
+                  Daiichi Sankyo, Novo Nordisk e Amgen, o que amplia o repertório para atuar em um setor
+                  regulado, técnico e sensível à dinâmica comercial.
+                </p>
+              </div>
+              <div className="card-grid">
+                {MASTERTECH_PHARMA_CASES.map((item) => (
+                  <div className="card" key={item.client}>
+                    <div className="card-label">Farmacêutico</div>
+                    <div className="card-title">{item.client}</div>
+                    <div className="card-items">
+                      <span className="card-item">
+                        <span className="card-item-mark"></span>
+                        <span className="card-item-text">{item.text}</span>
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="cta-row">
+                <button className="btn-cta" onClick={() => showScreen("solucao")}>
+                  Ver a solução →
+                </button>
+              </div>
+            </section>
           </div>
         </div>
       </section>
@@ -2494,6 +2889,41 @@ function App() {
                   </div>
                 </div>
               ))}
+            </div>
+          </section>
+
+          <section className="proposal-section fade section-anchor" id="proposal-mastertech">
+            <div className="proposal-head">
+              <div className="proposal-icon">
+                <Sparkles size={34} strokeWidth={1.0} />
+              </div>
+              <div>
+                <div className="proposal-kicker">Quem é a Mastertech</div>
+                <h2 className="proposal-title">Credenciais que sustentam a proposta</h2>
+                <p className="proposal-caput">
+                  A Mastertech foi fundada em 2015 e, ao longo de dez anos, consolidou uma atuação corporativa
+                  especializada em transformação digital, inovação, cultura ágil e desenho de soluções aplicadas.
+                </p>
+              </div>
+            </div>
+
+            <div className="proposal-summary-grid">
+              <div className="proposal-summary-card">
+                <div className="proposal-card-label">Atuação</div>
+                <ul className="proposal-list">
+                  <li>Mais de 200 clientes corporativos de diferentes portes e setores.</li>
+                  <li>Origem em tecnologia, evolução para escola e ampliação para programas e atuação consultiva.</li>
+                  <li>Desenvolvimento recente de sistemas de IA, com o E2W como principal produto SaaS.</li>
+                </ul>
+              </div>
+              <div className="proposal-summary-card">
+                <div className="proposal-card-label">Setor farmacêutico</div>
+                <ul className="proposal-list">
+                  <li>Experiências com Bayer, Roche, Daiichi Sankyo, Novo Nordisk e Amgen.</li>
+                  <li>Projetos que passaram por dados, agilidade, design thinking, comunicação digital e construção de produtos.</li>
+                  <li>Repertório acumulado para trabalhar transformação em um contexto regulado e comercialmente sensível.</li>
+                </ul>
+              </div>
             </div>
           </section>
         </div>

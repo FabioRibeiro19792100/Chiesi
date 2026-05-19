@@ -1,6 +1,64 @@
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+function codexPersistencePlugin() {
+  const filePath = path.resolve(".local/chiesi-proposta-config.json");
+  const endpoint = "/__persist/chiesi-proposta-config";
+
+  async function readPersisted() {
+    try {
+      const raw = await readFile(filePath, "utf-8");
+      return JSON.parse(raw);
+    } catch {
+      return {
+        version: 2,
+        admin: null,
+        scenario: null,
+        savedAt: null,
+      };
+    }
+  }
+
+  return {
+    name: "codex-persistence-plugin",
+    configureServer(server) {
+      server.middlewares.use(endpoint, async (req, res) => {
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+        if (req.method === "GET") {
+          res.end(JSON.stringify(await readPersisted()));
+          return;
+        }
+
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", async () => {
+            try {
+              const parsed = JSON.parse(body || "{}");
+              await mkdir(path.dirname(filePath), { recursive: true });
+              await writeFile(filePath, JSON.stringify(parsed, null, 2));
+              res.statusCode = 200;
+              res.end(JSON.stringify({ ok: true }));
+            } catch {
+              res.statusCode = 400;
+              res.end(JSON.stringify({ ok: false }));
+            }
+          });
+          return;
+        }
+
+        res.statusCode = 405;
+        res.end(JSON.stringify({ ok: false }));
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), codexPersistencePlugin()],
 });
