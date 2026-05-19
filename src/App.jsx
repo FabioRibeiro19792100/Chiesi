@@ -23,6 +23,7 @@ const PRECO_SC_LIC = 45;
 const ENCONTROS = 6;
 const WORKSHOP_ENCONTROS = 1;
 const WORKSHOP_HORAS = 2;
+const COMITE_ENCONTRO_HORAS = 1;
 
 const CLUSTERS = {
   comite: {
@@ -89,7 +90,7 @@ const MODULES = [
     durationHours: 16,
     hourlyRate: 2860,
     subtitle:
-      "O que a transformação exige de cada profissional · letramento digital · benchmarks do setor",
+      "O que a transformação digital pede da rotina, com letramento aplicado e referências do setor.",
     optional: false,
     groups: ["comite", "escritorio", "fabrica", "fv"],
     proposal:
@@ -101,7 +102,7 @@ const MODULES = [
     title: "IA & Copilot no dia a dia",
     durationHours: 16,
     hourlyRate: 4400,
-    subtitle: "Engenharia de prompt · casos práticos por área",
+    subtitle: "IA aplicada ao trabalho, com prompt na prática e casos adaptados por área.",
     optional: true,
     groups: ["comite", "escritorio", "fabrica", "fv"],
     proposal:
@@ -113,7 +114,7 @@ const MODULES = [
     title: "Comunicação Digital",
     durationHours: 12,
     hourlyRate: 2200,
-    subtitle: "Canais · segmentação · frequência · médicos não visitados",
+    subtitle: "Comunicação com médicos por canais digitais, com segmentação, cadência e alcance ampliado.",
     optional: true,
     groups: ["fv"],
     proposal:
@@ -126,7 +127,7 @@ const MODULES = [
     durationHours: 8,
     hourlyRate: 2200,
     subtitle:
-      "Manifesto ágil · comportamentos aplicáveis · efetividade operacional",
+      "Princípios ágeis traduzidos em comportamento, coordenação e ganho de efetividade.",
     optional: true,
     groups: ["comite", "escritorio", "fabrica", "fv"],
     proposal:
@@ -139,7 +140,7 @@ const MODULES = [
     durationHours: 12,
     hourlyRate: 3520,
     subtitle:
-      "Vulnerabilidade · tolerância ao erro · cultura de experimentação · HLM",
+      "Liderança para mudança cultural, com vulnerabilidade, experimentação e gestão da ambiguidade.",
     optional: false,
     groups: ["comite", "escritorio", "fabrica", "fv"],
     proposal:
@@ -226,6 +227,12 @@ const CONFIG_INDEX = [
   { id: "config-e2w", label: "Sistema" },
   { id: "config-workshop", label: "Kick-off" },
   { id: "config-programas", label: "Programa" },
+];
+
+const ADMIN_INDEX = [
+  { id: "admin-publicos", label: "Públicos" },
+  { id: "admin-e2w", label: "E2W e workshop" },
+  { id: "admin-programas", label: "Programas" },
 ];
 
 const PROPOSAL_INDEX = [
@@ -495,6 +502,18 @@ function formatHoursByTurma(totalHours, turmas) {
   return `${roundedPerTurma}h por turma`;
 }
 
+function formatPeopleByTurma(totalPeople, turmas) {
+  if (!totalPeople || !turmas) return "";
+  const peoplePerTurma = totalPeople / turmas;
+  return Number.isInteger(peoplePerTurma)
+    ? String(peoplePerTurma)
+    : peoplePerTurma.toFixed(1).replace(".", ",");
+}
+
+function getModuleSessionHours(clusterId, adminPricing) {
+  return clusterId === "comite" ? adminPricing.comiteMeetingHours : 2;
+}
+
 function clampNumber(value, fallback, min, max) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed)) return fallback;
@@ -506,6 +525,7 @@ function createInitialAdminPricing() {
     workshopHourly: PRECO_HORA_WORKSHOP,
     workshopHours: WORKSHOP_HORAS,
     workshopMeetings: WORKSHOP_ENCONTROS,
+    comiteMeetingHours: COMITE_ENCONTRO_HORAS,
     ecosystemImplant: PRECO_SC_IMPL,
     ecosystemLicense: PRECO_SC_LIC,
   };
@@ -524,10 +544,26 @@ function createInitialAdminModuleParams() {
   );
 }
 
-const STORAGE_KEY = "chiesi-proposta-config";
+const ADMIN_STORAGE_KEY = "chiesi-proposta-admin-config";
+const ADMIN_STORAGE_BACKUP_KEY = "chiesi-proposta-admin-config-backup";
+const SCENARIO_STORAGE_KEY = "chiesi-proposta-scenario-config";
+const SCENARIO_STORAGE_BACKUP_KEY = "chiesi-proposta-scenario-config-backup";
+const STORAGE_VERSION = 2;
 
-function createInitialPersistedState() {
+function createInitialAdminState() {
   return {
+    version: STORAGE_VERSION,
+    clusterSizes: Object.fromEntries(
+      Object.entries(CLUSTERS).map(([clusterId, cluster]) => [clusterId, cluster.defaultSize])
+    ),
+    adminPricing: createInitialAdminPricing(),
+    adminModuleParams: createInitialAdminModuleParams(),
+  };
+}
+
+function createInitialScenarioState() {
+  return {
+    version: STORAGE_VERSION,
     scAtivo: true,
     clusters: {
       comite: true,
@@ -543,46 +579,67 @@ function createInitialPersistedState() {
       m4: true,
       m5: true,
     },
-    clusterSizes: Object.fromEntries(
-      Object.entries(CLUSTERS).map(([clusterId, cluster]) => [clusterId, cluster.defaultSize])
-    ),
     workshopTurmas: 1,
     moduleSettings: createInitialModuleSettings(),
-    adminPricing: createInitialAdminPricing(),
-    adminModuleParams: createInitialAdminModuleParams(),
   };
 }
 
-function loadPersistedState() {
-  const defaults = createInitialPersistedState();
+function mergeAdminState(defaults, parsed) {
+  return {
+    ...defaults,
+    ...parsed,
+    clusterSizes: { ...defaults.clusterSizes, ...(parsed?.clusterSizes || {}) },
+    adminPricing: { ...defaults.adminPricing, ...(parsed?.adminPricing || {}) },
+    adminModuleParams: { ...defaults.adminModuleParams, ...(parsed?.adminModuleParams || {}) },
+  };
+}
+
+function mergeScenarioState(defaults, parsed) {
+  return {
+    ...defaults,
+    ...parsed,
+    clusters: { ...defaults.clusters, ...(parsed?.clusters || {}) },
+    mods: { ...defaults.mods, ...(parsed?.mods || {}) },
+    moduleSettings: { ...defaults.moduleSettings, ...(parsed?.moduleSettings || {}) },
+  };
+}
+
+function loadPersistedAdminState() {
+  const defaults = createInitialAdminState();
   if (typeof window === "undefined") return defaults;
 
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw =
+      window.localStorage.getItem(ADMIN_STORAGE_KEY) ||
+      window.localStorage.getItem(ADMIN_STORAGE_BACKUP_KEY);
     if (!raw) return defaults;
     const parsed = JSON.parse(raw);
-    return {
-      ...defaults,
-      ...parsed,
-      clusters: { ...defaults.clusters, ...(parsed?.clusters || {}) },
-      mods: { ...defaults.mods, ...(parsed?.mods || {}) },
-      clusterSizes: { ...defaults.clusterSizes, ...(parsed?.clusterSizes || {}) },
-      adminPricing: { ...defaults.adminPricing, ...(parsed?.adminPricing || {}) },
-      moduleSettings: { ...defaults.moduleSettings, ...(parsed?.moduleSettings || {}) },
-      adminModuleParams: { ...defaults.adminModuleParams, ...(parsed?.adminModuleParams || {}) },
-    };
+    return mergeAdminState(defaults, parsed);
+  } catch {
+    return defaults;
+  }
+}
+
+function loadPersistedScenarioState() {
+  const defaults = createInitialScenarioState();
+  if (typeof window === "undefined") return defaults;
+
+  try {
+    const raw =
+      window.localStorage.getItem(SCENARIO_STORAGE_KEY) ||
+      window.localStorage.getItem(SCENARIO_STORAGE_BACKUP_KEY);
+    if (!raw) return defaults;
+    const parsed = JSON.parse(raw);
+    return mergeScenarioState(defaults, parsed);
   } catch {
     return defaults;
   }
 }
 
 function App() {
-  const persistedState = loadPersistedState();
+  const [persistedAdminState] = useState(() => loadPersistedAdminState());
+  const [persistedScenarioState] = useState(() => loadPersistedScenarioState());
   const [adminMode] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("admin") === "1";
-  });
-  const [adminOpen, setAdminOpen] = useState(() => {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("admin") === "1";
   });
@@ -593,39 +650,71 @@ function App() {
   const [activeSolutionAnchor, setActiveSolutionAnchor] = useState(SOLUCAO_INDEX[0].id);
   const [activeConfigAnchor, setActiveConfigAnchor] = useState(CONFIG_INDEX[0].id);
   const [activeProposalAnchor, setActiveProposalAnchor] = useState(PROPOSAL_INDEX[0].id);
-  const [scAtivo, setScAtivo] = useState(persistedState.scAtivo);
-  const [clusters, setClusters] = useState(persistedState.clusters);
-  const [mods, setMods] = useState(persistedState.mods);
-  const [clusterSizes, setClusterSizes] = useState(persistedState.clusterSizes);
-  const [workshopTurmas, setWorkshopTurmas] = useState(persistedState.workshopTurmas);
-  const [moduleSettings, setModuleSettings] = useState(persistedState.moduleSettings);
-  const [adminPricing, setAdminPricing] = useState(persistedState.adminPricing);
-  const [adminModuleParams, setAdminModuleParams] = useState(persistedState.adminModuleParams);
+  const [activeAdminAnchor, setActiveAdminAnchor] = useState(ADMIN_INDEX[0].id);
+  const [scAtivo, setScAtivo] = useState(persistedScenarioState.scAtivo);
+  const [clusters, setClusters] = useState(persistedScenarioState.clusters);
+  const [mods, setMods] = useState(persistedScenarioState.mods);
+  const [clusterSizes, setClusterSizes] = useState(persistedAdminState.clusterSizes);
+  const [workshopTurmas, setWorkshopTurmas] = useState(persistedScenarioState.workshopTurmas);
+  const [moduleSettings, setModuleSettings] = useState(persistedScenarioState.moduleSettings);
+  const [adminPricing, setAdminPricing] = useState(persistedAdminState.adminPricing);
+  const [adminModuleParams, setAdminModuleParams] = useState(persistedAdminState.adminModuleParams);
+  const [adminSavedAt, setAdminSavedAt] = useState(null);
+  const [hasHydratedPersistence, setHasHydratedPersistence] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        scAtivo,
-        clusters,
-        mods,
-        clusterSizes,
-        workshopTurmas,
-        moduleSettings,
-        adminPricing,
-        adminModuleParams,
-      })
-    );
+    setHasHydratedPersistence(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !hasHydratedPersistence) return;
+    const nextAdminState = {
+      version: STORAGE_VERSION,
+      clusterSizes,
+      adminPricing,
+      adminModuleParams,
+    };
+
+    try {
+      const serialized = JSON.stringify(nextAdminState);
+      window.localStorage.setItem(ADMIN_STORAGE_KEY, serialized);
+      window.localStorage.setItem(ADMIN_STORAGE_BACKUP_KEY, serialized);
+      setAdminSavedAt(new Date());
+    } catch (error) {
+      console.warn("Nao foi possivel persistir configuracao localmente.", error);
+    }
+  }, [
+    clusterSizes,
+    adminPricing,
+    adminModuleParams,
+    hasHydratedPersistence,
+  ]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !hasHydratedPersistence) return;
+    const nextScenarioState = {
+      version: STORAGE_VERSION,
+      scAtivo,
+      clusters,
+      mods,
+      workshopTurmas,
+      moduleSettings,
+    };
+
+    try {
+      const serialized = JSON.stringify(nextScenarioState);
+      window.localStorage.setItem(SCENARIO_STORAGE_KEY, serialized);
+      window.localStorage.setItem(SCENARIO_STORAGE_BACKUP_KEY, serialized);
+    } catch (error) {
+      console.warn("Nao foi possivel persistir o cenario da proposta.", error);
+    }
   }, [
     scAtivo,
     clusters,
     mods,
-    clusterSizes,
     workshopTurmas,
     moduleSettings,
-    adminPricing,
-    adminModuleParams,
+    hasHydratedPersistence,
   ]);
 
   const activeParticipants = Object.entries(clusterSizes).reduce(
@@ -651,10 +740,12 @@ function App() {
     totalMeetings += workshopTurmas * adminPricing.workshopMeetings;
     investmentLines.push({
       name: "Workshop Comitê Executivo",
+      displayName: `Workshop Comitê Executivo · ${
+        adminPricing.workshopMeetings * adminPricing.workshopHours
+      }h`,
       detail: `${workshopTurmas} turma(s) · ${adminPricing.workshopMeetings} encontro · ${hours}h`,
       composition: [
         `${workshopTurmas} turma(s)`,
-        `${adminPricing.workshopMeetings * adminPricing.workshopHours}h por turma`,
         `${formatCurrency(workshopValorPorTurma)} por turma`,
         `${formatCurrency(value)} no total`,
       ],
@@ -681,15 +772,18 @@ function App() {
 
       const turmas = settings.format === "ao_vivo" ? clusterConfig.turmas : 1;
       const hours = turmas * moduleBaseHours;
-      const meetings = turmas * ENCONTROS;
+      const sessionHours = getModuleSessionHours(clusterId, adminPricing);
+      const meetings = turmas * (moduleBaseHours / sessionHours);
 
       moduleHours += hours;
       moduleMeetings += meetings;
       clusterRows.push({
         cluster: cluster.label,
+        clusterId,
         turmas,
         people: clusterSizes[clusterId],
         hours,
+        sessionHours,
       });
     });
 
@@ -707,7 +801,6 @@ function App() {
       const valorBase = moduleBaseHours * hourlyRate;
       value = valorBase * multiplier;
       composition = [
-        `${formatHours(moduleBaseHours)} de conteúdo`,
         `${formatCurrency(hourlyRate)}/h`,
         `${formatCurrency(value)} no total`,
         ...(settings.content === "customizado"
@@ -721,7 +814,6 @@ function App() {
       value = valorBase * multiplier;
       composition = [
         `${turmasTotais} turma(s)`,
-        `${formatHours(moduleBaseHours)} por turma`,
         `${formatCurrency(valorPorTurma)} por turma`,
         `${formatCurrency(value)} no total`,
         ...(settings.content === "customizado"
@@ -734,6 +826,7 @@ function App() {
     totalMeetings += moduleMeetings;
     investmentLines.push({
       name: module.title,
+      displayName: `${module.title} · ${moduleBaseHours}h`,
       detail: `${
         settings.format === "gravado"
           ? `On-demand · ${Math.round(moduleHours)}h × ${formatCurrency(hourlyRate)}`
@@ -744,7 +837,7 @@ function App() {
     });
     summaryModules.push({
       name: module.title,
-      detail: `${moduleMeetings} encontros · ${Math.round(moduleHours)}h`,
+      detail: `${Math.round(moduleMeetings)} encontros · ${Math.round(moduleHours)}h`,
     });
     moduleDetails[module.id] = { clusterRows, value };
   });
@@ -972,6 +1065,33 @@ function App() {
   }, [screen]);
 
   useEffect(() => {
+    if (screen !== "admin") return;
+
+    const sections = ADMIN_INDEX.map((item) => document.getElementById(item.id)).filter(Boolean);
+    if (!sections.length) return;
+
+    const updateActiveAnchor = () => {
+      const threshold = window.scrollY + 136;
+      const current =
+        sections.reduce(
+          (active, section) => (section.offsetTop <= threshold ? section : active),
+          sections[0]
+        ) || sections[0];
+
+      setActiveAdminAnchor(current.id);
+    };
+
+    updateActiveAnchor();
+    window.addEventListener("scroll", updateActiveAnchor, { passive: true });
+    window.addEventListener("resize", updateActiveAnchor);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveAnchor);
+      window.removeEventListener("resize", updateActiveAnchor);
+    };
+  }, [screen]);
+
+  useEffect(() => {
     if (screen !== "config") return;
 
     const sections = CONFIG_INDEX.map((item) => document.getElementById(item.id)).filter(Boolean);
@@ -1067,7 +1187,9 @@ function App() {
   }
 
   function openProposalTab() {
-    if (!proposalReady) return;
+    if (!proposalReady) {
+      setProposalReady(true);
+    }
     setScreen("proposta");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -1136,190 +1258,17 @@ function App() {
           <button
             className={`nav-tab ${screen === "proposta" ? "active" : ""}`}
             onClick={openProposalTab}
-            disabled={!proposalReady}
           >
             VER PROPOSTA
           </button>
+          {adminMode ? (
+            <button className={`nav-tab ${screen === "admin" ? "active" : ""}`} onClick={() => showScreen("admin")}>
+              PARAMETROS
+            </button>
+          ) : null}
         </div>
         <div className="nav-brand">Mastertech</div>
       </nav>
-
-      {adminMode ? (
-        <>
-          <button
-            className={`admin-toggle ${adminOpen ? "open" : ""}`}
-            onClick={() => setAdminOpen((current) => !current)}
-          >
-            Parâmetros
-          </button>
-          <aside className={`admin-panel ${adminOpen ? "open" : ""}`}>
-            <div className="admin-panel-head">
-              <div>
-                <div className="admin-panel-kicker">Modo interno</div>
-                <div className="admin-panel-title">Tabela de parâmetros</div>
-              </div>
-              <button className="admin-panel-close" onClick={() => setAdminOpen(false)}>
-                Fechar
-              </button>
-            </div>
-
-            <div className="admin-panel-section">
-              <div className="admin-panel-label">Públicos</div>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Público</th>
-                    <th>Pessoas</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(CLUSTERS).map(([clusterId, cluster]) => (
-                    <tr key={`admin-cluster-${clusterId}`}>
-                      <td>{cluster.label}</td>
-                      <td>
-                        <input
-                          className="admin-input"
-                          type="number"
-                          min={cluster.min}
-                          max={cluster.max}
-                          value={clusterSizes[clusterId]}
-                          onChange={(event) => updateClusterSize(clusterId, event.target.value)}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="admin-panel-section">
-              <div className="admin-panel-label">E2W e workshop</div>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Parâmetro</th>
-                    <th>Valor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Workshop · valor/hora</td>
-                    <td>
-                      <input
-                        className="admin-input"
-                        type="number"
-                        min="1"
-                        value={adminPricing.workshopHourly}
-                        onChange={(event) =>
-                          updateAdminPricing("workshopHourly", event.target.value)
-                        }
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Workshop · carga por encontro</td>
-                    <td>
-                      <input
-                        className="admin-input"
-                        type="number"
-                        min="1"
-                        value={adminPricing.workshopHours}
-                        onChange={(event) =>
-                          updateAdminPricing("workshopHours", event.target.value, 1, 24)
-                        }
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Workshop · encontros</td>
-                    <td>
-                      <input
-                        className="admin-input"
-                        type="number"
-                        min="1"
-                        value={adminPricing.workshopMeetings}
-                        onChange={(event) =>
-                          updateAdminPricing("workshopMeetings", event.target.value, 1, 12)
-                        }
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>E2W · implantação</td>
-                    <td>
-                      <input
-                        className="admin-input"
-                        type="number"
-                        min="0"
-                        value={adminPricing.ecosystemImplant}
-                        onChange={(event) =>
-                          updateAdminPricing("ecosystemImplant", event.target.value, 0)
-                        }
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>E2W · licença/mês</td>
-                    <td>
-                      <input
-                        className="admin-input"
-                        type="number"
-                        min="0"
-                        value={adminPricing.ecosystemLicense}
-                        onChange={(event) =>
-                          updateAdminPricing("ecosystemLicense", event.target.value, 0)
-                        }
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="admin-panel-section">
-              <div className="admin-panel-label">Programas</div>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Programa</th>
-                    <th>Carga (h)</th>
-                    <th>Valor/h</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {MODULES.map((module) => (
-                    <tr key={`admin-module-${module.id}`}>
-                      <td>{module.title}</td>
-                      <td>
-                        <input
-                          className="admin-input"
-                          type="number"
-                          min="1"
-                          value={adminModuleParams[module.id].durationHours}
-                          onChange={(event) =>
-                            updateAdminModuleParam(module.id, "durationHours", event.target.value, 1, 80)
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className="admin-input"
-                          type="number"
-                          min="1"
-                          value={adminModuleParams[module.id].hourlyRate}
-                          onChange={(event) =>
-                            updateAdminModuleParam(module.id, "hourlyRate", event.target.value, 1)
-                          }
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </aside>
-        </>
-      ) : null}
 
       <section id="tela-contexto" className={`screen ${screen === "contexto" ? "active" : ""}`}>
         <div className="hero">
@@ -1795,7 +1744,7 @@ function App() {
                     <div className="mod-num">Entregável · Comitê Executivo</div>
                     <div className="mod-title">Workshop Comitê Executivo</div>
                     <div className="mod-sub">
-                      Diagnóstico de maturidade · diretrizes do programa
+                      Leitura da maturidade da liderança e alinhamento das diretrizes que orientam o programa.
                     </div>
                   </div>
                 </div>
@@ -1803,12 +1752,14 @@ function App() {
                   <div className="mod-table">
                     <div className="mod-table-head">
                       <span>Grupo</span>
-                      <span>Turmas</span>
                       <span>Pessoas</span>
+                      <span>Turmas</span>
+                      <span>Pessoas/turma</span>
                       <span>Horas</span>
                     </div>
                     <div className={`mod-table-row ${clusters.comite ? "" : "off"}`}>
                       <span>Comitê Executivo</span>
+                      <span>{clusters.comite ? clusterSizes.comite : "N/A"}</span>
                       <span>
                         {clusters.comite ? (
                           <span className="mod-cell-stack">
@@ -1825,7 +1776,15 @@ function App() {
                           "N/A"
                         )}
                       </span>
-                      <span>{clusters.comite ? clusterSizes.comite : "N/A"}</span>
+                      <span>
+                        {clusters.comite ? (
+                          <span className="mod-people-inline">
+                            <span>{formatPeopleByTurma(clusterSizes.comite, workshopTurmas)}</span>
+                          </span>
+                        ) : (
+                          "N/A"
+                        )}
+                      </span>
                       <span>
                         {clusters.comite ? (
                           <span className="mod-hours-inline">
@@ -1883,7 +1842,7 @@ function App() {
                           </div>
                           <div className="mod-title">{module.title}</div>
                           <div className="mod-sub">{module.subtitle}</div>
-                          <div className="mod-structure">{ENCONTROS} encontros · {moduleParams.durationHours}h por turma</div>
+                          <div className="mod-structure">{moduleParams.durationHours}h por turma</div>
                         </div>
                       </div>
 
@@ -1996,8 +1955,9 @@ function App() {
                           <div className="mod-table">
                             <div className="mod-table-head">
                               <span>Grupo</span>
-                              <span>Turmas</span>
                               <span>Pessoas</span>
+                              <span>Turmas</span>
+                              <span>Pessoas/turma</span>
                               <span>Horas</span>
                             </div>
 
@@ -2028,6 +1988,7 @@ function App() {
                                       {cluster.label}
                                     </label>
                                   </span>
+                                  <span>{on ? clusterSizes[clusterId] : "N/A"}</span>
                                   <span>
                                     {on ? (
                                       <span className="mod-cell-stack">
@@ -2060,7 +2021,15 @@ function App() {
                                       "N/A"
                                     )}
                               </span>
-                              <span>{on ? clusterSizes[clusterId] : "N/A"}</span>
+                              <span>
+                                {on ? (
+                                  <span className="mod-people-inline">
+                                    <span>{formatPeopleByTurma(clusterSizes[clusterId], clusterConfig.turmas)}</span>
+                                  </span>
+                                ) : (
+                                  "N/A"
+                                )}
+                              </span>
                               <span>
                                 {on ? (
                                   <span className="mod-hours-inline">
@@ -2068,7 +2037,7 @@ function App() {
                                     <span className="mod-hours-detail">
                                       {formatPerSessionBreakdown(
                                         clusterConfig.turmas * moduleParams.durationHours,
-                                        2
+                                        getModuleSessionHours(clusterId, adminPricing)
                                       )}
                                     </span>
                                   </span>
@@ -2113,10 +2082,6 @@ function App() {
                       <span className="rs-val">{Math.round(totalHours)}h</span>
                       <span className="rs-lbl">horas</span>
                     </div>
-                    <div className="right-stat">
-                      <span className="rs-val">{totalMeetings}</span>
-                      <span className="rs-lbl">encontros</span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -2136,7 +2101,7 @@ function App() {
                         <div className="invest-section-title">Sistema de gestão de capital humano</div>
                         <div className="invest-line invest-line-eco" key={`${ecosystemLine.name}-${ecosystemLine.value}`}>
                           <div className="invest-line-head">
-                            <div className="il-name">{ecosystemLine.name}</div>
+                            <div className="il-name">{ecosystemLine.displayName || ecosystemLine.name}</div>
                             <div className="il-val">
                               {ecosystemLine.value > 0 ? formatCurrency(ecosystemLine.value) : "Incluso"}
                             </div>
@@ -2160,7 +2125,7 @@ function App() {
                         <div className="invest-section-title">Workshop executivo</div>
                         <div className="invest-line" key={`${workshopLine.name}-${workshopLine.value}`}>
                           <div className="invest-line-head">
-                            <div className="il-name">{workshopLine.name}</div>
+                            <div className="il-name">{workshopLine.displayName || workshopLine.name}</div>
                             <div className="il-val">
                               {workshopLine.value > 0 ? formatCurrency(workshopLine.value) : "Incluso"}
                             </div>
@@ -2185,7 +2150,7 @@ function App() {
                         {programInvestmentLines.map((line) => (
                           <div className="invest-line" key={`${line.name}-${line.value}`}>
                             <div className="invest-line-head">
-                              <div className="il-name">{line.name}</div>
+                              <div className="il-name">{line.displayName || line.name}</div>
                               <div className="il-val">
                                 {line.value > 0 ? formatCurrency(line.value) : "Incluso"}
                               </div>
@@ -2229,9 +2194,7 @@ function App() {
           <div className="hero-grid"></div>
           <div className="hero-inner">
             <h1 className="hero-title">Documento executivo da proposta</h1>
-            <p className="hero-sub">
-              {proposalDate} · {activeParticipants} participantes · proposta executiva configurada
-            </p>
+            <p className="hero-sub">{proposalDate}</p>
           </div>
         </div>
 
@@ -2538,6 +2501,222 @@ function App() {
           </>
         )}
       </section>
+
+      {adminMode ? (
+        <section id="tela-admin" className={`screen ${screen === "admin" ? "active" : ""}`}>
+          <div className="hero">
+            <div className="hero-grid"></div>
+            <div className="hero-inner">
+              <h1 className="hero-title">Parâmetros internos</h1>
+              <p className="hero-sub">
+                Área oculta por link. Os valores salvos aqui afetam a proposta e ficam visíveis só quando você acessa com <strong>?admin=1</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div className="editorial-layout">
+            <aside className="section-index" aria-label="Índice da seção">
+              <div className="section-index-kicker">Nesta seção</div>
+              {ADMIN_INDEX.map((item) => (
+                <a
+                  className={`section-index-link ${activeAdminAnchor === item.id ? "active" : ""}`}
+                  href={`#${item.id}`}
+                  key={item.id}
+                  onClick={() => setActiveAdminAnchor(item.id)}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </aside>
+
+            <div className="editorial-main">
+              <section className="section section-anchor" id="admin-publicos">
+                <div className="admin-page-head">
+                  <div>
+                    <div className="admin-panel-kicker">Persistência local</div>
+                    <h2 className="section-title">Públicos</h2>
+                  </div>
+                  <div className="admin-save-badge">
+                    {adminSavedAt
+                      ? `Salvo localmente às ${adminSavedAt.toLocaleTimeString("pt-BR", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}`
+                      : "Salvando localmente"}
+                  </div>
+                </div>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Público</th>
+                      <th>Pessoas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(CLUSTERS).map(([clusterId, cluster]) => (
+                      <tr key={`admin-cluster-${clusterId}`}>
+                        <td>{cluster.label}</td>
+                        <td>
+                          <input
+                            className="admin-input"
+                            type="number"
+                            min={cluster.min}
+                            max={cluster.max}
+                            value={clusterSizes[clusterId]}
+                            onChange={(event) => updateClusterSize(clusterId, event.target.value)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+
+              <section className="section section-anchor" id="admin-e2w">
+                <div className="admin-panel-label">E2W e workshop</div>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Parâmetro</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Workshop · valor/hora</td>
+                      <td>
+                        <input
+                          className="admin-input"
+                          type="number"
+                          min="1"
+                          value={adminPricing.workshopHourly}
+                          onChange={(event) =>
+                            updateAdminPricing("workshopHourly", event.target.value)
+                          }
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Workshop · carga por encontro</td>
+                      <td>
+                        <input
+                          className="admin-input"
+                          type="number"
+                          min="1"
+                          value={adminPricing.workshopHours}
+                          onChange={(event) =>
+                            updateAdminPricing("workshopHours", event.target.value, 1, 24)
+                          }
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Workshop · encontros</td>
+                      <td>
+                        <input
+                          className="admin-input"
+                          type="number"
+                          min="1"
+                          value={adminPricing.workshopMeetings}
+                          onChange={(event) =>
+                            updateAdminPricing("workshopMeetings", event.target.value, 1, 12)
+                          }
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Comitê · horas por encontro</td>
+                      <td>
+                        <input
+                          className="admin-input"
+                          type="number"
+                          min="1"
+                          max="8"
+                          value={adminPricing.comiteMeetingHours}
+                          onChange={(event) =>
+                            updateAdminPricing("comiteMeetingHours", event.target.value, 1, 8)
+                          }
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>E2W · implantação</td>
+                      <td>
+                        <input
+                          className="admin-input"
+                          type="number"
+                          min="0"
+                          value={adminPricing.ecosystemImplant}
+                          onChange={(event) =>
+                            updateAdminPricing("ecosystemImplant", event.target.value, 0)
+                          }
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>E2W · licença/mês</td>
+                      <td>
+                        <input
+                          className="admin-input"
+                          type="number"
+                          min="0"
+                          value={adminPricing.ecosystemLicense}
+                          onChange={(event) =>
+                            updateAdminPricing("ecosystemLicense", event.target.value, 0)
+                          }
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+
+              <section className="section section-anchor" id="admin-programas">
+                <div className="admin-panel-label">Programas</div>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Programa</th>
+                      <th>Carga (h)</th>
+                      <th>Valor/h</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {MODULES.map((module) => (
+                      <tr key={`admin-module-${module.id}`}>
+                        <td>{module.title}</td>
+                        <td>
+                          <input
+                            className="admin-input"
+                            type="number"
+                            min="1"
+                            value={adminModuleParams[module.id].durationHours}
+                            onChange={(event) =>
+                              updateAdminModuleParam(module.id, "durationHours", event.target.value, 1, 80)
+                            }
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="admin-input"
+                            type="number"
+                            min="1"
+                            value={adminModuleParams[module.id].hourlyRate}
+                            onChange={(event) =>
+                              updateAdminModuleParam(module.id, "hourlyRate", event.target.value, 1)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+        </section>
+      ) : null}
         </>
       ) : null}
     </>
