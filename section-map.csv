@@ -1,0 +1,22 @@
+tela,nave,hero,section_id,tag_label,titulo
+Capa,,Chiesi,,,Programa de Transformação Digital e Gestão da Mudança
+Contexto,CONTEXTO,Leitura do briefing,contexto-organizacao,A organização,A Chiesi no Brasil
+Contexto,CONTEXTO,Leitura do briefing,contexto-grupos,Os grupos,Quatro públicos, quatro pontos de partida
+Contexto,CONTEXTO,Leitura do briefing,contexto-objetivo,O que a Chiesi quer,O que a Chiesi quer do programa
+Contexto,CONTEXTO,Leitura do briefing,contexto-escopo,O que foi pedido,"Escopo e timing do briefing"
+Solução,DESENHO DA SOLUÇÃO,Arquitetura da jornada,solucao-diagnostico,Diagnóstico,Como o diagnóstico começa
+Solução,DESENHO DA SOLUÇÃO,Arquitetura da jornada,solucao-conteudos,Conteúdos,Como a trilha se organiza
+Solução,DESENHO DA SOLUÇÃO,Arquitetura da jornada,solucao-acompanhamento,Acompanhamento,Como o programa continua aprendendo
+Solução,DESENHO DA SOLUÇÃO,Arquitetura da jornada,solucao-gestao,Gestão,O que a liderança passa a enxergar
+Configuração,PERSONALIZAR PROPOSTA,Definições da jornada,,Passo 1,Públicos do programa
+Configuração,PERSONALIZAR PROPOSTA,Definições da jornada,,Passo 2,Configuração do programa
+Configuração,PERSONALIZAR PROPOSTA,Definições da jornada,,E2W,Sistema de desenvolvimento de competências
+Configuração,PERSONALIZAR PROPOSTA,Definições da jornada,,Workshop,Workshop Comitê Executivo
+Configuração,PERSONALIZAR PROPOSTA,Definições da jornada,,Programa,Nossa proposta para cada trilha
+Proposta,VER PROPOSTA,Documento executivo da proposta,,Síntese do briefing recebido,O ponto de partida desta proposta
+Proposta,VER PROPOSTA,Documento executivo da proposta,,Como pensamos a proposta,A lógica que organiza a solução
+Proposta,VER PROPOSTA,Documento executivo da proposta,,A estrutura da proposta,Como a arquitetura se sustenta nesta configuração
+Proposta,VER PROPOSTA,Documento executivo da proposta,,Públicos participantes,Quem participa da jornada
+Proposta,VER PROPOSTA,Documento executivo da proposta,,Entrega e investimento,O que será entregue e como isso se traduz financeiramente
+Proposta,VER PROPOSTA,Documento executivo da proposta,,Sugestão de calendário,Uma cadência sugerida para ativar a jornada
+Proposta,VER PROPOSTA,Documento executivo da proposta,,Próximos passos,O que precisa ser fechado para avançar

@@ -1,0 +1,3039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chiesi — Programa de Transformação Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1a3cc8;
+  --blue2: #2d4fd4;
+  --blue-pale: #dde3fa;
+  --paper: #0b1024;
+  --mist: #4a5278;
+  --mist2: #7c86aa;
+  --bg: #ffffff;
+  --bg2: #f4f6ff;
+  --bg3: #eaedfa;
+  --line: rgba(26, 60, 200, 0.14);
+  --line2: rgba(26, 60, 200, 0.07);
+  --chiesi: #c8006e;
+  --nav-h: 60px;
+  --h-pad: 64px;
+  --hero-min: 280px;
+  --right-col: 380px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Instrument Sans", sans-serif;
+  font-weight: 300;
+  color: var(--paper);
+  background: var(--bg2);
+  overflow-x: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+}
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: var(--nav-h);
+  padding: 0 64px;
+  background: var(--blue);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-brand {
+  font-family: "DM Mono", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #fff;
+  text-transform: uppercase;
+  margin-right: 12px;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 3px;
+}
+
+.nav-tab {
+  padding: 8px 24px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.nav-tab:hover {
+  color: #fff;
+}
+
+.nav-tab.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-weight: 500;
+}
+
+.nav-right {
+  margin-left: auto;
+}
+
+.chiesi-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.chiesi-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--chiesi);
+}
+
+.screen {
+  display: none;
+  padding-top: var(--nav-h);
+}
+
+.screen.active {
+  display: block;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--hero-min);
+  padding: 80px 64px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--blue) 0%, #1635b8 100%);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.hero-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.hero-label::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.hero-title {
+  max-width: 560px;
+  margin-bottom: 18px;
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(30px, 3vw, 46px);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: #cfe0ff;
+}
+
+.hero-sub {
+  max-width: 540px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+#tela-contexto,
+#tela-solucao,
+#tela-proposta {
+  background: var(--bg);
+}
+
+.section {
+  padding: 64px;
+  border-bottom: 1px solid var(--line2);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.section-label,
+.block-label,
+.sep-label,
+.card-label,
+.right-invest-title,
+.tl-title,
+.right-label,
+.pr-label,
+.prop-section-label,
+.prop-invest-head,
+.eco-table-head,
+.pedagogy-label,
+.mod-num,
+.cluster-tag,
+.group-col-label,
+.gr-label,
+.rs-lbl,
+.it-label,
+.es-label,
+.sistema-label,
+.cov-table th,
+.prop-table th,
+.tl-month,
+.prop-tl-month,
+.tl-note,
+.opt-btn-tag,
+.opt-legend,
+.mod-table-head,
+.mod-table-note,
+.mod-opt-label,
+.eco-tag {
+  font-family: "DM Mono", monospace;
+}
+
+.section-label,
+.block-label {
+  margin-bottom: 8px;
+  color: var(--blue);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.section-title,
+.block-title,
+.prop-section-title {
+  margin-bottom: 20px;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.section-body,
+.block-desc,
+.prop-body,
+.sistema-body,
+.ps-desc,
+.prop-mod-desc {
+  color: var(--mist);
+  line-height: 1.85;
+}
+
+.section-body {
+  max-width: 720px;
+  font-size: 15px;
+}
+
+.section-body p,
+.prop-body p {
+  margin-bottom: 16px;
+}
+
+.section-body p:last-child,
+.prop-body p:last-child {
+  margin-bottom: 0;
+}
+
+.section-body strong,
+.prop-body strong,
+.pedagogy strong {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.num-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin-top: 32px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.num-item {
+  background: var(--bg);
+  padding: 28px 24px;
+}
+
+.num-big,
+.right-total,
+.pit-val,
+.pr-val,
+.gr-val,
+.il-val,
+.sm-val,
+.rs-val,
+.eco-cond-val,
+.etr-val,
+.prop-mod-val,
+.pil-val {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 300;
+}
+
+.num-big {
+  margin-bottom: 10px;
+  color: var(--blue);
+  font-size: 36px;
+  line-height: 1;
+  opacity: 0.3;
+}
+
+.num-text {
+  color: var(--paper);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.group-table,
+.step-list,
+.prop-mods,
+.mods-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-table {
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.group-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 1fr;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.group-name,
+.step-num,
+.ps-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue);
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.group-name {
+  justify-content: flex-start;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.group-col {
+  padding: 16px 20px;
+  border-left: 1px solid var(--line2);
+}
+
+.group-col-label {
+  margin-bottom: 4px;
+  color: var(--mist2);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.group-col-val {
+  color: var(--paper);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.card {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 24px;
+}
+
+.card-label {
+  margin-bottom: 8px;
+  color: var(--blue);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.card-title {
+  margin-bottom: 10px;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+}
+
+.card-items {
+  color: var(--mist);
+  font-size: 12px;
+  line-height: 2.1;
+}
+
+.card-items span {
+  position: relative;
+  display: block;
+  padding-left: 14px;
+}
+
+.card-items span::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--blue);
+  opacity: 0.5;
+}
+
+.sistema-box {
+  position: relative;
+  overflow: hidden;
+  margin-top: 32px;
+  background: var(--blue);
+  padding: 40px;
+}
+
+.sistema-box::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sistema-label {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.sistema-title {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 14px;
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.3;
+}
+
+.sistema-body {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+}
+
+.cta-row {
+  margin-top: 36px;
+}
+
+.btn-cta,
+.btn-primary {
+  cursor: pointer;
+  background: var(--blue);
+  color: #fff;
+  transition: background 0.15s;
+}
+
+.btn-cta {
+  padding: 14px 32px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.btn-cta:hover,
+.btn-primary:hover {
+  background: var(--blue2);
+}
+
+#tela-config {
+  background: var(--bg2);
+}
+
+.config-wrap {
+  display: grid;
+  grid-template-columns: 1fr var(--right-col);
+  align-items: start;
+  min-height: calc(100vh - var(--nav-h) - var(--hero-min));
+}
+
+.config-left {
+  padding: 64px 40px 64px 64px;
+}
+
+.config-right {
+  position: sticky;
+  top: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  height: calc(100vh - var(--nav-h));
+  overflow-y: auto;
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+}
+
+.block {
+  margin-bottom: 40px;
+}
+
+.block-title {
+  margin-bottom: 4px;
+  font-size: 22px;
+}
+
+.block-desc {
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.divider {
+  height: 1px;
+  margin: 32px 0;
+  background: var(--line2);
+}
+
+.clusters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.cluster-card,
+.mod-card {
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  transition: all 0.15s;
+}
+
+.cluster-card {
+  position: relative;
+  padding: 18px;
+  cursor: pointer;
+}
+
+.cluster-card.active {
+  background: var(--blue-pale);
+  border-color: var(--blue);
+}
+
+.cluster-card:hover:not(.active) {
+  border-color: rgba(26, 60, 200, 0.35);
+}
+
+.cluster-check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  transition: all 0.15s;
+}
+
+.cluster-card.active .cluster-check {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.cluster-check::after {
+  content: "✓";
+  color: #fff;
+  font-size: 9px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.cluster-card.active .cluster-check::after {
+  opacity: 1;
+}
+
+.cluster-tag {
+  margin-bottom: 4px;
+  color: var(--mist2);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.cluster-name {
+  margin-bottom: 10px;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.num-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.num-label {
+  flex: 1;
+  color: var(--mist);
+  font-size: 11px;
+}
+
+.num-input,
+.t-input {
+  border: 1px solid var(--line);
+  outline: none;
+  transition: border-color 0.15s;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 300;
+  text-align: center;
+}
+
+.num-input {
+  width: 64px;
+  background: var(--bg);
+  padding: 5px 8px;
+  font-size: 16px;
+}
+
+.num-input:focus,
+.t-input:focus {
+  border-color: var(--blue);
+}
+
+.sep {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 10px;
+}
+
+.sep-label {
+  color: var(--blue);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sep::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.eco-card {
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: var(--blue);
+}
+
+.eco-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  cursor: pointer;
+}
+
+.eco-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.eco-tag {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.eco-name {
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+}
+
+.eco-toggle,
+.mod-toggle {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.eco-toggle {
+  width: 38px;
+  height: 21px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.2s;
+}
+
+.eco-card.active .eco-toggle {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.eco-toggle::after,
+.mod-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.eco-toggle::after {
+  top: 3px;
+  left: 3px;
+  width: 15px;
+  height: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.eco-card.active .eco-toggle::after {
+  transform: translateX(17px);
+  background: var(--blue);
+}
+
+.eco-body {
+  display: none;
+  background: var(--blue);
+}
+
+.eco-card.active .eco-body {
+  display: block;
+}
+
+.eco-conds {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.eco-cond {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.07);
+  transition: background 0.15s;
+}
+
+.eco-cond.on {
+  background: rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #fff;
+}
+
+.eco-cond-name {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.eco-cond-det,
+.etr-val-sub {
+  margin-top: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.eco-cond-val {
+  white-space: nowrap;
+  color: #fff;
+  font-size: 14px;
+}
+
+.eco-note {
+  padding: 10px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+  font-style: italic;
+}
+
+.pedagogy {
+  margin-bottom: 10px;
+  background: var(--blue);
+  padding: 16px 18px;
+}
+
+.pedagogy-label {
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.pedagogy p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.price-note {
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blue);
+  background: var(--bg2);
+  padding: 10px 14px;
+  color: var(--mist);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.price-note strong {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.mods-list {
+  gap: 8px;
+}
+
+.mod-card {
+  overflow: hidden;
+}
+
+.mod-card.active {
+  border-color: var(--blue);
+}
+
+.mod-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+}
+
+.mod-header:hover {
+  background: var(--bg2);
+}
+
+.mod-toggle {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(26, 60, 200, 0.15);
+  transition: background 0.2s;
+}
+
+.mod-card.active .mod-toggle {
+  background: var(--blue);
+}
+
+.mod-toggle::after {
+  width: 14px;
+  height: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.mod-card.active .mod-toggle::after {
+  transform: translateX(14px);
+}
+
+.mod-info {
+  flex: 1;
+}
+
+.mod-num {
+  margin-bottom: 2px;
+  color: var(--mist2);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.mod-title {
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.mod-sub {
+  margin-top: 1px;
+  color: var(--mist);
+  font-size: 11px;
+}
+
+.opt-tag {
+  margin-left: 6px;
+  border: 1px solid var(--line);
+  padding: 2px 6px;
+  color: var(--mist2);
+  font-family: "DM Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.mod-body {
+  display: none;
+  border-top: 1px solid var(--line2);
+  background: var(--bg2);
+  padding: 0 18px 16px;
+}
+
+.mod-card.active .mod-body {
+  display: block;
+}
+
+.mod-opts-row {
+  display: flex;
+  gap: 14px;
+  margin: 12px 0 10px;
+}
+
+.mod-opt-group {
+  flex: 1;
+}
+
+.mod-opt-label {
+  margin-bottom: 6px;
+  color: var(--blue);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.mod-opt-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 5px 10px;
+  color: var(--mist);
+  font-size: 11px;
+  transition: all 0.15s;
+}
+
+.opt-btn.sel {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.opt-btn input[type="radio"] {
+  display: none;
+}
+
+.opt-btn-tag {
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.opt-legend {
+  margin-top: 5px;
+  color: var(--mist2);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.mod-table {
+  margin-top: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.mod-table-head,
+.mod-table-row {
+  display: grid;
+  grid-template-columns: 1fr 60px 80px 60px;
+  gap: 8px;
+  align-items: center;
+}
+
+.mod-table-head {
+  background: var(--blue);
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mod-table-row {
+  border-top: 1px solid var(--line2);
+  background: var(--bg);
+  padding: 8px 12px;
+  color: var(--paper);
+  font-size: 12px;
+}
+
+.mod-table-row.off {
+  opacity: 0.35;
+}
+
+.mod-table-note {
+  border-top: 1px solid var(--line2);
+  background: var(--bg2);
+  padding: 7px 12px;
+  color: var(--mist2);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.t-input {
+  width: 50px;
+  background: var(--bg2);
+  padding: 3px 6px;
+  font-size: 13px;
+}
+
+.t-check {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.gravado-resumo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 8px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.gr-item {
+  background: var(--bg);
+  padding: 12px 14px;
+}
+
+.gr-val {
+  color: var(--blue);
+  font-size: 20px;
+}
+
+.gr-label {
+  margin-top: 2px;
+  color: var(--mist2);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.right-top {
+  flex-shrink: 0;
+  background: var(--blue);
+  padding: 24px;
+}
+
+.right-label {
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.right-total {
+  color: #fff;
+  font-size: 44px;
+  line-height: 1;
+}
+
+.right-total span {
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.right-sub {
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+}
+
+.right-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin-top: 16px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.right-stat {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 11px 13px;
+}
+
+.rs-val {
+  color: #fff;
+  font-size: 20px;
+}
+
+.rs-lbl {
+  margin-top: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.right-invest,
+.right-mods,
+.timeline-wrap,
+.right-cta {
+  padding: 18px 20px;
+}
+
+.right-invest {
+  border-bottom: 1px solid var(--line2);
+}
+
+.right-invest-title,
+.tl-title {
+  margin-bottom: 10px;
+  color: var(--blue);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.invest-line,
+.invest-total,
+.prop-invest-line,
+.prop-invest-total,
+.eco-table-row,
+.sum-mod {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.invest-line {
+  padding: 5px 0;
+  border-bottom: 1px solid var(--line2);
+  font-size: 12px;
+}
+
+.invest-line:last-child {
+  border-bottom: none;
+}
+
+.il-name,
+.pil-name {
+  color: var(--mist);
+}
+
+.il-det,
+.pil-det,
+.sm-det {
+  margin-top: 1px;
+  color: var(--mist2);
+  font-size: 10px;
+}
+
+.il-val,
+.sm-val {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--paper);
+  font-size: 13px;
+}
+
+.invest-total {
+  margin-top: 6px;
+  border-top: 2px solid var(--blue);
+  padding-top: 10px;
+}
+
+.it-label {
+  color: var(--paper);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.it-val {
+  color: var(--blue);
+  font-size: 20px;
+}
+
+.eco-summary {
+  display: none;
+  background: var(--blue);
+  padding: 10px 20px;
+}
+
+.eco-summary.on {
+  display: block;
+}
+
+.es-label {
+  margin-bottom: 2px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 7px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.es-val {
+  color: #fff;
+  font-size: 12px;
+}
+
+.sum-mod {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line2);
+  padding: 7px 0;
+}
+
+.sum-mod:last-child {
+  border-bottom: none;
+}
+
+.sm-name {
+  flex: 1;
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sum-empty {
+  padding: 6px 0;
+  color: var(--mist2);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.timeline-wrap {
+  flex-shrink: 0;
+  border-top: 1px solid var(--line2);
+}
+
+.tl-months,
+.prop-tl-months {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 3px;
+}
+
+.tl-month,
+.prop-tl-month {
+  flex: 1;
+  color: var(--mist2);
+  font-size: 7px;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tl-rows,
+.prop-tl-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tl-row,
+.prop-tl-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tl-row-lbl {
+  width: 62px;
+  overflow: hidden;
+  color: var(--mist);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tl-cells,
+.prop-tl-cells {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+}
+
+.tl-cell,
+.prop-tl-cell {
+  flex: 1;
+  border-radius: 2px;
+  background: var(--bg3);
+}
+
+.tl-cell {
+  height: 13px;
+}
+
+.prop-tl-cell {
+  height: 16px;
+}
+
+.tl-cell.on,
+.prop-tl-cell.on {
+  background: var(--blue);
+  opacity: 0.7;
+}
+
+.tl-cell.on.s,
+.prop-tl-cell.on.s {
+  opacity: 1;
+}
+
+.tl-cell.sc,
+.prop-tl-cell.sc {
+  background: var(--chiesi);
+  opacity: 0.45;
+}
+
+.tl-note {
+  margin-top: 6px;
+  color: var(--mist2);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+.btn-ghost {
+  width: 100%;
+  margin-top: 6px;
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 9px;
+  color: var(--mist);
+  cursor: pointer;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.prop-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 64px 80px;
+}
+
+.prop-section {
+  margin-bottom: 48px;
+}
+
+.prop-section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: var(--blue);
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.prop-section-label::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: var(--blue);
+}
+
+.prop-section-title {
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.prop-section-title em {
+  color: var(--blue);
+  font-style: italic;
+}
+
+.prop-body {
+  font-size: 14px;
+}
+
+.prop-resumo {
+  margin-bottom: 48px;
+  background: var(--blue);
+  padding: 28px 32px;
+}
+
+.pr-label {
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.pr-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.pr-stat {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 14px;
+}
+
+.pr-val {
+  color: #fff;
+  font-size: 26px;
+}
+
+.pr-lbl {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "DM Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pr-body {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.prop-table,
+.cov-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.prop-table th,
+.cov-table th {
+  padding: 9px 12px;
+  text-align: left;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.prop-table th {
+  border-bottom: 2px solid var(--blue);
+  color: var(--mist2);
+}
+
+.cov-table th {
+  background: var(--blue);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.prop-table td,
+.cov-table td {
+  border-bottom: 1px solid var(--line2);
+  padding: 10px 12px;
+  color: var(--mist);
+  vertical-align: top;
+  font-size: 13px;
+}
+
+.prop-table td:first-child,
+.cov-table td:first-child {
+  color: var(--paper);
+}
+
+.prop-table td:first-child {
+  font-weight: 400;
+}
+
+.cov-table td:first-child {
+  width: 160px;
+  font-weight: 500;
+}
+
+.prop-table tr:last-child td,
+.cov-table tr:last-child td {
+  border-bottom: none;
+}
+
+.prop-mod {
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+}
+
+.prop-mod-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+
+.prop-mod-title {
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.prop-mod-val {
+  color: var(--blue);
+  font-size: 14px;
+}
+
+.prop-mod-desc {
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.prop-invest {
+  margin-top: 20px;
+  border: 1px solid var(--line);
+}
+
+.prop-invest-head,
+.eco-table-head {
+  background: var(--blue);
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.prop-invest-line,
+.eco-table-row {
+  align-items: center;
+  border-bottom: 1px solid var(--line2);
+  padding: 12px 20px;
+}
+
+.prop-invest-line:last-child,
+.eco-table-row:last-child {
+  border-bottom: none;
+}
+
+.pil-val {
+  color: var(--paper);
+  font-size: 16px;
+}
+
+.prop-invest-total {
+  border-top: 2px solid var(--blue);
+  background: var(--bg2);
+  padding: 16px 20px;
+}
+
+.pit-label {
+  color: var(--paper);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.pit-val {
+  color: var(--blue);
+  font-size: 26px;
+}
+
+.eco-table {
+  margin-top: 20px;
+  border: 1px solid var(--line);
+}
+
+.eco-table-row.hi {
+  background: var(--blue-pale);
+}
+
+.etr-name {
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.etr-val {
+  white-space: nowrap;
+  color: var(--blue);
+  font-size: 14px;
+}
+
+.etr-val-sub {
+  color: var(--mist2);
+}
+
+.eco-table-note {
+  border-top: 1px solid var(--line2);
+  background: var(--bg2);
+  padding: 9px 20px;
+  color: var(--mist);
+  font-size: 11px;
+  font-style: italic;
+}
+
+.prop-tl {
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  padding: 20px;
+}
+
+.prop-tl-months {
+  gap: 3px;
+  margin-bottom: 5px;
+}
+
+.prop-tl-month {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+}
+
+.prop-tl-rows {
+  gap: 4px;
+}
+
+.prop-tl-row {
+  gap: 3px;
+}
+
+.prop-tl-lbl {
+  width: 110px;
+  flex-shrink: 0;
+  color: var(--mist);
+  font-size: 11px;
+}
+
+.prop-tl-cells {
+  gap: 3px;
+}
+
+.tl-legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.tl-leg {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--mist);
+  font-size: 10px;
+}
+
+.tl-leg-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.prop-steps {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+}
+
+.prop-step {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  border-bottom: 1px solid var(--line2);
+}
+
+.prop-step:last-child {
+  border-bottom: none;
+}
+
+.step-num {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.ps-num {
+  font-size: 17px;
+  font-weight: 300;
+}
+
+.ps-body {
+  padding: 14px 18px;
+}
+
+.ps-title {
+  margin-bottom: 2px;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.ps-desc {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.fade {
+  animation: fadeUp 0.4s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1120px) {
+  .config-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .config-right {
+    position: static;
+    height: auto;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 900px) {
+  .nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 14px 20px;
+  }
+
+  .nav-right {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .screen {
+    padding-top: 110px;
+  }
+
+  .hero,
+  .section,
+  .config-left,
+  .prop-wrap {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .hero {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .clusters-grid,
+  .card-grid,
+  .pr-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .group-row,
+  .mod-opts-row {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .group-name {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    white-space: nowrap;
+  }
+
+  .screen {
+    padding-top: 126px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .num-grid,
+  .gravado-resumo,
+  .right-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .group-row,
+  .prop-step,
+  .mod-table-head,
+  .mod-table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mod-table-head,
+  .mod-table-row {
+    gap: 4px;
+  }
+
+  .prop-invest-line,
+  .prop-invest-total,
+  .eco-table-row,
+  .invest-line,
+  .invest-total,
+  .sum-mod,
+  .prop-mod-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .prop-tl-row,
+  .tl-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .prop-tl-lbl,
+  .tl-row-lbl {
+    width: auto;
+  }
+
+  .tl-cells,
+  .prop-tl-cells {
+    width: 100%;
+  }
+}
+
+@media print {
+  .nav,
+  .right-cta {
+    display: none !important;
+  }
+
+  #tela-config,
+  #tela-contexto,
+  #tela-solucao {
+    display: none !important;
+  }
+
+  #tela-proposta {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-brand">Mastertech</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-screen="contexto" onclick="showTela('contexto')">Contexto</button>
+    <button class="nav-tab" data-screen="solucao" onclick="showTela('solucao')">Solução</button>
+    <button class="nav-tab" data-screen="config" onclick="showTela('config')">Configurar</button>
+    <button class="nav-tab" data-screen="proposta" onclick="gerarProposta()">Ver Proposta</button>
+  </div>
+  <div class="nav-right">
+    <div class="chiesi-badge"><div class="chiesi-dot"></div>Chiesi Brasil</div>
+  </div>
+</nav>
+
+<main id="app"></main>
+
+<script>
+const PRECO_HORA = 800;
+const PRECO_SC_IMPL = 12000;
+const PRECO_SC_LIC = 45;
+const ENCONTROS = 6;
+const HORAS = 2;
+const MESES = ["Set", "Out", "Nov", "Dez", "Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
+
+const state = {
+  currentScreen: "contexto",
+  scAtivo: true,
+  clusters: {
+    comite: true,
+    escritorio: true,
+    fabrica: true,
+    fv: true,
+  },
+  mods: {
+    workshop: true,
+    m1: true,
+    m2: false,
+    m3: false,
+    m4: false,
+    m5: false,
+  },
+  clusterSizes: {
+    comite: 10,
+    escritorio: 150,
+    fabrica: 50,
+    fv: 30,
+  },
+  workshopTurmas: 1,
+  moduleSettings: {},
+};
+
+const CLUSTERS = {
+  comite: {
+    tag: "Grupo 01",
+    label: "Comitê Executivo",
+    min: 1,
+    max: 50,
+    defaultTurmas: 1,
+    context: "Define prioridades e aloca recursos. Fala de transformação digital no nível estratégico, ainda sem estrutura para operacionalizar essa visão para toda a organização.",
+    focus: "Visão estratégica, tomada de decisão sob ambiguidade e cultura de experimentação",
+    deepening: "Lacunas de liderança na transformação e conexão com HLM",
+  },
+  escritorio: {
+    tag: "Grupo 02",
+    label: "Escritório",
+    min: 1,
+    max: 500,
+    defaultTurmas: 3,
+    context: "O maior grupo, com áreas como TI, Marketing, Medical, Compliance e Regulatórios. Convivem perfis com graus muito diferentes de maturidade e interesse pelo digital.",
+    focus: "Ferramentas, processos digitais e colaboração entre áreas",
+    deepening: "Maturidade individual em IA e rotinas de trabalho digital",
+  },
+  fabrica: {
+    tag: "Grupo 03",
+    label: "Fábrica",
+    min: 1,
+    max: 500,
+    defaultTurmas: 1,
+    context: "Ambiente operacional com rotinas físicas consolidadas. O briefing identifica esse grupo como público do programa, mas não detalha o que a digitalização significa especificamente para esse contexto.",
+    focus: "Digitalização de processos operacionais, rastreabilidade e dados de produção",
+    deepening: "Lacunas específicas do ambiente produtivo e integração com sistemas",
+  },
+  fv: {
+    tag: "Grupo 04",
+    label: "Força de Vendas",
+    min: 1,
+    max: 500,
+    defaultTurmas: 1,
+    context: "O grupo com maior resistência declarada ao digital. A visitação presencial define a identidade profissional da maioria. A liderança reconhece o baixíssimo engajamento com o tema hoje.",
+    focus: "Canais digitais, CRM e estratégias para alcançar médicos não visitados",
+    deepening: "Comunicação digital com médicos e uso de dados para priorização de visitas",
+  },
+};
+
+const MODULES = [
+  {
+    id: "m1",
+    num: "01",
+    title: "Transformação Digital",
+    subtitle: "O que a transformação exige de cada profissional · letramento digital · benchmarks do setor",
+    optional: false,
+    groups: ["comite", "escritorio", "fabrica", "fv"],
+    proposal: "O módulo trabalha o que a transformação digital exige de cada profissional e como isso se traduz em decisões e rotinas do dia a dia. Inclui benchmarks do setor farmacêutico e atividades práticas de letramento digital ao longo dos seis encontros.",
+  },
+  {
+    id: "m2",
+    num: "02",
+    title: "IA & Copilot no dia a dia",
+    subtitle: "Engenharia de prompt · casos práticos por área",
+    optional: true,
+    groups: ["comite", "escritorio", "fabrica", "fv"],
+    proposal: "Uso prático de IA generativa e do Copilot aplicado à rotina de cada área. Os encontros partem de situações reais de trabalho e incluem engenharia de prompt, limites regulatórios e casos do setor farmacêutico.",
+  },
+  {
+    id: "m3",
+    num: "03",
+    title: "Comunicação Digital",
+    subtitle: "Canais · segmentação · frequência · médicos não visitados",
+    optional: true,
+    groups: ["fv"],
+    proposal: "Canais digitais, segmentação de audiência, frequência e formatos aplicados à comunicação com médicos. O módulo trabalha o digital como extensão da visitação — para manter relacionamento, alcançar médicos não visitados e aumentar o impacto comercial da força de vendas.",
+  },
+  {
+    id: "m4",
+    num: "04",
+    title: "Mentalidade Ágil",
+    subtitle: "Manifesto ágil · comportamentos aplicáveis · efetividade operacional",
+    optional: true,
+    groups: ["comite", "escritorio", "fabrica", "fv"],
+    proposal: "Os conceitos do manifesto ágil aplicados à realidade da Chiesi. O módulo trabalha comportamentos e rotinas concretas que aumentam efetividade operacional sem exigir reestruturação de times ou processos.",
+  },
+  {
+    id: "m5",
+    num: "05",
+    title: "Liderança na Transformação",
+    subtitle: "Vulnerabilidade · tolerância ao erro · cultura de experimentação · HLM",
+    optional: false,
+    groups: ["comite", "escritorio", "fabrica", "fv"],
+    proposal: "Como a liderança sustenta uma transformação cultural. O módulo trabalha vulnerabilidade, tolerância ao erro, gestão da ambiguidade e o papel da liderança em times que estão aprendendo a operar de forma diferente.",
+  },
+];
+
+const CONTEXTO_SECTIONS = [
+  {
+    label: "A organização",
+    title: "A Chiesi no Brasil",
+    paragraphs: [
+      "A Chiesi é uma multinacional italiana com operação consolidada no Brasil. O time é formado majoritariamente por profissionais de longa data — pessoas que conhecem o negócio com profundidade, construíram relações duradouras com médicos e operam com foco no físico: visitas, amostras, eventos presenciais, materiais impressos.",
+      "Há cerca de três anos, a organização passou a receber colaboradores com perfil mais digital. Esses dois grupos convivem hoje na mesma estrutura, sem uma linguagem comum sobre o que significa operar digitalmente no contexto da Chiesi.",
+      "A liderança global coloca transformação digital entre as prioridades estratégicas. No Brasil, essa diretriz chega de forma macro — presente no discurso, ainda sem estrutura para descer para o dia a dia das equipes. Quando projetos digitais entram em pauta, a cobrança é por resultado imediato, num ritmo que colide com o tempo necessário para mudança cultural acontecer.",
+    ],
+  },
+  {
+    label: "Os grupos",
+    title: "Os quatro grupos",
+    paragraphs: [
+      "Cada grupo traz perguntas diferentes para o tema da transformação digital. Tratar todos da mesma forma produziria um programa genérico — que é exatamente o que a Chiesi diz que não quer.",
+    ],
+    extra: () => `
+      <div class="num-grid">
+        ${Object.entries(CLUSTERS).map(([, cluster], index) => `
+          <div class="num-item">
+            <div class="num-big">${[10, 150, 50, 30][index]}</div>
+            <div class="num-text"><strong>${cluster.label}.</strong> ${cluster.context}</div>
+          </div>
+        `).join("")}
+      </div>
+    `,
+  },
+  {
+    label: "O que a Chiesi quer",
+    title: "O que a Chiesi quer do programa",
+    paragraphs: [
+      "A Chiesi foi explícita no briefing: o programa não pode ser informativo. O risco de não mudar foi nomeado internamente como ineficiência operacional e perda de oportunidade comercial.",
+      "A liderança global tem intenção de estruturar um change management global, mas com foco restrito a CRM para a força de vendas. O programa que a Chiesi Brasil está buscando é mais amplo — cobre toda a organização e vai além de uma ferramenta específica.",
+      "Os módulos sugeridos no briefing não são obrigatórios. O documento deixa explícito que quer recomendações — uma abertura para propor uma arquitetura diferente da que foi esboçada internamente.",
+      "A Chiesi quer que o programa contemple experiências e boas práticas já implementadas na indústria farmacêutica e na área da saúde.",
+    ],
+  },
+  {
+    label: "O que foi pedido",
+    title: "O que foi pedido",
+    paragraphs: [
+      "O briefing define cinco entregáveis e um timing. Assessment para todos os colaboradores, com diagnóstico de maturidade digital e engajamento com o tema. Workshop com o Comitê Executivo para mapear maturidade da liderança, levantar interesses e preocupações, e construir as recomendações para o programa. Plano de change management e treinamento baseado no assessment e no workshop. Criação e condução da trilha de conteúdos e workshops, contemplando experiências e boas práticas da indústria farmacêutica e da área da saúde. Proposta de KPIs para avaliar a efetividade do programa.",
+      "O timing está definido: assessment e workshop com o comitê ainda no segundo semestre de 2026, trilha começando na convenção de março de 2027 e se estendendo pelo primeiro semestre. Os encontros são remotos, com duração máxima de 4 horas, síncronos e assíncronos.",
+    ],
+    cta: { label: "Ver a solução →", action: "showTela('solucao')" },
+  },
+];
+
+const SOLUCAO_SECTIONS = [
+  {
+    label: "Diagnóstico",
+    title: "Diagnóstico de maturidade",
+    paragraphs: [
+      "Antes do programa começar, cada colaborador faz uma autoavaliação estruturada por competência. Para cada uma, define onde está hoje e onde quer chegar — a meta de desenvolvimento. Essa meta é revisada pelo gestor, que pode aprovar, ajustar ou devolver para calibração. O programa só começa depois desse alinhamento.",
+      "O resultado é um mapa individual de competências — técnicas, comportamentais e digitais — com o ponto de partida de cada pessoa e as prioridades acordadas entre ela e a liderança.",
+      "A Chiesi define os temas que quer trabalhar no programa. O ecossistema cruza essas prioridades com os mapas individuais de cada grupo e orienta a construção dos encontros.",
+    ],
+  },
+  {
+    label: "Encontros",
+    title: "Os encontros por grupo",
+    paragraphs: [
+      "A partir dos mapas individuais e das prioridades temáticas definidas pela Chiesi, o ecossistema orienta a construção de 6 encontros por grupo. Os temas são os mesmos para todos — o que constrói uma linguagem comum na organização. A sequência e os exemplos são calibrados para a realidade de cada grupo, porque o que transformação digital exige do comitê executivo, da força de vendas, da fábrica e do escritório tem especificidades que moldam cada encontro.",
+      "Os encontros são majoritariamente práticos, com entrega ao final de cada um. São remotos, com duração máxima de 4 horas, e seguem um ritmo de até 4 horas semanais de facilitação por grupo.",
+    ],
+    extra: () => `
+      <div class="group-table">
+        ${Object.values(CLUSTERS).map(cluster => `
+          <div class="group-row">
+            <div class="group-name">${cluster.label}</div>
+            <div class="group-col">
+              <div class="group-col-label">Ênfase dos encontros</div>
+              <div class="group-col-val">${cluster.focus}</div>
+            </div>
+            <div class="group-col">
+              <div class="group-col-label">Aprofundamento orientado por</div>
+              <div class="group-col-val">${cluster.deepening}</div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `,
+  },
+  {
+    label: "Acompanhamento",
+    title: "Acompanhamento contínuo",
+    paragraphs: [
+      "Ao longo do programa, cada colaborador pode se reavaliar a qualquer momento. O ecossistema conta com um advisor de IA que conduz verificações técnicas de prontidão — checando se o nível declarado pela pessoa é consistente com o que ela demonstra na prática. Novas autoavaliações, validadas por esse processo, atualizam o mapa de competências e registram como a percepção sobre si mesmo está evoluindo.",
+      "O ecossistema acumula essas leituras ao longo do tempo e constrói uma visão longitudinal de cada pessoa. À medida que os mapas individuais se atualizam, o ecossistema identifica colaboradores com maior maturidade em determinadas competências — o que viabiliza aprendizado entre pares dentro da própria organização.",
+      "Quando o acúmulo de dados de um grupo aponta lacunas que os 6 encontros não cobriram, o ecossistema orienta encontros adicionais de aprofundamento. Esses encontros não estão definidos no início do programa. Emergem do que o ecossistema aprende ao longo da jornada.",
+    ],
+  },
+  {
+    label: "Gestão",
+    title: "Visibilidade para a gestão",
+    paragraphs: [
+      "A Chiesi tem acesso a uma visão em tempo real do que está acontecendo com cada grupo ao longo do programa. Os indicadores não são gerados ao final do programa — estão disponíveis desde o início, atualizados a cada nova avaliação.",
+    ],
+    extra: () => `
+      <div class="card-grid">
+        ${[
+          ["Individual", "Cada colaborador", ["Mapa de competências atualizado", "Metas acordadas com a liderança", "Status do plano de desenvolvimento", "Evolução ao longo do programa"]],
+          ["Por grupo", "Cada grupo", ["Distribuição de maturidade no grupo", "Gaps coletivos prioritários", "Evolução desde o início do programa", "Comparação entre grupos"]],
+          ["Do programa", "Os encontros", ["Progresso por encontro e grupo", "Variação de maturidade por etapa", "Indicadores de mudança comportamental", "Base para ajustes em tempo real"]],
+          ["Institucional", "A organização", ["Visão consolidada do capital humano", "Distribuição de competências por área", "Evolução trimestral", "Base para decisões de continuidade"]],
+        ].map(([label, title, items]) => `
+          <div class="card">
+            <div class="card-label">${label}</div>
+            <div class="card-title">${title}</div>
+            <div class="card-items">${items.map(item => `<span>${item}</span>`).join("")}</div>
+          </div>
+        `).join("")}
+      </div>
+    `,
+    cta: { label: "Configurar o programa →", action: "showTela('config')" },
+  },
+];
+
+function initModuleSettings() {
+  MODULES.forEach((module) => {
+    state.moduleSettings[module.id] = {
+      format: "ao_vivo",
+      content: "base",
+      clusters: Object.fromEntries(
+        Object.entries(CLUSTERS).map(([clusterId, cluster]) => [
+          clusterId,
+          {
+            on: module.groups.includes(clusterId),
+            turmas: cluster.defaultTurmas,
+          },
+        ])
+      ),
+    };
+  });
+}
+
+function formatCurrency(value) {
+  return `R$ ${Math.round(value).toLocaleString("pt-BR")}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function activeParticipantCount() {
+  return Object.entries(state.clusterSizes).reduce((total, [clusterId, count]) => {
+    return total + (state.clusters[clusterId] ? count : 0);
+  }, 0);
+}
+
+function allCoreModulesSelected() {
+  return MODULES.every((module) => state.mods[module.id]);
+}
+
+function getProposalMetrics() {
+  const investmentLines = [];
+  const summaryModules = [];
+  const moduleDetails = {};
+  let totalHours = 0;
+  let totalMeetings = 0;
+
+  if (state.mods.workshop) {
+    const hours = state.workshopTurmas * ENCONTROS * HORAS;
+    const value = hours * PRECO_HORA;
+    totalHours += hours;
+    totalMeetings += ENCONTROS * state.workshopTurmas;
+    investmentLines.push({
+      name: "Workshop Comitê Executivo",
+      detail: `${state.workshopTurmas} turma(s) · ${ENCONTROS} encontros · ${hours}h`,
+      value,
+    });
+    summaryModules.push({
+      name: "Workshop Comitê Executivo",
+      detail: `${ENCONTROS * state.workshopTurmas} encontros · ${hours}h`,
+      value,
+    });
+  }
+
+  MODULES.forEach((module) => {
+    if (!state.mods[module.id]) {
+      return;
+    }
+
+    const settings = state.moduleSettings[module.id];
+    const clusterRows = [];
+    let moduleHours = 0;
+    let moduleMeetings = 0;
+
+    Object.entries(CLUSTERS).forEach(([clusterId, cluster]) => {
+      const clusterSettings = settings.clusters[clusterId];
+      if (!state.clusters[clusterId] || !clusterSettings.on) {
+        return;
+      }
+
+      const turmas = settings.format === "ao_vivo" ? clusterSettings.turmas : 1;
+      const hours = turmas * ENCONTROS * HORAS;
+      const meetings = turmas * ENCONTROS;
+
+      moduleHours += hours;
+      moduleMeetings += meetings;
+      clusterRows.push({
+        cluster: cluster.label,
+        turmas,
+        people: state.clusterSizes[clusterId],
+        hours,
+      });
+    });
+
+    if (settings.format === "gravado") {
+      moduleHours = ENCONTROS * HORAS;
+      moduleMeetings = ENCONTROS;
+    }
+
+    let multiplier = 1;
+    if (settings.format === "gravado") {
+      multiplier += 0.4;
+    }
+    if (settings.content === "customizado") {
+      multiplier += 0.2;
+    }
+
+    const value = moduleHours * PRECO_HORA * multiplier;
+    totalHours += moduleHours;
+    totalMeetings += moduleMeetings;
+
+    investmentLines.push({
+      name: module.title,
+      detail: `${settings.format === "gravado" ? "Gravado" : "Ao vivo"} · ${settings.content === "customizado" ? "Customizado" : "Base"} · ${Math.round(moduleHours)}h`,
+      value,
+    });
+
+    summaryModules.push({
+      name: module.title,
+      detail: `${moduleMeetings} encontros · ${Math.round(moduleHours)}h`,
+      value,
+    });
+
+    moduleDetails[module.id] = {
+      clusterRows,
+      format: settings.format,
+      content: settings.content,
+      value,
+    };
+  });
+
+  const participants = activeParticipantCount();
+  let ecosystemValue = 0;
+  if (state.scAtivo) {
+    if (allCoreModulesSelected()) {
+      investmentLines.push({
+        name: "Ecossistema de desenvolvimento",
+        detail: "Incluso nos primeiros 12 meses",
+        value: 0,
+      });
+    } else {
+      ecosystemValue = PRECO_SC_IMPL + participants * PRECO_SC_LIC * 12;
+      investmentLines.push({
+        name: "Ecossistema de desenvolvimento",
+        detail: `Implantação + ${participants} licenças × 12 meses`,
+        value: ecosystemValue,
+      });
+    }
+  }
+
+  const totalInvestment = investmentLines.reduce((sum, item) => sum + item.value, 0);
+
+  return {
+    participants,
+    totalHours,
+    totalMeetings,
+    totalInvestment,
+    totalWeeks: Math.ceil(totalHours / 4),
+    investmentLines,
+    summaryModules,
+    moduleDetails,
+    ecosystemValue,
+    ecosystemIncluded: state.scAtivo && allCoreModulesSelected(),
+  };
+}
+
+function renderEditorialSection(section) {
+  return `
+    <section class="section">
+      <div class="section-label">${section.label}</div>
+      <h2 class="section-title">${section.title}</h2>
+      <div class="section-body">
+        ${section.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
+      </div>
+      ${section.extra ? section.extra() : ""}
+      ${section.cta ? `<div class="cta-row"><button class="btn-cta" onclick="${section.cta.action}">${section.cta.label}</button></div>` : ""}
+    </section>
+  `;
+}
+
+function renderContextScreen() {
+  return `
+    <section id="tela-contexto" class="screen${state.currentScreen === "contexto" ? " active" : ""}">
+      <div class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+          <div class="hero-label">Briefing</div>
+          <h1 class="hero-title">O briefing.</h1>
+          <p class="hero-sub">O que identificamos sobre a organização, os públicos e o escopo do programa.</p>
+        </div>
+      </div>
+      ${CONTEXTO_SECTIONS.map(renderEditorialSection).join("")}
+    </section>
+  `;
+}
+
+function renderSolutionScreen() {
+  return `
+    <section id="tela-solucao" class="screen${state.currentScreen === "solucao" ? " active" : ""}">
+      <div class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+          <div class="hero-label">A solução</div>
+          <h1 class="hero-title">Como o programa<br>é <em>estruturado.</em></h1>
+          <p class="hero-sub">O programa tem quatro dimensões que operam juntas. O ecossistema de desenvolvimento atravessa todas elas, do diagnóstico inicial à visão institucional em tempo real.</p>
+        </div>
+      </div>
+      ${SOLUCAO_SECTIONS.map(renderEditorialSection).join("")}
+    </section>
+  `;
+}
+
+function renderClusterCards() {
+  return Object.entries(CLUSTERS).map(([clusterId, cluster]) => `
+    <div class="cluster-card${state.clusters[clusterId] ? " active" : ""}" onclick="toggleCluster('${clusterId}')">
+      <div class="cluster-check"></div>
+      <div class="cluster-tag">${cluster.tag}</div>
+      <div class="cluster-name">${cluster.label}</div>
+      <div class="num-row">
+        <div class="num-label">Participantes</div>
+        <input
+          class="num-input"
+          type="number"
+          min="${cluster.min}"
+          max="${cluster.max}"
+          value="${state.clusterSizes[clusterId]}"
+          onclick="event.stopPropagation()"
+          oninput="setClusterSize('${clusterId}', this.value)"
+        >
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderWorkshopCard() {
+  const participants = state.clusters.comite ? state.clusterSizes.comite : "—";
+  const hours = state.clusters.comite ? `${state.workshopTurmas * ENCONTROS * HORAS}h` : "—";
+
+  return `
+    <div class="mod-card${state.mods.workshop ? " active" : ""}">
+      <div class="mod-header" onclick="toggleMod('workshop')">
+        <div class="mod-toggle"></div>
+        <div class="mod-info">
+          <div class="mod-num">Entregável · Comitê Executivo</div>
+          <div class="mod-title">Workshop Comitê Executivo</div>
+          <div class="mod-sub">Diagnóstico de maturidade · diretrizes do programa</div>
+        </div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-table">
+          <div class="mod-table-head">
+            <span>Grupo</span>
+            <span>Turmas</span>
+            <span>Pessoas</span>
+            <span>Horas</span>
+          </div>
+          <div class="mod-table-row${!state.clusters.comite ? " off" : ""}">
+            <span>Comitê Executivo</span>
+            <span><input class="t-input" type="number" min="1" max="4" value="${state.workshopTurmas}" oninput="setWorkshopTurmas(this.value)"></span>
+            <span>${participants}</span>
+            <span>${hours}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderModuleCard(module) {
+  const settings = state.moduleSettings[module.id];
+  const activeGroups = Object.entries(CLUSTERS).filter(([clusterId]) => state.clusters[clusterId] && settings.clusters[clusterId].on);
+
+  const recordedSummary = `
+    <div class="gravado-resumo">
+      <div class="gr-item">
+        <div class="gr-val">${activeGroups.reduce((total, [clusterId]) => total + state.clusterSizes[clusterId], 0)}</div>
+        <div class="gr-label">pessoas</div>
+      </div>
+      <div class="gr-item">
+        <div class="gr-val">${ENCONTROS * HORAS}h</div>
+        <div class="gr-label">produção</div>
+      </div>
+      <div class="gr-item">
+        <div class="gr-val">${ENCONTROS}</div>
+        <div class="gr-label">encontros</div>
+      </div>
+    </div>
+  `;
+
+  const liveTableRows = Object.entries(CLUSTERS).map(([clusterId, cluster]) => {
+    const clusterSettings = settings.clusters[clusterId];
+    const on = state.clusters[clusterId] && clusterSettings.on;
+    const turmasValue = on && settings.format === "ao_vivo"
+      ? `<input class="t-input" type="number" min="1" max="20" value="${clusterSettings.turmas}" oninput="setModuleTurmas('${module.id}','${clusterId}', this.value)">`
+      : (on ? "1" : "—");
+
+    return `
+      <div class="mod-table-row${on ? "" : " off"}">
+        <span>
+          <label class="t-check">
+            <input type="checkbox" ${clusterSettings.on ? "checked" : ""} onchange="setModuleClusterOn('${module.id}','${clusterId}', this.checked)" onclick="event.stopPropagation()">
+            ${cluster.label}
+          </label>
+        </span>
+        <span>${turmasValue}</span>
+        <span>${on ? state.clusterSizes[clusterId] : "—"}</span>
+        <span>${on ? `${clusterSettings.turmas * ENCONTROS * HORAS}h` : "—"}</span>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="mod-card${state.mods[module.id] ? " active" : ""}">
+      <div class="mod-header" onclick="toggleMod('${module.id}')">
+        <div class="mod-toggle"></div>
+        <div class="mod-info">
+          <div class="mod-num">Módulo ${module.num}${module.optional ? ' <span class="opt-tag">opcional</span>' : ""}</div>
+          <div class="mod-title">${module.title}</div>
+          <div class="mod-sub">${module.subtitle}</div>
+        </div>
+      </div>
+      <div class="mod-body">
+        <div class="mod-opts-row">
+          <div class="mod-opt-group">
+            <div class="mod-opt-label">Conteúdo</div>
+            <div class="mod-opt-btns">
+              <label class="opt-btn${settings.content === "base" ? " sel" : ""}">
+                <input type="radio" name="content-${module.id}" ${settings.content === "base" ? "checked" : ""} onchange="setModuleContent('${module.id}', 'base')" onclick="event.stopPropagation()">
+                Base
+              </label>
+              <label class="opt-btn${settings.content === "customizado" ? " sel" : ""}">
+                <input type="radio" name="content-${module.id}" ${settings.content === "customizado" ? "checked" : ""} onchange="setModuleContent('${module.id}', 'customizado')" onclick="event.stopPropagation()">
+                Customizado <span class="opt-btn-tag">+20%</span>
+              </label>
+            </div>
+            <div class="opt-legend">${settings.content === "base" ? "Mesmo conteúdo para todos os grupos." : "Conteúdo adaptado para cada grupo."}</div>
+          </div>
+          <div class="mod-opt-group">
+            <div class="mod-opt-label">Formato</div>
+            <div class="mod-opt-btns">
+              <label class="opt-btn${settings.format === "ao_vivo" ? " sel" : ""}">
+                <input type="radio" name="format-${module.id}" ${settings.format === "ao_vivo" ? "checked" : ""} onchange="setModuleFormat('${module.id}', 'ao_vivo')" onclick="event.stopPropagation()">
+                Ao vivo
+              </label>
+              <label class="opt-btn${settings.format === "gravado" ? " sel" : ""}">
+                <input type="radio" name="format-${module.id}" ${settings.format === "gravado" ? "checked" : ""} onchange="setModuleFormat('${module.id}', 'gravado')" onclick="event.stopPropagation()">
+                Gravado <span class="opt-btn-tag">+40%</span>
+              </label>
+            </div>
+            <div class="opt-legend">${settings.format === "ao_vivo" ? "Sessões síncronas. Requer turmas por grupo." : "Conteúdo gravado. Produção única para todos."}</div>
+          </div>
+        </div>
+        <div class="mod-table-note">${ENCONTROS} encontros · ${HORAS}h cada · por turma</div>
+        ${settings.format === "gravado"
+          ? recordedSummary
+          : `<div class="mod-table">
+              <div class="mod-table-head">
+                <span>Grupo</span>
+                <span>Turmas</span>
+                <span>Pessoas</span>
+                <span>Horas</span>
+              </div>
+              ${liveTableRows}
+            </div>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+function renderConfigScreen() {
+  const metrics = getProposalMetrics();
+  const ecosystemAltValue = PRECO_SC_IMPL + metrics.participants * PRECO_SC_LIC * 12;
+
+  return `
+    <section id="tela-config" class="screen${state.currentScreen === "config" ? " active" : ""}">
+      <div class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+          <div class="hero-label">Configurador</div>
+          <h1 class="hero-title">Monte o programa<br>da <em>Chiesi Brasil.</em></h1>
+          <p class="hero-sub">Selecione os públicos, habilite os módulos e defina formato e conteúdo. O investimento é calculado em tempo real.</p>
+        </div>
+      </div>
+      <div class="config-wrap">
+        <div class="config-left">
+          <div class="block">
+            <div class="block-label">Passo 1</div>
+            <div class="block-title">Públicos do programa</div>
+            <div class="block-desc">Selecione os grupos participantes e informe o número de pessoas em cada um.</div>
+            <div class="clusters-grid">${renderClusterCards()}</div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="block">
+            <div class="block-label">Passo 2</div>
+            <div class="block-title">Configuração do programa</div>
+            <div class="block-desc">Habilite os módulos e configure formato, conteúdo e turmas por grupo.</div>
+
+            <div class="sep"><div class="sep-label">Ecossistema</div></div>
+            <div class="eco-card${state.scAtivo ? " active" : ""}">
+              <div class="eco-header" onclick="toggleSC()">
+                <div class="eco-header-left">
+                  <div class="eco-tag">Ecossistema de desenvolvimento</div>
+                  <div class="eco-name">Diagnóstico contínuo e gestão de capital humano</div>
+                </div>
+                <div class="eco-toggle"></div>
+              </div>
+              <div class="eco-body">
+                <div class="eco-conds">
+                  <div class="eco-cond${allCoreModulesSelected() ? " on" : ""}">
+                    <div>
+                      <div class="eco-cond-name">Programa completo</div>
+                      <div class="eco-cond-det">Todos os 5 módulos contratados</div>
+                    </div>
+                    <div class="eco-cond-val">Incluso · 12 meses</div>
+                  </div>
+                  <div class="eco-cond${!allCoreModulesSelected() ? " on" : ""}">
+                    <div>
+                      <div class="eco-cond-name">Seleção parcial</div>
+                      <div class="eco-cond-det">R$ 12.000 implantação + ${metrics.participants} pessoas × R$ 45/mês</div>
+                    </div>
+                    <div class="eco-cond-val">${formatCurrency(ecosystemAltValue)}</div>
+                  </div>
+                </div>
+                <div class="eco-note">${allCoreModulesSelected() ? "Configuração atual: ecossistema incluso nos primeiros 12 meses." : "Configuração atual: ecossistema cobrado separadamente."}</div>
+              </div>
+            </div>
+
+            <div class="sep" style="margin-top:20px"><div class="sep-label">Workshop</div></div>
+            ${renderWorkshopCard()}
+
+            <div class="sep" style="margin-top:20px"><div class="sep-label">Programa</div></div>
+            <div class="pedagogy">
+              <div class="pedagogy-label">Nossa proposta para cada trilha</div>
+              <p>Cada trilha tem <strong>6 encontros</strong> com <strong>2 horas cada</strong>. Os temas são os mesmos para todos os grupos, com sequência e exemplos calibrados para a realidade de cada um.</p>
+            </div>
+            <div class="price-note">
+              O valor de cada módulo varia conforme o <strong>formato</strong> — gravado custa 40% a mais que ao vivo, pois envolve produção de conteúdo — e o <strong>tipo de conteúdo</strong> — customizado por grupo custa 20% a mais que o conteúdo base.
+            </div>
+            <div class="mods-list">${MODULES.map(renderModuleCard).join("")}</div>
+          </div>
+        </div>
+
+        <aside class="config-right">
+          <div class="right-top">
+            <div class="right-label">Investimento total estimado</div>
+            <div class="right-total">${formatCurrency(metrics.totalInvestment)} <span></span></div>
+            <div class="right-sub">${metrics.participants > 0 ? `${metrics.participants} colaboradores · ${Object.values(state.mods).filter(Boolean).length} módulos` : "Configure o programa para ver o resumo"}</div>
+            <div class="right-stats">
+              <div class="right-stat"><div class="rs-val">${metrics.participants}</div><div class="rs-lbl">pessoas</div></div>
+              <div class="right-stat"><div class="rs-val">${Math.round(metrics.totalHours)}h</div><div class="rs-lbl">horas</div></div>
+              <div class="right-stat"><div class="rs-val">${metrics.totalWeeks}</div><div class="rs-lbl">semanas</div></div>
+              <div class="right-stat"><div class="rs-val">${metrics.totalMeetings}</div><div class="rs-lbl">encontros</div></div>
+            </div>
+          </div>
+          <div class="right-invest">
+            <div class="right-invest-title">Investimento</div>
+            <div>
+              ${metrics.investmentLines.length
+                ? metrics.investmentLines.map((line) => `
+                  <div class="invest-line">
+                    <div>
+                      <div class="il-name">${line.name}</div>
+                      <div class="il-det">${line.detail}</div>
+                    </div>
+                    <div class="il-val">${line.value > 0 ? formatCurrency(line.value) : "Incluso"}</div>
+                  </div>
+                `).join("")
+                : `<div class="invest-line"><div class="il-name">Nenhum módulo selecionado</div><div class="il-val">—</div></div>`
+              }
+            </div>
+            <div class="invest-total">
+              <div class="it-label">Total</div>
+              <div class="it-val">${formatCurrency(metrics.totalInvestment)}</div>
+            </div>
+          </div>
+          <div class="eco-summary${state.scAtivo ? " on" : ""}">
+            <div class="es-label">Ecossistema</div>
+            <div class="es-val">${metrics.ecosystemIncluded ? "Incluso · 12 meses" : `${metrics.participants} licenças · R$ 45/pessoa/mês`}</div>
+          </div>
+          <div class="right-mods">
+            <div class="right-invest-title" style="margin-bottom:8px">Módulos</div>
+            ${metrics.summaryModules.length
+              ? metrics.summaryModules.map((module) => `
+                <div class="sum-mod">
+                  <div>
+                    <div class="sm-name">${module.name}</div>
+                    <div class="sm-det">${module.detail}</div>
+                  </div>
+                  <div class="sm-val">${formatCurrency(module.value)}</div>
+                </div>
+              `).join("")
+              : `<div class="sum-empty">Nenhum módulo ativo.</div>`
+            }
+          </div>
+          <div class="timeline-wrap">
+            <div class="tl-title">Calendário · Set/2026</div>
+            <div class="tl-months">${MESES.map((month) => `<div class="tl-month">${month}</div>`).join("")}</div>
+            <div class="tl-rows">${renderTimelineRows(metrics.totalWeeks, false)}</div>
+            <div class="tl-note">Máx. 4h semanais de facilitação</div>
+          </div>
+          <div class="right-cta">
+            <button class="btn-primary" onclick="gerarProposta()">Gerar proposta →</button>
+            <button class="btn-ghost" onclick="window.print()">Exportar PDF</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  `;
+}
+
+function renderTimelineRows(weeks, proposalMode) {
+  const rows = [];
+
+  if (state.mods.workshop) {
+    rows.push({ label: "Workshop", start: 0, end: 1, tone: "blue" });
+  }
+
+  if (MODULES.some((module) => state.mods[module.id])) {
+    const coverage = Math.min(Math.ceil(weeks / 2), 10);
+    rows.push({ label: "Trilha", start: 6, end: Math.min(6 + coverage, 10), tone: "blue" });
+  }
+
+  if (state.scAtivo) {
+    rows.push({ label: "Ecossistema", start: 0, end: 10, tone: "sc" });
+  }
+
+  return rows.map((row) => {
+    const cellClass = proposalMode ? "prop-tl-cell" : "tl-cell";
+    const rowClass = proposalMode ? "prop-tl-row" : "tl-row";
+    const labelClass = proposalMode ? "prop-tl-lbl" : "tl-row-lbl";
+    const cellsClass = proposalMode ? "prop-tl-cells" : "tl-cells";
+    const cells = MESES.map((_, index) => {
+      let classes = cellClass;
+      if (index >= row.start && index < row.end) {
+        classes += row.tone === "sc" ? " sc" : ` on${index === row.start ? " s" : ""}`;
+      }
+      return `<div class="${classes}"></div>`;
+    }).join("");
+
+    return `
+      <div class="${rowClass}">
+        <div class="${labelClass}">${row.label}</div>
+        <div class="${cellsClass}">${cells}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderProposalScreen() {
+  const metrics = getProposalMetrics();
+  const activeModules = MODULES.filter((module) => state.mods[module.id]);
+  const proposalDate = new Date().toLocaleDateString("pt-BR");
+
+  return `
+    <section id="tela-proposta" class="screen${state.currentScreen === "proposta" ? " active" : ""}">
+      <div class="hero fade">
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+          <div class="hero-label">Proposta · Chiesi Brasil</div>
+          <h1 class="hero-title">Programa de <em>Transformação Digital</em><br>e Gestão da Mudança</h1>
+          <p class="hero-sub">Configurado em ${proposalDate} · ${metrics.participants} colaboradores · ${Object.values(state.mods).filter(Boolean).length} módulos</p>
+        </div>
+      </div>
+
+      <div class="prop-wrap">
+        <div class="prop-section fade">
+          <div class="prop-resumo">
+            <div class="pr-label">Resumo executivo</div>
+            <div class="pr-stats">
+              <div class="pr-stat"><div class="pr-val">${metrics.participants}</div><div class="pr-lbl">colaboradores</div></div>
+              <div class="pr-stat"><div class="pr-val">${Math.round(metrics.totalHours)}h</div><div class="pr-lbl">facilitação</div></div>
+              <div class="pr-stat"><div class="pr-val">${metrics.totalWeeks}</div><div class="pr-lbl">semanas</div></div>
+              <div class="pr-stat"><div class="pr-val">${metrics.totalMeetings}</div><div class="pr-lbl">encontros</div></div>
+            </div>
+            <div class="pr-body">A Chiesi Brasil tem ${metrics.participants} colaboradores com perfis, realidades operacionais e graus de familiaridade com digital muito distintos entre si. Este programa foi estruturado para atuar sobre esse espectro inteiro, com trilhas calibradas por grupo, encontros majoritariamente práticos e um ecossistema de acompanhamento que torna o progresso visível ao longo de toda a jornada.</div>
+          </div>
+        </div>
+
+        <div class="prop-section fade">
+          <div class="prop-section-label">Públicos</div>
+          <h2 class="prop-section-title">Públicos do programa</h2>
+          <table class="prop-table">
+            <thead>
+              <tr><th>Grupo</th><th>Participantes</th><th>Foco da trilha</th></tr>
+            </thead>
+            <tbody>
+              ${Object.entries(CLUSTERS).map(([clusterId, cluster]) => {
+                if (!state.clusters[clusterId]) {
+                  return "";
+                }
+                return `<tr><td>${cluster.label}</td><td>${state.clusterSizes[clusterId]} pessoas</td><td>${cluster.focus}</td></tr>`;
+              }).join("")}
+              <tr><td><strong>Total</strong></td><td><strong>${metrics.participants} pessoas</strong></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="prop-section fade">
+          <div class="prop-section-label">Estrutura</div>
+          <h2 class="prop-section-title">Os encontros por grupo</h2>
+          <div class="prop-body"><p>Cada grupo percorre a mesma espinha temática — o que constrói linguagem comum na organização — com sequência, exemplos e atividades calibrados para a sua realidade. Todos os encontros têm entrega concreta.</p></div>
+          <div class="prop-mods">
+            ${state.mods.workshop ? `
+              <div class="prop-mod">
+                <div class="prop-mod-header">
+                  <div class="prop-mod-title">Workshop Comitê Executivo</div>
+                  <div class="prop-mod-val">${formatCurrency(metrics.investmentLines.find((line) => line.name === "Workshop Comitê Executivo")?.value || 0)}</div>
+                </div>
+                <div class="prop-mod-desc">A liderança entra no programa antes de todos. O workshop mapeia maturidade do comitê, levanta preocupações reais e constrói as diretrizes que orientam o programa para toda a organização.</div>
+              </div>
+            ` : ""}
+            ${activeModules.map((module) => {
+              const detail = metrics.moduleDetails[module.id];
+              const investmentLine = metrics.investmentLines.find((line) => line.name === module.title);
+              return `
+                <div class="prop-mod">
+                  <div class="prop-mod-header">
+                    <div class="prop-mod-title">${module.title}</div>
+                    <div class="prop-mod-val">${formatCurrency(investmentLine?.value || 0)}</div>
+                  </div>
+                  <div class="prop-mod-desc">${module.proposal}</div>
+                  ${detail?.clusterRows?.length ? `
+                    <table style="width:100%;border-top:1px solid var(--line2);margin-top:8px">
+                      ${detail.clusterRows.map((row) => `
+                        <tr>
+                          <td style="padding:5px 0;font-size:11px;color:var(--mist)">${row.cluster}</td>
+                          <td style="padding:5px 0;font-size:11px;color:var(--mist);text-align:right">${row.turmas} turma(s) · ${row.hours}h total</td>
+                        </tr>
+                      `).join("")}
+                    </table>
+                  ` : ""}
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+
+        ${state.scAtivo ? `
+          <div class="prop-section fade">
+            <div class="prop-section-label">Ecossistema</div>
+            <h2 class="prop-section-title">O ecossistema de desenvolvimento</h2>
+            <div class="prop-body">
+              <p>Todo o acompanhamento do programa — autoavaliações, mapas individuais de competência, planos de desenvolvimento e indicadores de evolução — é gerenciado por um ecossistema proprietário de gestão de capital humano. Ele registra o desenvolvimento em tempo real, cruza o que cada pessoa declara com o que ela demonstra na prática e entrega quatro níveis de leitura: individual, por grupo, do programa e institucional.</p>
+              <p>Os KPIs de efetividade são gerados como dado nativo ao longo de toda a jornada. O acesso está configurado para <strong>${metrics.participants} licenças por 12 meses</strong>, cobrindo o programa e o acompanhamento posterior.</p>
+            </div>
+          </div>
+        ` : ""}
+
+        <div class="prop-section fade">
+          <div class="prop-section-label">Cobertura do escopo</div>
+          <h2 class="prop-section-title">Cobertura do escopo</h2>
+          <table class="cov-table">
+            <thead>
+              <tr><th>Entregável</th><th>Ecossistema</th><th>Encontros</th><th>Aprofundamento</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Diagnóstico de maturidade</td><td>Autoavaliação estruturada por competência, com meta acordada entre colaborador e gestor</td><td>—</td><td>—</td></tr>
+              <tr><td>Workshop Comitê Executivo</td><td>—</td><td>Sessão dedicada antes do início da trilha, com mapeamento de maturidade da liderança</td><td>—</td></tr>
+              <tr><td>Plano de change management</td><td>Ecossistema cruza diagnóstico com prioridades da Chiesi e orienta a estrutura por grupo</td><td>Encontros definidos a partir desse cruzamento</td><td>Encontros adicionais emergem do que o ecossistema aprende ao longo da jornada</td></tr>
+              <tr><td>Trilha de conteúdos</td><td>—</td><td>6 encontros por grupo, com ênfase calibrada para cada um</td><td>Até 4 por grupo, orientados pelo diagnóstico contínuo</td></tr>
+              <tr><td>KPIs de efetividade</td><td>Indicadores em tempo real nos quatro níveis: individual, grupo, programa e institucional</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="prop-section fade">
+          <div class="prop-section-label">Calendário</div>
+          <h2 class="prop-section-title">Calendário de execução</h2>
+          <div class="prop-tl">
+            <div class="prop-tl-months">${MESES.map((month) => `<div class="prop-tl-month">${month}</div>`).join("")}</div>
+            <div class="prop-tl-rows">${renderTimelineRows(metrics.totalWeeks, true)}</div>
+            <div class="tl-legend">
+              <div class="tl-leg"><div class="tl-leg-dot" style="background:var(--blue);opacity:0.8"></div>Programa</div>
+              ${state.scAtivo ? '<div class="tl-leg"><div class="tl-leg-dot" style="background:var(--chiesi);opacity:0.5"></div>Ecossistema</div>' : ""}
+            </div>
+          </div>
+          <div class="prop-body" style="margin-top:14px">
+            <p>O workshop com o Comitê Executivo e o diagnóstico inicial ocorrem no 2º semestre de 2026. A trilha começa na convenção de março de 2027 e segue pelo 1º semestre. O programa está calibrado para no máximo 4 horas semanais de facilitação por grupo, mantendo o ritmo compatível com a operação.</p>
+          </div>
+        </div>
+
+        <div class="prop-section fade">
+          <div class="prop-section-label">Investimento</div>
+          <h2 class="prop-section-title">Investimento</h2>
+          <div class="prop-invest">
+            <div class="prop-invest-head">Detalhamento</div>
+            <div>
+              ${metrics.investmentLines.map((line) => `
+                <div class="prop-invest-line">
+                  <div>
+                    <div class="pil-name">${line.name}</div>
+                    <div class="pil-det">${line.detail}</div>
+                  </div>
+                  <div class="pil-val">${line.value > 0 ? formatCurrency(line.value) : "Incluso"}</div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="prop-invest-total">
+              <div class="pit-label">Investimento total</div>
+              <div class="pit-val">${formatCurrency(metrics.totalInvestment)}</div>
+            </div>
+          </div>
+          <div class="eco-table">
+            <div class="eco-table-head">Ecossistema · condições de contratação</div>
+            <div class="eco-table-row${metrics.ecosystemIncluded ? " hi" : ""}">
+              <div>
+                <div class="etr-name">Programa completo (5 módulos)</div>
+                <div class="etr-val-sub">Todos os módulos contratados</div>
+              </div>
+              <div class="etr-val">Incluso · 12 meses</div>
+            </div>
+            <div class="eco-table-row${!metrics.ecosystemIncluded ? " hi" : ""}">
+              <div>
+                <div class="etr-name">Seleção parcial</div>
+                <div class="etr-val-sub">R$ 12.000 implantação + ${metrics.participants} pessoas × R$ 45/mês</div>
+              </div>
+              <div class="etr-val">${formatCurrency(PRECO_SC_IMPL + metrics.participants * PRECO_SC_LIC * 12)}</div>
+            </div>
+            <div class="eco-table-note">${metrics.ecosystemIncluded ? "Com a configuração atual, o ecossistema está incluso." : "Com a configuração atual, o ecossistema é cobrado separadamente."}</div>
+          </div>
+        </div>
+
+        <div class="prop-section fade">
+          <div class="prop-section-label">Próximos passos</div>
+          <h2 class="prop-section-title">Próximos passos</h2>
+          <div class="prop-steps">
+            ${[
+              ["Reunião de alinhamento", "Revisão da configuração do programa, ajustes de escopo e definição do calendário de início."],
+              ["Workshop Comitê Executivo", "Diagnóstico de maturidade da liderança e construção das diretrizes que orientam o programa para toda a organização."],
+              ["Diagnóstico e ativação do ecossistema", "Autoavaliações para todos os colaboradores e ativação do ecossistema de gestão antes do início da trilha."],
+              ["Início da trilha — Convenção março 2027", "Abertura do programa para toda a organização, com encontros por grupo e acompanhamento contínuo pelo ecossistema."],
+            ].map((step, index) => `
+              <div class="prop-step">
+                <div class="ps-num">${index + 1}</div>
+                <div class="ps-body">
+                  <div class="ps-title">${step[0]}</div>
+                  <div class="ps-desc">${step[1]}</div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderApp() {
+  document.getElementById("app").innerHTML = [
+    renderContextScreen(),
+    renderSolutionScreen(),
+    renderConfigScreen(),
+    renderProposalScreen(),
+  ].join("");
+
+  document.querySelectorAll(".nav-tab").forEach((button) => {
+    button.classList.toggle("active", button.dataset.screen === state.currentScreen);
+  });
+}
+
+function showTela(screen) {
+  state.currentScreen = screen;
+  renderApp();
+  window.scrollTo(0, 0);
+}
+
+function sanitizeNumber(value, fallback, min = 1, max = 999) {
+  const parsed = parseInt(value, 10);
+  if (Number.isNaN(parsed)) {
+    return fallback;
+  }
+  return Math.max(min, Math.min(max, parsed));
+}
+
+function setClusterSize(clusterId, value) {
+  const cluster = CLUSTERS[clusterId];
+  state.clusterSizes[clusterId] = sanitizeNumber(value, state.clusterSizes[clusterId], cluster.min, cluster.max);
+  renderApp();
+}
+
+function setWorkshopTurmas(value) {
+  state.workshopTurmas = sanitizeNumber(value, state.workshopTurmas, 1, 4);
+  renderApp();
+}
+
+function toggleCluster(clusterId) {
+  state.clusters[clusterId] = !state.clusters[clusterId];
+  renderApp();
+}
+
+function toggleMod(moduleId) {
+  state.mods[moduleId] = !state.mods[moduleId];
+  renderApp();
+}
+
+function toggleSC() {
+  state.scAtivo = !state.scAtivo;
+  renderApp();
+}
+
+function setModuleFormat(moduleId, format) {
+  state.moduleSettings[moduleId].format = format;
+  renderApp();
+}
+
+function setModuleContent(moduleId, content) {
+  state.moduleSettings[moduleId].content = content;
+  renderApp();
+}
+
+function setModuleTurmas(moduleId, clusterId, value) {
+  const current = state.moduleSettings[moduleId].clusters[clusterId].turmas;
+  state.moduleSettings[moduleId].clusters[clusterId].turmas = sanitizeNumber(value, current, 1, 20);
+  renderApp();
+}
+
+function setModuleClusterOn(moduleId, clusterId, checked) {
+  state.moduleSettings[moduleId].clusters[clusterId].on = checked;
+  renderApp();
+}
+
+function gerarProposta() {
+  showTela("proposta");
+}
+
+initModuleSettings();
+renderApp();
+</script>
+</body>
+</html>
