@@ -2336,8 +2336,8 @@ button {
 .mod-table-head,
 .mod-table-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 72px 56px 112px 184px;
-  column-gap: 8px;
+  grid-template-columns: minmax(140px, 1fr) 72px 132px 132px 168px;
+  column-gap: 12px;
   align-items: center;
 }
 
@@ -2377,11 +2377,10 @@ button {
 }
 
 .mod-hours-inline {
-  display: inline-grid;
-  grid-template-columns: 44px 1fr;
-  align-items: baseline;
-  column-gap: 10px;
-  text-align: left;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
   width: 100%;
 }
 
@@ -2400,7 +2399,9 @@ button {
   font-size: 9px;
   letter-spacing: 0.02em;
   line-height: 1.35;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  max-width: 100%;
 }
 
 .mod-table-row.off {
@@ -3296,9 +3297,17 @@ button {
   letter-spacing: 0.05em;
 }
 
+.proposal-load-sublines {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
 .proposal-load-subline {
   display: block;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .proposal-format-cell {
@@ -3311,27 +3320,27 @@ button {
 
 .proposal-offer-table th:nth-child(1),
 .proposal-offer-table td:nth-child(1) {
-  width: 20%;
+  width: 17%;
 }
 
 .proposal-offer-table th:nth-child(2),
 .proposal-offer-table td:nth-child(2) {
-  width: 20%;
+  width: 16%;
 }
 
 .proposal-offer-table th:nth-child(3),
 .proposal-offer-table td:nth-child(3) {
-  width: 15%;
+  width: 12%;
 }
 
 .proposal-offer-table th:nth-child(4),
 .proposal-offer-table td:nth-child(4) {
-  width: 15%;
+  width: 27%;
 }
 
 .proposal-offer-table th:nth-child(5),
 .proposal-offer-table td:nth-child(5) {
-  width: 15%;
+  width: 13%;
   text-align: right;
 }
 
@@ -3786,33 +3795,50 @@ button {
   }
 }
 
+/* ====== PDF cover (visível apenas no print) ====== */
+.pdf-cover {
+  display: none;
+}
+
 @page {
   size: A4 portrait;
-  margin: 14mm 12mm 14mm 12mm;
+  margin: 16mm 14mm 18mm 14mm;
+}
+
+@page :first {
+  margin: 0;
 }
 
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
   :root {
     --page-pad: 0;
     --section-pad-y: 10mm;
   }
 
+  html,
   body {
     background: #fff;
   }
 
+  .cover,
+  .mobile-block,
   .nav,
   .section-index,
   .config-layout > .section-index,
   .proposal-layout > .section-index,
   .right-cta,
-  .proposal-print-btn {
-    display: none !important;
-  }
-
-  #tela-config,
+  .proposal-print-btn,
   #tela-contexto,
-  #tela-solucao {
+  #tela-mastertech,
+  #tela-solucao,
+  #tela-config,
+  #tela-admin {
     display: none !important;
   }
 
@@ -3821,45 +3847,121 @@ button {
     padding-top: 0 !important;
   }
 
-  .hero {
-    height: auto;
-    min-height: 0;
-    padding: 0 0 8mm;
-    background: #fff;
-    border-bottom: 1px solid var(--proposal-stroke-mid);
-  }
-
-  .hero-grid {
-    display: none;
-  }
-
-  .hero-title,
-  .hero-sub {
-    color: var(--paper);
-  }
-
-  .hero-title {
-    max-width: none;
-    font-size: 27pt;
-    line-height: 1.08;
-  }
-
-  .hero-sub {
-    max-width: none;
-    font-size: 10.5pt;
-    line-height: 1.55;
+  #tela-proposta > .hero {
+    display: none !important;
   }
 
   .proposal-layout,
   .proposal-doc {
     display: block;
     padding: 0;
+    margin: 0;
   }
 
+  /* Capa do PDF — primeira página inteira */
+  .pdf-cover {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 210mm;
+    height: 297mm;
+    padding: 28mm 22mm 26mm;
+    margin: 0;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 60%),
+      var(--blue);
+    color: #fff;
+    box-sizing: border-box;
+    page-break-after: always;
+    break-after: page;
+    overflow: hidden;
+  }
+
+  .pdf-cover-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 9pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .pdf-cover-brand {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+  }
+
+  .pdf-cover-confidencial {
+    border: 1px solid rgba(255, 255, 255, 0.36);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 7.5pt;
+  }
+
+  .pdf-cover-main {
+    display: flex;
+    flex-direction: column;
+    gap: 14mm;
+  }
+
+  .pdf-cover-kicker {
+    font-size: 9pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .pdf-cover-title {
+    margin: 0;
+    max-width: 140mm;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 38pt;
+    font-weight: 300;
+    line-height: 1.05;
+    color: #fff;
+  }
+
+  .pdf-cover-client {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 14pt;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .pdf-cover-foot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10mm;
+    padding-top: 12mm;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .pdf-cover-meta-label {
+    font-size: 7.5pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 4px;
+  }
+
+  .pdf-cover-meta-val {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 11.5pt;
+    font-weight: 400;
+    color: #fff;
+  }
+
+  /* Seções do documento — uma por página */
   .proposal-section {
+    padding: 4mm 0 6mm;
     break-inside: avoid;
     page-break-inside: avoid;
-    padding: 8mm 0;
+  }
+
+  .proposal-section + .proposal-section {
+    page-break-before: always;
+    break-before: page;
   }
 
   .proposal-head {
@@ -3868,27 +3970,81 @@ button {
     margin-bottom: 6mm;
   }
 
+  .proposal-icon {
+    color: var(--blue);
+  }
+
   .proposal-icon svg {
     width: 28px;
     height: 28px;
   }
 
+  .proposal-kicker {
+    font-size: 8.5pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+
   .proposal-title {
     max-width: none;
-    font-size: 19pt;
+    font-size: 20pt;
+    line-height: 1.15;
   }
 
   .proposal-caput {
     max-width: none;
-    font-size: 10.5pt;
-    line-height: 1.6;
+    font-size: 10pt;
+    line-height: 1.55;
   }
 
   .proposal-section > :not(.proposal-head) {
     margin-left: 62px;
   }
 
-  .proposal-table {
+  /* Tabelas — repetir cabeçalho e evitar quebra ruim */
+  .proposal-table,
+  .proposal-offer-table {
     font-size: 9pt;
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  .proposal-table thead,
+  .proposal-offer-table thead {
+    display: table-header-group;
+  }
+
+  .proposal-table tr,
+  .proposal-offer-table tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .proposal-table th,
+  .proposal-offer-table th {
+    background: var(--blue) !important;
+    color: #fff !important;
+  }
+
+  /* Cards/layers — densificar */
+  .proposal-summary-grid,
+  .proposal-principles-grid,
+  .proposal-public-card-grid {
+    gap: 4mm;
+  }
+
+  .proposal-layer-stack {
+    gap: 3mm;
+  }
+
+  .proposal-layer {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .proposal-investment-foot {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }

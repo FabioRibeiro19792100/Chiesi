@@ -2603,6 +2603,34 @@ function App() {
           </aside>
 
         <div className="proposal-doc">
+          <section className="pdf-cover" aria-hidden="true">
+            <div className="pdf-cover-bar">
+              <span className="pdf-cover-brand">Mastertech</span>
+              <span className="pdf-cover-confidencial">Confidencial</span>
+            </div>
+            <div className="pdf-cover-main">
+              <div className="pdf-cover-kicker">Proposta comercial</div>
+              <h1 className="pdf-cover-title">
+                Programa de Transformação Digital e Gestão da Mudança
+              </h1>
+              <div className="pdf-cover-client">para Chiesi Brasil</div>
+            </div>
+            <div className="pdf-cover-foot">
+              <div className="pdf-cover-meta">
+                <div className="pdf-cover-meta-label">Metodologia</div>
+                <div className="pdf-cover-meta-val">Mastertech proprietária</div>
+              </div>
+              <div className="pdf-cover-meta">
+                <div className="pdf-cover-meta-label">Emissão</div>
+                <div className="pdf-cover-meta-val">{proposalDate}</div>
+              </div>
+              <div className="pdf-cover-meta">
+                <div className="pdf-cover-meta-label">Investimento</div>
+                <div className="pdf-cover-meta-val">{formatCurrency(totalInvestment)}</div>
+              </div>
+            </div>
+          </section>
+
           <section className="proposal-section fade section-anchor" id="proposal-briefing">
             <div className="proposal-head">
               <div className="proposal-icon">
@@ -2778,7 +2806,7 @@ function App() {
                       <td>
                         <span className="proposal-load-cell">
                           <strong>{row.loadMain}</strong>
-                          <span>
+                          <span className="proposal-load-sublines">
                             {String(row.loadSub)
                               .split("\n")
                               .map((part, index) => (
