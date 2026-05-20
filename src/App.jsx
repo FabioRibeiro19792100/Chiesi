@@ -2112,10 +2112,13 @@ function App() {
                     <div className="eco-name">
                       E2W — sistema proprietário da Mastertech
                     </div>
-                    <div className="eco-sub">
-                      O E2W é a base técnica da metodologia: sustenta diagnóstico,
-                      acompanhamento e gestão da evolução. Sem ele não existe a proposta
-                      Mastertech, por isso está sempre presente nesta configuração.
+                    <div className="eco-callout">
+                      <div className="eco-callout-mark">E2W</div>
+                      <p className="eco-callout-text">
+                        O E2W é a <strong>base técnica da metodologia</strong>: sustenta diagnóstico,
+                        acompanhamento e gestão da evolução. Sem ele não existe a proposta Mastertech,
+                        por isso está sempre presente nesta configuração.
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -1788,6 +1788,46 @@ button {
   font-weight: 300;
 }
 
+.eco-callout {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  margin-top: 14px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 4px solid var(--blue);
+  padding: 14px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.eco-callout-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 56px;
+  padding: 0 12px;
+  background: var(--blue);
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  border-radius: 6px;
+}
+
+.eco-callout-text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.eco-callout-text strong {
+  color: var(--blue);
+  font-weight: 600;
+}
+
 .eco-toggle,
 .mod-toggle {
   position: relative;
