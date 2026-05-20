@@ -2871,6 +2871,27 @@ button {
 .proposal-print-btn {
   width: 100%;
   margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-color: var(--blue);
+  background: var(--blue);
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  box-shadow: 0 12px 24px rgba(26, 60, 200, 0.18);
+}
+
+.proposal-print-btn:hover {
+  border-color: var(--blue2);
+  background: var(--blue2);
+  color: #fff;
+}
+
+.proposal-print-btn svg {
+  flex: 0 0 auto;
 }
 
 .proposal-doc {

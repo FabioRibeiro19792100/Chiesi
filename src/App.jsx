@@ -2,6 +2,7 @@ import {
   CalendarRange,
   CircleCheckBig,
   Crosshair,
+  FileDown,
   FileStack,
   LayoutGrid,
   Lightbulb,
@@ -2705,7 +2706,8 @@ function App() {
               </a>
             ))}
             <button className="btn-ghost proposal-print-btn" onClick={printProposal}>
-              Exportar PDF
+              <FileDown size={16} strokeWidth={1.8} />
+              <span>Exportar PDF</span>
             </button>
           </aside>
 
