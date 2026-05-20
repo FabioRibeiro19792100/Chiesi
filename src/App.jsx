@@ -522,6 +522,109 @@ const PROPOSAL_EXECUTION_STEPS = [
   },
 ];
 
+const PROPOSAL_FAQ = [
+  {
+    question: "Quem é a Mastertech e que tipo de atuação sustenta esta proposta?",
+    answer:
+      "A Mastertech é uma empresa de educação especializada em transformação digital, inovação e cultura ágil, com atuação corporativa construída ao longo de dez anos. Esta proposta é sustentada por uma combinação de repertório educacional, desenho consultivo e tecnologia própria.",
+  },
+  {
+    question: "O que caracteriza a atuação da Mastertech nesta proposta?",
+    answer:
+      "A proposta nasce de uma leitura de contexto e de uma arquitetura de jornada. O foco está em construir repertório, orientar aplicação prática e sustentar transformação ao longo do percurso.",
+  },
+  {
+    question: "Qual é o papel do diagnóstico dentro da metodologia?",
+    answer:
+      "O diagnóstico organiza prioridades, profundidade e recortes da solução. Ele dá precisão à jornada e orienta as escolhas que tornam a proposta aderente a cada público.",
+  },
+  {
+    question: "Como a Mastertech define a arquitetura final da jornada?",
+    answer:
+      "A arquitetura final é consolidada a partir da leitura inicial da organização, da calibração com a liderança e das evidências produzidas ao longo do processo. A proposta já apresenta uma base clara e preserva espaço para ajuste fino com mais contexto.",
+  },
+  {
+    question: "Por que a proposta combina base on-demand e encontros ao vivo?",
+    answer:
+      "Cada formato cumpre uma função complementar. A base on-demand nivela linguagem e fundamentos; os encontros ao vivo transformam esse repertório em prática, discussão aplicada e tomada de decisão.",
+  },
+  {
+    question: "Como os encontros ao vivo são organizados?",
+    answer:
+      "Os encontros ao vivo são estruturados em blocos objetivos, com foco em aplicação, discussão de casos e leitura de contexto. A trilha busca equilíbrio entre cadência, profundidade e aderência à rotina.",
+  },
+  {
+    question: "Por que o Comitê Executivo opera com encontros de 1 hora?",
+    answer:
+      "A dinâmica da liderança favorece encontros mais curtos, densos e orientados à tomada de decisão. Esse formato preserva foco e aderência à agenda do público executivo.",
+  },
+  {
+    question: "Como a solução é calibrada por público?",
+    answer:
+      "Cada público entra na jornada com recortes, ênfases e desdobramentos próprios. A base pode ser comum, enquanto a trilha ao vivo é ajustada conforme realidade, maturidade e papel de cada grupo.",
+  },
+  {
+    question: "O que acontece na prática nos encontros ao vivo?",
+    answer:
+      "Os encontros ao vivo trabalham casos, dilemas, exemplos de rotina, construção de repertório comum e aplicação direta ao contexto de trabalho. A metodologia privilegia participação e uso prático do conteúdo.",
+  },
+  {
+    question: "Como a Mastertech garante aplicação prática ao longo da jornada?",
+    answer:
+      "A aplicação prática está presente no desenho metodológico, nos recortes por público e na organização dos encontros em torno de situações reais de trabalho. Isso aproxima conteúdo, operação e tomada de decisão.",
+  },
+  {
+    question: "Qual é o papel do E2W na execução?",
+    answer:
+      "O E2W sustenta diagnóstico, leitura de progresso e governança. Ele organiza evidências da jornada e transforma desenvolvimento em acompanhamento estruturado.",
+  },
+  {
+    question: "Como o E2W participa da solução?",
+    answer:
+      "O E2W atua como camada estrutural da proposta. Ele conecta leitura inicial, personalização, acompanhamento e visão consolidada da evolução ao longo da jornada.",
+  },
+  {
+    question: "Como a evolução dos participantes é acompanhada?",
+    answer:
+      "A evolução é acompanhada por indicadores de progresso, leitura por público e consolidação de evidências ao longo do percurso. Isso permite observar aprofundamento, aderência e movimento de desenvolvimento.",
+  },
+  {
+    question: "Como a jornada pode ser ajustada ao longo da execução?",
+    answer:
+      "A proposta prevê leitura contínua e recalibração ao longo do processo. Isso permite ajustar intensidade, aprofundamentos e prioridades com base no que a jornada revela.",
+  },
+  {
+    question: "Como a governança da solução funciona?",
+    answer:
+      "A governança acontece por meio de acompanhamento estruturado, leitura de evolução e momentos de alinhamento sobre prioridades, avanços e necessidades de ajuste.",
+  },
+  {
+    question: "Como a Mastertech personaliza conteúdo para o contexto farmacêutico?",
+    answer:
+      "A personalização acontece pela adaptação de linguagem, desafios, aplicações e exemplos ao contexto de uma operação regulada, técnica e comercialmente sensível.",
+  },
+  {
+    question: "Que experiência a Mastertech já acumulou nesse setor?",
+    answer:
+      "Ao longo do tempo, a Mastertech construiu experiências com empresas como Bayer, Roche, Daiichi Sankyo, Novo Nordisk e Amgen. Esse repertório fortalece a aderência da proposta ao setor farmacêutico.",
+  },
+  {
+    question: "Como a lógica de investimento se conecta ao desenho da proposta?",
+    answer:
+      "O investimento acompanha a arquitetura da solução: base comum, trilha ao vivo calibrada por público e camada de sistema e governança. O valor reflete a estrutura completa da jornada.",
+  },
+  {
+    question: "O que pode ser recalibrado depois da aprovação?",
+    answer:
+      "Depois da aprovação, a jornada pode ser refinada em recortes de público, intensidade da trilha, aprofundamentos e detalhes da ativação. A proposta estabelece a base que orienta essa consolidação.",
+  },
+  {
+    question: "O que acontece após a validação comercial da proposta?",
+    answer:
+      "Após a validação comercial, a Mastertech consolida escopo, cronograma, premissas de execução e arquitetura final da jornada. A partir daí, a proposta se converte em plano de ativação.",
+  },
+];
+
 const PROPOSAL_CALENDAR = [
   {
     phase: "2º semestre de 2026",
@@ -2436,6 +2539,10 @@ function App() {
                             );
                           })}
                         </div>
+
+                        <div className="mod-note-highlight">
+                          Observação: os encontros ao vivo acontecem em blocos de 2 horas, com exceção do Comitê Executivo, cujos encontros têm 1 hora.
+                        </div>
                       </div>
                     </div>
                   );
@@ -2935,6 +3042,31 @@ function App() {
                   <li>Repertório acumulado para trabalhar transformação em um contexto regulado e comercialmente sensível.</li>
                 </ul>
               </div>
+            </div>
+          </section>
+
+          <section className="proposal-appendix fade" id="proposal-faq">
+            <div className="proposal-head proposal-appendix-head">
+              <div className="proposal-icon">
+                <FileStack size={34} strokeWidth={1.0} />
+              </div>
+              <div>
+                <div className="proposal-kicker proposal-appendix-kicker">Leitura complementar</div>
+                <h2 className="proposal-title proposal-appendix-title">Síntese dos principais tópicos (Q&amp;A)</h2>
+                <p className="proposal-caput proposal-appendix-text">
+                Material de apoio com respostas objetivas sobre a metodologia, a lógica da solução e a forma de atuação da Mastertech.
+                </p>
+              </div>
+            </div>
+
+            <div className="proposal-faq-grid">
+              {PROPOSAL_FAQ.map((item, index) => (
+                <article className="proposal-faq-item" key={item.question}>
+                  <div className="proposal-faq-index">{String(index + 1).padStart(2, "0")}</div>
+                  <h3 className="proposal-faq-question">{item.question}</h3>
+                  <p className="proposal-faq-answer">{item.answer}</p>
+                </article>
+              ))}
             </div>
           </section>
         </div>

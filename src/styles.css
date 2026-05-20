@@ -2161,6 +2161,17 @@ button {
   display: block;
 }
 
+.mod-note-highlight {
+  margin-top: 14px;
+  border-left: 3px solid var(--blue);
+  background: rgba(26, 60, 200, 0.06);
+  padding: 12px 14px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
 .mod-opts-row {
   display: flex;
   gap: 18px;
@@ -3416,6 +3427,83 @@ button {
   gap: 0;
 }
 
+.proposal-appendix {
+  margin-top: 56px;
+  border-top: 1px solid var(--proposal-stroke);
+  padding-top: 36px;
+}
+
+.proposal-appendix-head {
+  margin-bottom: var(--space-4);
+}
+
+.proposal-appendix-kicker {
+  color: var(--mist2);
+}
+
+.proposal-appendix-title {
+  max-width: 860px;
+  margin-bottom: 16px;
+  color: var(--paper);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.proposal-appendix-text {
+  max-width: 820px;
+}
+
+.proposal-appendix > :not(.proposal-appendix-head) {
+  margin-left: 96px;
+}
+
+.proposal-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.proposal-faq-item {
+  border: 1px solid var(--proposal-stroke);
+  border-radius: 6px;
+  background: #fff;
+  padding: 24px 24px 22px;
+}
+
+.proposal-faq-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  background: var(--blue-pale);
+  padding: 6px 12px;
+  color: var(--blue);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.proposal-faq-question {
+  margin-bottom: 12px;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+.proposal-faq-answer {
+  color: var(--mist);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
 .proposal-step-item {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr);
@@ -3600,6 +3688,7 @@ button {
   .follow-flow,
   .proposal-summary-grid,
   .proposal-principles-grid,
+  .proposal-faq-grid,
   .proposal-public-card-grid {
     grid-template-columns: 1fr;
   }
@@ -4030,6 +4119,7 @@ button {
   /* Cards/layers — densificar */
   .proposal-summary-grid,
   .proposal-principles-grid,
+  .proposal-faq-grid,
   .proposal-public-card-grid {
     gap: 4mm;
   }
