@@ -2205,6 +2205,78 @@ button {
   border-color: rgba(255, 255, 255, 0.28);
 }
 
+.mod-baseline {
+  margin: 0 0 22px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blue);
+  background: rgba(26, 60, 200, 0.04);
+  padding: 16px 18px 18px;
+}
+
+.mod-baseline-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.mod-baseline-label {
+  color: var(--blue);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.mod-baseline-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--blue);
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.mod-baseline-grid {
+  display: grid;
+  grid-template-columns: minmax(80px, auto) minmax(160px, auto) 1fr;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.mod-baseline-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mod-baseline-cell-val {
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.mod-baseline-cell-cost {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.mod-baseline-cell-cost .mod-baseline-cell-val {
+  color: var(--blue);
+  font-size: 19px;
+}
+
+.mod-baseline-cell-lbl {
+  color: var(--mist2);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 .opt-legend {
   margin-top: 10px;
   color: var(--mist2);

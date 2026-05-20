@@ -1,8 +1,8 @@
 {
-  "version": 2,
-  "savedAt": "2026-05-20T00:09:46.376Z",
+  "version": 3,
+  "savedAt": "2026-05-20T11:01:12.388Z",
   "admin": {
-    "version": 2,
+    "version": 3,
     "clusterSizes": {
       "comite": 10,
       "escritorio": 150,
@@ -10,44 +10,43 @@
       "fv": 30
     },
     "adminPricing": {
-      "workshopHourly": 6000,
-      "workshopHours": 2,
+      "workshopHourly": 7800,
+      "workshopHours": 1,
       "workshopMeetings": 1,
       "comiteMeetingHours": 1,
-      "ecosystemImplant": 9900,
-      "ecosystemLicense": 29
+      "ecosystemImplant": 12870,
+      "ecosystemLicense": 38
     },
     "adminModuleParams": {
       "m1": {
         "title": "Transformação Digital",
         "durationHours": 16,
-        "hourlyRate": 1800
+        "hourlyRate": 2340
       },
       "m2": {
         "title": "IA & Copilot no dia a dia",
         "durationHours": 16,
-        "hourlyRate": 2300
+        "hourlyRate": 2990
       },
       "m3": {
         "title": "Comunicação Digital",
         "durationHours": 12,
-        "hourlyRate": 1800
+        "hourlyRate": 2340
       },
       "m4": {
         "title": "Mentalidade Ágil",
         "durationHours": 8,
-        "hourlyRate": 1600
+        "hourlyRate": 2080
       },
       "m5": {
         "title": "Liderança na Transformação",
         "durationHours": 12,
-        "hourlyRate": 2500
+        "hourlyRate": 3250
       }
     }
   },
   "scenario": {
-    "version": 2,
-    "scAtivo": true,
+    "version": 3,
     "clusters": {
       "comite": true,
       "escritorio": true,
@@ -65,112 +64,122 @@
     "workshopTurmas": 1,
     "moduleSettings": {
       "m1": {
-        "format": "ao_vivo",
-        "content": "base",
         "clusters": {
           "comite": {
             "on": false,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "escritorio": {
             "on": true,
-            "turmas": 3
+            "turmas": 3,
+            "encontros": 3
           },
           "fabrica": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "fv": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           }
         }
       },
       "m2": {
-        "format": "ao_vivo",
-        "content": "base",
         "clusters": {
           "comite": {
             "on": false,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "escritorio": {
             "on": true,
-            "turmas": 3
+            "turmas": 3,
+            "encontros": 3
           },
           "fabrica": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "fv": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           }
         }
       },
       "m3": {
-        "format": "ao_vivo",
-        "content": "base",
         "clusters": {
           "comite": {
             "on": false,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "escritorio": {
             "on": false,
-            "turmas": 3
+            "turmas": 3,
+            "encontros": 3
           },
           "fabrica": {
             "on": false,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "fv": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           }
         }
       },
       "m4": {
-        "format": "ao_vivo",
-        "content": "base",
         "clusters": {
           "comite": {
             "on": false,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "escritorio": {
             "on": true,
-            "turmas": 3
+            "turmas": 3,
+            "encontros": 3
           },
           "fabrica": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "fv": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           }
         }
       },
       "m5": {
-        "format": "ao_vivo",
-        "content": "base",
         "clusters": {
           "comite": {
             "on": true,
-            "turmas": 1
+            "turmas": 1,
+            "encontros": 3
           },
           "escritorio": {
-            "on": false,
-            "turmas": 3
+            "on": true,
+            "turmas": 3,
+            "encontros": 3
           },
           "fabrica": {
-            "on": false,
-            "turmas": 1
+            "on": true,
+            "turmas": 1,
+            "encontros": 3
           },
           "fv": {
-            "on": false,
-            "turmas": 1
+            "on": true,
+            "turmas": 1,
+            "encontros": 3
           }
         }
       }

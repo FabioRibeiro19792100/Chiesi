@@ -7,6 +7,7 @@ function codexPersistencePlugin() {
   const filePath = path.resolve("data/chiesi-proposta-config.json");
   const legacyFilePath = path.resolve(".local/chiesi-proposta-config.json");
   const endpoint = "/__persist/chiesi-proposta-config";
+  let writeQueue = Promise.resolve();
 
   async function readPersisted() {
     try {
@@ -18,13 +19,23 @@ function codexPersistencePlugin() {
         return JSON.parse(legacyRaw);
       } catch {
         return {
-          version: 2,
+          version: 3,
           admin: null,
           scenario: null,
           savedAt: null,
         };
       }
     }
+  }
+
+  async function safeWrite(parsed) {
+    const serialized = JSON.stringify(parsed, null, 2) + "\n";
+    JSON.parse(serialized);
+    await mkdir(path.dirname(filePath), { recursive: true });
+    const tmpPath = `${filePath}.tmp`;
+    await writeFile(tmpPath, serialized);
+    const { rename } = await import("node:fs/promises");
+    await rename(tmpPath, filePath);
   }
 
   return {
@@ -46,8 +57,10 @@ function codexPersistencePlugin() {
           req.on("end", async () => {
             try {
               const parsed = JSON.parse(body || "{}");
-              await mkdir(path.dirname(filePath), { recursive: true });
-              await writeFile(filePath, JSON.stringify(parsed, null, 2));
+              writeQueue = writeQueue.then(() => safeWrite(parsed)).catch((err) => {
+                console.warn("persist writeQueue failure:", err.message);
+              });
+              await writeQueue;
               res.statusCode = 200;
               res.end(JSON.stringify({ ok: true }));
             } catch {

@@ -18,26 +18,29 @@ import {
 import { useEffect, useState } from "react";
 import versionedConfig from "../data/chiesi-proposta-config.json";
 
-const PRECO_HORA_WORKSHOP = 6600;
-const PRECO_SC_IMPL = 12000;
-const PRECO_SC_LIC = 45;
-const ENCONTROS = 6;
+const PRECO_HORA_WORKSHOP = 8580;
+const PRECO_SC_IMPL = 15600;
+const PRECO_SC_LIC = 59;
+const ENCONTROS_DEFAULT = 3;
+const ENCONTROS_MIN = 3;
+const ENCONTROS_MAX = 6;
+const ON_DEMAND_HOURS_PADRAO = 2;
 const WORKSHOP_ENCONTROS = 1;
-const WORKSHOP_HORAS = 2;
+const WORKSHOP_HORAS = 1;
 const COMITE_ENCONTRO_HORAS = 1;
 
 const CLUSTERS = {
   comite: {
-    tag: "Grupo 01",
+    tag: "Liderança",
     label: "Comitê Executivo",
     min: 1,
     max: 50,
     defaultSize: 10,
     defaultTurmas: 1,
     context:
-      "Define prioridades e aloca recursos. Fala de transformação digital no nível estratégico e orienta a construção dessa visão para toda a organização.",
+      "Define prioridades e aloca recursos. Participa do workshop diagnóstico de 1 hora, que abre o programa, e segue dentro da trilha apenas em Liderança na Transformação.",
     focus:
-      "Visão estratégica, tomada de decisão sob ambiguidade e cultura de experimentação",
+      "Leitura de maturidade da liderança e direcionamento estratégico do programa",
     deepening:
       "Lacunas de liderança na transformação e conexão com HLM",
   },
@@ -88,64 +91,74 @@ const MODULES = [
     id: "m1",
     num: "01",
     title: "Transformação Digital",
+    onDemandHours: ON_DEMAND_HOURS_PADRAO,
+    liveHoursPerMeeting: 2,
     durationHours: 16,
-    hourlyRate: 2860,
+    hourlyRate: 3718,
     subtitle:
-      "O que a transformação digital pede da rotina, com letramento aplicado e referências do setor.",
+      "Base on-demand obrigatória de 2h e trilha ao vivo prioritariamente prática, com casos do setor farmacêutico.",
     optional: false,
-    groups: ["comite", "escritorio", "fabrica", "fv"],
+    groups: ["escritorio", "fabrica", "fv"],
     proposal:
-      "O módulo trabalha o que a transformação digital exige de cada profissional e como isso se traduz em decisões e rotinas do dia a dia. Inclui benchmarks do setor farmacêutico e atividades práticas de letramento digital ao longo dos seis encontros.",
+      "Base on-demand comum a todos os públicos com o letramento digital aplicado à rotina e referências do setor farmacêutico. Os encontros ao vivo são mão na massa: casos reais, decisões compartilhadas e desdobramentos para a operação de cada público, calibrados pelo E2W.",
   },
   {
     id: "m2",
     num: "02",
     title: "IA & Copilot no dia a dia",
+    onDemandHours: ON_DEMAND_HOURS_PADRAO,
+    liveHoursPerMeeting: 2,
     durationHours: 16,
-    hourlyRate: 4400,
-    subtitle: "IA aplicada ao trabalho, com prompt na prática e casos adaptados por área.",
+    hourlyRate: 5720,
+    subtitle: "IA aplicada ao trabalho — base on-demand para nivelamento e encontros ao vivo de prompt na prática.",
     optional: true,
-    groups: ["comite", "escritorio", "fabrica", "fv"],
+    groups: ["escritorio", "fabrica", "fv"],
     proposal:
-      "Uso prático de IA generativa e do Copilot aplicado à rotina de cada área. Os encontros partem de situações reais de trabalho e incluem engenharia de prompt, limites regulatórios e casos do setor farmacêutico.",
+      "Base on-demand com fundamentos de IA generativa e Copilot, igual para todos os públicos. Os encontros ao vivo trabalham prompts em situações reais de cada área, limites regulatórios do setor farmacêutico e construção de rotinas com a ferramenta.",
   },
   {
     id: "m3",
     num: "03",
     title: "Comunicação Digital",
+    onDemandHours: ON_DEMAND_HOURS_PADRAO,
+    liveHoursPerMeeting: 2,
     durationHours: 12,
-    hourlyRate: 2200,
-    subtitle: "Comunicação com médicos por canais digitais, com segmentação, cadência e alcance ampliado.",
+    hourlyRate: 2860,
+    subtitle: "Canais digitais como extensão da visitação — fundamentos on-demand e encontros ao vivo aplicados à FV.",
     optional: true,
     groups: ["fv"],
     proposal:
-      "Canais digitais, segmentação de audiência, frequência e formatos aplicados à comunicação com médicos. O módulo trabalha o digital como extensão da visitação, para manter relacionamento, alcançar médicos não visitados e aumentar o impacto comercial da força de vendas.",
+      "Base on-demand sobre canais digitais, segmentação de audiência, cadência e formatos para comunicação com médicos. Os encontros ao vivo são exclusivos da força de vendas, com casos reais de relacionamento e construção de plano por território.",
   },
   {
     id: "m4",
     num: "04",
     title: "Mentalidade Ágil",
+    onDemandHours: ON_DEMAND_HOURS_PADRAO,
+    liveHoursPerMeeting: 2,
     durationHours: 8,
-    hourlyRate: 2200,
+    hourlyRate: 2860,
     subtitle:
-      "Princípios ágeis traduzidos em comportamento, coordenação e ganho de efetividade.",
+      "Princípios ágeis aplicados — base on-demand de conceitos e encontros ao vivo de aplicação na rotina.",
     optional: true,
-    groups: ["comite", "escritorio", "fabrica", "fv"],
+    groups: ["escritorio", "fabrica", "fv"],
     proposal:
-      "Os conceitos do manifesto ágil aplicados à realidade da Chiesi. O módulo trabalha comportamentos e rotinas concretas que aumentam efetividade operacional com incorporação progressiva à dinâmica dos times e processos.",
+      "Base on-demand com o manifesto ágil aplicado à realidade da Chiesi. Os encontros ao vivo trabalham comportamentos e rotinas concretas de cada público, com prática direta sobre coordenação de times e ciclos de entrega.",
   },
   {
     id: "m5",
     num: "05",
     title: "Liderança na Transformação",
+    onDemandHours: ON_DEMAND_HOURS_PADRAO,
+    liveHoursPerMeeting: 2,
     durationHours: 12,
-    hourlyRate: 3520,
+    hourlyRate: 4576,
     subtitle:
-      "Liderança para mudança cultural, com vulnerabilidade, experimentação e gestão da ambiguidade.",
+      "Liderança que sustenta a mudança — base on-demand obrigatória e encontros ao vivo aplicados, incluindo o Comitê Executivo.",
     optional: false,
     groups: ["comite", "escritorio", "fabrica", "fv"],
     proposal:
-      "Como a liderança sustenta uma transformação cultural. O módulo trabalha vulnerabilidade, tolerância ao erro, gestão da ambiguidade e o papel da liderança em times que estão aprendendo a operar de forma diferente.",
+      "Base on-demand sobre o papel da liderança em transformações culturais. Os encontros ao vivo são prioritariamente práticos, com discussão de dilemas reais e tomada de decisão sob ambiguidade. Este é o único módulo que mantém o Comitê Executivo na trilha.",
   },
 ];
 
@@ -459,34 +472,34 @@ const SOLUCAO = [
 
 const CONTENT_LOGIC_CARDS = [
   {
-    title: "Base comum",
+    title: "Base comum on-demand obrigatória",
     icon: "grid",
-    text: "Os temas centrais são os mesmos para todos os grupos, o que constrói uma linguagem compartilhada sobre transformação digital na organização.",
+    text: "Cada módulo começa por uma gravação única de 2 horas, igual para todos os públicos. Essa base nivela linguagem e conceitos, e é parte inegociável da metodologia.",
   },
   {
-    title: "Calibração por público",
+    title: "E2W como elemento estruturante",
     icon: "tune",
-    text: "A sequência, os exemplos e os aprofundamentos mudam conforme o que o E2W identifica para comitê executivo, escritório, fábrica e força de vendas.",
+    text: "O E2W faz o diagnóstico de maturidade por público e define o quanto cada grupo precisa aprofundar. É o que calibra a trilha ao vivo e organiza acompanhamento, evolução e entregáveis.",
   },
   {
-    title: "Aplicação prática",
+    title: "Encontros ao vivo prioritariamente práticos",
     icon: "spark",
-    text: "Cada encontro traduz o conteúdo em decisões, rotinas e entregas concretas, com aplicação direta na operação.",
+    text: "A trilha customizada (de 3 a 6 encontros por público) é mão na massa: casos reais, decisões compartilhadas e aplicação direta na rotina de escritório, fábrica e força de vendas.",
   },
 ];
 
 const PROPOSAL_PRINCIPLES = [
   {
-    title: "Base comum com calibração por público",
-    text: "A proposta organiza uma base comum para toda a organização e calibra exemplos, casos e aprofundamentos para a realidade de cada público.",
+    title: "Base on-demand obrigatória",
+    text: "Toda jornada começa por uma gravação única de 2 horas por módulo, comum a todos os públicos. Essa base é parte inegociável da metodologia Mastertech.",
   },
   {
-    title: "Aprendizagem aplicada à operação",
-    text: "Os encontros foram desenhados para gerar decisões, entregas e mudanças de rotina, com aplicação direta nas práticas de trabalho.",
+    title: "E2W como elemento estruturante",
+    text: "O E2W diagnostica a maturidade de cada público e define o quanto a trilha ao vivo precisa aprofundar. Sem E2W não existe a proposta Mastertech.",
   },
   {
-    title: "Infraestrutura sistêmica da jornada",
-    text: "A proposta incorpora uma camada sistêmica que conecta diagnóstico, acompanhamento e leitura gerencial ao longo de toda a jornada.",
+    title: "Trilha ao vivo prática e calibrada",
+    text: "A trilha customizada varia de 3 a 6 encontros por público, com default comercial de 3. São encontros prioritariamente práticos, com casos reais e aplicação direta na operação.",
   },
 ];
 
@@ -535,18 +548,23 @@ const PROPOSAL_CALENDAR = [
 const PROPOSAL_STRUCTURE_CAPABILITIES = [
   {
     layer: "Workshop executivo",
-    composition: "Comitê Executivo",
-    role: "Abre a jornada com leitura da liderança e definição das prioridades que orientam o programa.",
-  },
-  {
-    layer: "Trilha principal",
-    composition: "Módulos e públicos participantes",
-    role: "Concentra a execução dos encontros, a aplicação prática dos conteúdos e a cadência da jornada.",
+    composition: "Comitê Executivo · 1h",
+    role: "Encontro único de uma hora para leitura da maturidade da liderança. Item oficial da solução diagnóstica/estratégica e abertura da jornada.",
   },
   {
     layer: "E2W",
-    composition: "Diagnóstico, acompanhamento e leitura gerencial",
-    role: "Sustenta a leitura inicial, acompanha a evolução ao longo da jornada e transforma evidências em visibilidade gerencial.",
+    composition: "Base técnica da metodologia · inegociável",
+    role: "Sistema proprietário que diagnostica, acompanha e governa a evolução. Sem E2W não existe a proposta Mastertech — é o que permite definir entregáveis e calibrar a trilha por público.",
+  },
+  {
+    layer: "Base on-demand",
+    composition: "2h gravadas por módulo · obrigatória",
+    role: "Conteúdo único para todos os públicos, com a fundação conceitual de cada módulo. Sempre remoto, sempre presente.",
+  },
+  {
+    layer: "Trilha ao vivo customizada",
+    composition: "3 a 6 encontros por público · calibrados pelo E2W",
+    role: "Encontros prioritariamente práticos — casos, decisões e aplicação na rotina de escritório, fábrica e força de vendas. Default comercial: 3 encontros. Comitê participa apenas em Liderança na Transformação.",
   },
 ];
 
@@ -576,14 +594,13 @@ function createInitialModuleSettings() {
     MODULES.map((module) => [
       module.id,
       {
-        format: "ao_vivo",
-        content: "base",
         clusters: Object.fromEntries(
           Object.entries(CLUSTERS).map(([clusterId, cluster]) => [
             clusterId,
             {
               on: module.groups.includes(clusterId),
               turmas: cluster.defaultTurmas,
+              encontros: ENCONTROS_DEFAULT,
             },
           ])
         ),
@@ -607,15 +624,6 @@ function formatPerSessionBreakdown(totalHours, sessionHours) {
   const meetingLabel = roundedMeetings === 1 ? "encontro" : "encontros";
   const sessionLabel = sessionHours === 1 ? "hora" : "horas";
   return `${roundedMeetings} ${meetingLabel} de ${sessionHours} ${sessionLabel}`;
-}
-
-function formatHoursByTurma(totalHours, turmas) {
-  if (!totalHours || !turmas) return "";
-  const hoursPerTurma = totalHours / turmas;
-  const roundedPerTurma = Number.isInteger(hoursPerTurma)
-    ? hoursPerTurma
-    : Number(hoursPerTurma.toFixed(1));
-  return `${roundedPerTurma}h por turma`;
 }
 
 function formatPeopleByTurma(totalPeople, turmas) {
@@ -660,11 +668,11 @@ function createInitialAdminModuleParams() {
   );
 }
 
-const ADMIN_STORAGE_KEY = "chiesi-proposta-admin-config";
-const ADMIN_STORAGE_BACKUP_KEY = "chiesi-proposta-admin-config-backup";
-const SCENARIO_STORAGE_KEY = "chiesi-proposta-scenario-config";
-const SCENARIO_STORAGE_BACKUP_KEY = "chiesi-proposta-scenario-config-backup";
-const STORAGE_VERSION = 2;
+const ADMIN_STORAGE_KEY = "chiesi-proposta-admin-config-v3";
+const ADMIN_STORAGE_BACKUP_KEY = "chiesi-proposta-admin-config-v3-backup";
+const SCENARIO_STORAGE_KEY = "chiesi-proposta-scenario-config-v3";
+const SCENARIO_STORAGE_BACKUP_KEY = "chiesi-proposta-scenario-config-v3-backup";
+const STORAGE_VERSION = 3;
 const PERSIST_ENDPOINT = "/__persist/chiesi-proposta-config";
 const VERSIONED_PERSISTENCE = versionedConfig || {};
 
@@ -682,7 +690,6 @@ function createInitialAdminState() {
 function createInitialScenarioState() {
   return {
     version: STORAGE_VERSION,
-    scAtivo: true,
     clusters: {
       comite: true,
       escritorio: true,
@@ -712,13 +719,46 @@ function mergeAdminState(defaults, parsed) {
   };
 }
 
+function migrateModuleSettings(defaults, parsed) {
+  if (!parsed) return defaults;
+  const merged = { ...defaults };
+  Object.entries(parsed).forEach(([moduleId, parsedModule]) => {
+    const defaultModule = defaults[moduleId];
+    if (!defaultModule) return;
+    const mergedClusters = { ...defaultModule.clusters };
+    if (parsedModule?.clusters) {
+      Object.entries(parsedModule.clusters).forEach(([clusterId, parsedCluster]) => {
+        const defaultCluster = defaultModule.clusters[clusterId];
+        if (!defaultCluster) return;
+        mergedClusters[clusterId] = {
+          on:
+            typeof parsedCluster?.on === "boolean" ? parsedCluster.on : defaultCluster.on,
+          turmas:
+            typeof parsedCluster?.turmas === "number"
+              ? parsedCluster.turmas
+              : defaultCluster.turmas,
+          encontros: clampNumber(
+            parsedCluster?.encontros,
+            defaultCluster.encontros,
+            ENCONTROS_MIN,
+            ENCONTROS_MAX
+          ),
+        };
+      });
+    }
+    merged[moduleId] = { clusters: mergedClusters };
+  });
+  return merged;
+}
+
 function mergeScenarioState(defaults, parsed) {
+  const { scAtivo: _ignoredScAtivo, ...parsedRest } = parsed || {};
   return {
     ...defaults,
-    ...parsed,
+    ...parsedRest,
     clusters: { ...defaults.clusters, ...(parsed?.clusters || {}) },
     mods: { ...defaults.mods, ...(parsed?.mods || {}) },
-    moduleSettings: { ...defaults.moduleSettings, ...(parsed?.moduleSettings || {}) },
+    moduleSettings: migrateModuleSettings(defaults.moduleSettings, parsed?.moduleSettings),
   };
 }
 
@@ -770,7 +810,6 @@ function App() {
   const [activeConfigAnchor, setActiveConfigAnchor] = useState(CONFIG_INDEX[0].id);
   const [activeProposalAnchor, setActiveProposalAnchor] = useState(PROPOSAL_INDEX[0].id);
   const [activeAdminAnchor, setActiveAdminAnchor] = useState(ADMIN_INDEX[0].id);
-  const [scAtivo, setScAtivo] = useState(persistedScenarioState.scAtivo);
   const [clusters, setClusters] = useState(persistedScenarioState.clusters);
   const [mods, setMods] = useState(persistedScenarioState.mods);
   const [clusterSizes, setClusterSizes] = useState(persistedAdminState.clusterSizes);
@@ -826,7 +865,6 @@ function App() {
             createInitialScenarioState(),
             payload.scenario
           );
-          setScAtivo(mergedScenarioState.scAtivo);
           setClusters(mergedScenarioState.clusters);
           setMods(mergedScenarioState.mods);
           setWorkshopTurmas(mergedScenarioState.workshopTurmas);
@@ -879,7 +917,6 @@ function App() {
     if (typeof window === "undefined" || !hasHydratedPersistence) return;
     const nextScenarioState = {
       version: STORAGE_VERSION,
-      scAtivo,
       clusters,
       mods,
       workshopTurmas,
@@ -894,7 +931,6 @@ function App() {
       console.warn("Nao foi possivel persistir o cenario da proposta.", error);
     }
   }, [
-    scAtivo,
     clusters,
     mods,
     workshopTurmas,
@@ -917,7 +953,6 @@ function App() {
       },
       scenario: {
         version: STORAGE_VERSION,
-        scAtivo,
         clusters,
         mods,
         workshopTurmas,
@@ -937,7 +972,6 @@ function App() {
         console.warn("Nao foi possivel persistir configuracao em arquivo local.", error);
       });
   }, [
-    scAtivo,
     clusters,
     mods,
     clusterSizes,
@@ -990,112 +1024,102 @@ function App() {
 
   activeModuleDefs.forEach((module) => {
     const settings = moduleSettings[module.id];
-    const clusterRows = [];
     const moduleParams = adminModuleParams[module.id];
-    const moduleBaseHours = moduleParams.durationHours;
     const hourlyRate = moduleParams.hourlyRate;
-    let moduleHours = 0;
+    const onDemandHours = module.onDemandHours ?? ON_DEMAND_HOURS_PADRAO;
+    const onDemandValue = onDemandHours * hourlyRate;
+
+    let moduleHours = onDemandHours;
     let moduleMeetings = 0;
+    let liveValue = 0;
+    const clusterRows = [];
 
-    Object.entries(CLUSTERS).forEach(([clusterId, cluster]) => {
+    module.groups.forEach((clusterId) => {
+      const cluster = CLUSTERS[clusterId];
       const clusterConfig = settings.clusters[clusterId];
-      if (!clusters[clusterId] || !clusterConfig.on) return;
+      if (!cluster || !clusterConfig || !clusters[clusterId] || !clusterConfig.on) return;
 
-      const turmas = settings.format === "ao_vivo" ? clusterConfig.turmas : 1;
-      const hours = turmas * moduleBaseHours;
+      const encontros = clampNumber(
+        clusterConfig.encontros,
+        ENCONTROS_DEFAULT,
+        ENCONTROS_MIN,
+        ENCONTROS_MAX
+      );
       const sessionHours = getModuleSessionHours(clusterId, adminPricing);
-      const meetings = turmas * (moduleBaseHours / sessionHours);
+      const turmas = clusterConfig.turmas;
+      const liveHoursClusterTotal = encontros * sessionHours * turmas;
+      const liveClusterValue = liveHoursClusterTotal * hourlyRate;
 
-      moduleHours += hours;
-      moduleMeetings += meetings;
+      moduleHours += liveHoursClusterTotal;
+      moduleMeetings += encontros * turmas;
+      liveValue += liveClusterValue;
       clusterRows.push({
         cluster: cluster.label,
         clusterId,
         turmas,
+        encontros,
         people: clusterSizes[clusterId],
-        hours,
+        hours: liveHoursClusterTotal,
         sessionHours,
+        value: liveClusterValue,
       });
     });
 
-    if (settings.format === "gravado") {
-      moduleHours = moduleBaseHours;
-      moduleMeetings = ENCONTROS;
-    }
-
-    let multiplier = 1;
-    if (settings.content === "customizado") multiplier += 0.2;
-    let value = 0;
-    let composition = [];
-
-    if (settings.format === "gravado") {
-      const valorBase = moduleBaseHours * hourlyRate;
-      value = valorBase * multiplier;
-      composition = [
-        `${formatCurrency(hourlyRate)}/h`,
-        `${formatCurrency(value)} no total`,
-        ...(settings.content === "customizado"
-          ? ["Inclui adicional de customização"]
-          : []),
-      ];
-    } else {
-      const valorPorTurma = moduleBaseHours * hourlyRate;
-      const turmasTotais = clusterRows.reduce((sum, row) => sum + row.turmas, 0);
-      const valorBase = valorPorTurma * turmasTotais;
-      value = valorBase * multiplier;
-      composition = [
-        `${turmasTotais} turma(s)`,
-        `${formatCurrency(valorPorTurma)} por turma`,
-        `${formatCurrency(value)} no total`,
-        ...(settings.content === "customizado"
-          ? ["Inclui adicional de customização"]
-          : []),
-      ];
-    }
+    const value = onDemandValue + liveValue;
+    const composition = [
+      `Base on-demand · ${onDemandHours}h × ${formatCurrency(hourlyRate)} = ${formatCurrency(onDemandValue)}`,
+      ...clusterRows.map(
+        (row) =>
+          `${row.cluster} · ${row.encontros} encontros × ${row.sessionHours}h × ${row.turmas} turma(s) = ${formatCurrency(row.value)}`
+      ),
+      `${formatCurrency(value)} no total`,
+    ];
 
     totalHours += moduleHours;
     totalMeetings += moduleMeetings;
     investmentLines.push({
       name: module.title,
-      displayName: `${module.title} · ${moduleBaseHours}h`,
-      detail: `${
-        settings.format === "gravado"
-          ? `On-demand · ${Math.round(moduleHours)}h × ${formatCurrency(hourlyRate)}`
-          : `Remoto ao vivo · ${Math.round(moduleHours)}h × ${formatCurrency(hourlyRate)}`
-      } · ${settings.content === "customizado" ? "Customizado" : "Base"}`,
+      displayName: `${module.title}`,
+      detail: `Base on-demand obrigatória + trilha ao vivo calibrada pelo E2W`,
       composition,
       value,
     });
     summaryModules.push({
       name: module.title,
-      detail: `${Math.round(moduleMeetings)} encontros · ${Math.round(moduleHours)}h`,
+      detail: `${onDemandHours}h on-demand · ${Math.round(moduleMeetings)} encontros ao vivo`,
     });
-    moduleDetails[module.id] = { clusterRows, value };
+    moduleDetails[module.id] = {
+      clusterRows,
+      value,
+      onDemandHours,
+      onDemandValue,
+      liveValue,
+    };
   });
 
-  if (scAtivo) {
-    if (allModulesSelected) {
-      investmentLines.push({
-        name: ECOSYSTEM_LINE_NAME,
-        detail: "Incluso nos primeiros 12 meses",
-        composition: [
-          "Base de implantação zerada",
-          "Licenças zeradas por 12 meses",
-        ],
-        value: 0,
-      });
-    } else {
-      investmentLines.push({
-        name: ECOSYSTEM_LINE_NAME,
-        detail: `Implantação + ${activeParticipants} licenças × 12 meses`,
-        composition: [
-          `Implantação da plataforma: ${formatCurrency(adminPricing.ecosystemImplant)}`,
-          `${activeParticipants} licenças × ${formatCurrency(adminPricing.ecosystemLicense)}/mês`,
-          `Contratação por 12 meses`,
-        ],
-        value: adminPricing.ecosystemImplant + activeParticipants * adminPricing.ecosystemLicense * 12,
-      });
-    }
+  if (allModulesSelected) {
+    investmentLines.push({
+      name: ECOSYSTEM_LINE_NAME,
+      detail: "Incluso nos primeiros 12 meses",
+      composition: [
+        "Base técnica da metodologia Mastertech, sempre presente.",
+        "Base de implantação zerada na contratação completa",
+        "Licenças zeradas por 12 meses",
+      ],
+      value: 0,
+    });
+  } else {
+    investmentLines.push({
+      name: ECOSYSTEM_LINE_NAME,
+      detail: `Implantação + ${activeParticipants} licenças × 12 meses`,
+      composition: [
+        "Base técnica da metodologia Mastertech, sempre presente.",
+        `Implantação da plataforma: ${formatCurrency(adminPricing.ecosystemImplant)}`,
+        `${activeParticipants} licenças × ${formatCurrency(adminPricing.ecosystemLicense)}/mês`,
+        "Contratação por 12 meses",
+      ],
+      value: adminPricing.ecosystemImplant + activeParticipants * adminPricing.ecosystemLicense * 12,
+    });
   }
 
   const totalInvestment = investmentLines.reduce((sum, item) => sum + item.value, 0);
@@ -1122,81 +1146,72 @@ function App() {
   const activeModuleCount = Object.values(mods).filter(Boolean).length;
   const proposalPrograms = [];
   const offerRows = [];
-  const proposalStructureCapabilities = scAtivo
-    ? [
-        "Diagnóstico com alinhamento entre colaborador e liderança",
-        "Leitura contínua de evolução individual e coletiva",
-        "Aprofundamentos definidos a partir de lacunas reais do percurso",
-        "Indicadores gerenciais nativos para acompanhar efetividade",
-      ]
-    : [
-        "Workshop executivo para alinhar direção e prioridades",
-        "Trilha principal com módulos calibrados por público",
-        "Execução remota com cadência semanal de até 4 horas",
-        "Leitura de avanço concentrada na operação da jornada",
-      ];
+  const proposalStructureCapabilities = [
+    "Diagnóstico com alinhamento entre colaborador e liderança",
+    "Leitura contínua de evolução individual e coletiva",
+    "Aprofundamentos definidos a partir de lacunas reais do percurso",
+    "Indicadores gerenciais nativos para acompanhar efetividade",
+  ];
 
   if (mods.workshop) {
     proposalPrograms.push({
       name: "Workshop Comitê Executivo",
       audiences: "Comitê Executivo",
       formatMain: "Remoto",
-      formatSub: "(ao vivo)",
-      content: "Diagnóstico e alinhamento da liderança",
+      formatSub: "(ao vivo · 1h)",
+      content: "Leitura de maturidade da liderança",
       loadMain: `${workshopTurmas} turma(s)`,
       loadSub: `${adminPricing.workshopHours}h · ${adminPricing.workshopMeetings} encontro`,
     });
   }
 
   activeModuleDefs.forEach((module) => {
-    const settings = moduleSettings[module.id];
-    const clusterRows = moduleDetails[module.id]?.clusterRows || [];
+    const details = moduleDetails[module.id] || { clusterRows: [], onDemandHours: ON_DEMAND_HOURS_PADRAO };
+    const clusterRows = details.clusterRows;
     const allActiveAudiencesCovered =
-      clusterRows.length > 0 && clusterRows.length === activeClusterEntries.length;
-    const audiences = allActiveAudiencesCovered
-      ? "Todos os públicos"
-      : clusterRows.map((row) => row.cluster).join(" · ");
-    const totalTurmas = clusterRows.reduce((sum, row) => sum + row.turmas, 0);
-    const totalModuleHours = Math.round(clusterRows.reduce((sum, row) => sum + row.hours, 0));
+      clusterRows.length > 0 &&
+      clusterRows.length === activeClusterEntries.filter(([cid]) => module.groups.includes(cid)).length;
+    const audiences = clusterRows.length === 0
+      ? "Sem público ativo"
+      : allActiveAudiencesCovered
+        ? "Todos os públicos do módulo"
+        : clusterRows.map((row) => row.cluster).join(" · ");
+    const liveSummary = clusterRows.length
+      ? clusterRows
+          .map((row) => `${row.cluster}: ${row.encontros} enc.×${row.turmas} turma(s)`)
+          .join("\n")
+      : "Sem trilha ao vivo configurada";
 
     proposalPrograms.push({
       name: module.title,
       audiences,
-      formatMain: settings.format === "gravado" ? "On-demand" : "Remoto",
-      formatSub: settings.format === "gravado" ? null : "(ao vivo)",
-      content: settings.content === "customizado" ? "Customizado" : "Base",
-      loadMain:
-        settings.format === "gravado"
-          ? `${ENCONTROS} episódios`
-          : `${totalTurmas} turma(s)`,
-      loadSub:
-        settings.format === "gravado"
-          ? `${adminModuleParams[module.id].durationHours}h`
-          : `${formatHoursByTurma(totalModuleHours, totalTurmas)}\n${totalModuleHours}h no total`,
+      formatMain: "Híbrido",
+      formatSub: "On-demand + ao vivo",
+      content: "Base obrigatória + trilha calibrada",
+      loadMain: `${details.onDemandHours}h on-demand`,
+      loadSub: liveSummary,
     });
   });
 
-  if (scAtivo) {
-    offerRows.push({
-      name: "E2W",
-      audiences: "Todos os públicos",
-      formatMain: "Sistema",
-      formatSub: null,
-      loadMain: "12 meses",
-      loadSub: allModulesSelected
-        ? "Incluído na contratação completa"
-        : `${activeParticipants} licenças ativas`,
-      pricePerTurma: null,
-      value: allModulesSelected ? 0 : ecosystemPartial,
-    });
-  }
+  offerRows.push({
+    name: "E2W",
+    audiences: "Todos os públicos",
+    formatMain: "Sistema (inegociável)",
+    formatSub: null,
+    loadMain: "12 meses",
+    loadSub: allModulesSelected
+      ? "Incluído na contratação completa"
+      : `${activeParticipants} licenças ativas`,
+    pricePerTurma: null,
+    value: allModulesSelected ? 0 : ecosystemPartial,
+  });
 
   if (mods.workshop) {
     offerRows.push({
       name: "Workshop Comitê Executivo",
       audiences: "Comitê Executivo",
       formatMain: "Remoto",
-      formatSub: "(ao vivo)",
+      formatSub: "(ao vivo · 1h)",
       loadMain: `${workshopTurmas} turma(s)`,
       loadSub: `${adminPricing.workshopHours * adminPricing.workshopMeetings}h por turma\n${workshopTurmas * adminPricing.workshopHours * adminPricing.workshopMeetings}h no total`,
       pricePerTurma:
@@ -1209,13 +1224,11 @@ function App() {
   activeModuleDefs.forEach((module) => {
     const program = proposalPrograms.find((item) => item.name === module.title);
     const investment = investmentLines.find((line) => line.name === module.title);
-    const clusterRows = moduleDetails[module.id]?.clusterRows || [];
-    const totalTurmas = clusterRows.reduce((sum, row) => sum + row.turmas, 0);
     if (!program || !investment) return;
 
     offerRows.push({
       ...program,
-      pricePerTurma: totalTurmas ? investment.value / totalTurmas : null,
+      pricePerTurma: null,
       value: investment.value,
     });
   });
@@ -1880,9 +1893,9 @@ function App() {
               <h2 className="section-title">O desenvolvimento do programa</h2>
               <div className="section-body">
                 <p className="editorial-caput">
-                  O programa combina uma base comum para toda a organização com calibração
-                  específica por público. O E2W organiza essa ponte entre prioridade institucional
-                  e realidade de cada grupo.
+                  O programa combina uma base on-demand obrigatória de 2 horas por módulo —
+                  gravação única para todos os públicos — com uma trilha ao vivo de 3 a 6
+                  encontros por público, calibrada pelo E2W. Default comercial: 3 encontros.
                 </p>
               </div>
               <div className="content-logic-grid">
@@ -1897,8 +1910,10 @@ function App() {
               <div className="content-logic-note">
                 <div className="content-logic-note-label">Como acontece</div>
                 <p className="content-logic-note-text">
-                  Cada grupo percorre 6 encontros, majoritariamente práticos, em formato remoto
-                  ao vivo e com carga calibrada por módulo, sempre com entrega ao final de cada etapa.
+                  Cada módulo começa pela base on-demand obrigatória de 2 horas, comum a todos os públicos.
+                  Em seguida cada público percorre uma trilha ao vivo de 3 a 6 encontros — prioritariamente
+                  prática, com casos reais e aplicação na rotina — calibrada pelo diagnóstico do E2W.
+                  O default comercial é 3 encontros.
                 </p>
               </div>
               <div className="matrix-intro">
@@ -2017,7 +2032,8 @@ function App() {
           <div className="hero-inner">
             <h1 className="hero-title">Definições da jornada</h1>
             <p className="hero-sub">
-              Defina públicos, módulos, formato e conteúdo. O investimento é calculado em tempo real.
+              Defina públicos, módulos e o número de encontros ao vivo (3 a 6) por público.
+              A base on-demand obrigatória e o E2W são parte fixa da metodologia. Investimento calculado em tempo real.
             </p>
           </div>
         </div>
@@ -2089,13 +2105,17 @@ function App() {
               <div className="sep section-anchor" id="config-e2w">
                 <div className="sep-label">E2W</div>
               </div>
-              <div className={`eco-card ${scAtivo ? "active" : ""}`}>
-                <div className="eco-header" onClick={() => setScAtivo((current) => !current)}>
-                  <div className="eco-toggle"></div>
+              <div className="eco-card active eco-card-locked">
+                <div className="eco-header">
                   <div className="eco-header-left">
-                    <div className="eco-tag">Sistema</div>
+                    <div className="eco-tag">Base técnica · inegociável</div>
                     <div className="eco-name">
-                      Sistema de desenvolvimento de competências
+                      E2W — sistema proprietário da Mastertech
+                    </div>
+                    <div className="eco-sub">
+                      O E2W é a base técnica da metodologia: sustenta diagnóstico,
+                      acompanhamento e gestão da evolução. Sem ele não existe a proposta
+                      Mastertech, por isso está sempre presente nesta configuração.
                     </div>
                   </div>
                 </div>
@@ -2157,10 +2177,10 @@ function App() {
                 >
                   <div className="mod-toggle"></div>
                   <div className="mod-info">
-                    <div className="mod-num">Entregável · Comitê Executivo</div>
+                    <div className="mod-num">Entregável · Comitê Executivo · 1h</div>
                     <div className="mod-title">Workshop Comitê Executivo</div>
                     <div className="mod-sub">
-                      Leitura da maturidade da liderança e alinhamento das diretrizes que orientam o programa.
+                      Encontro único de 1 hora para leitura da maturidade da liderança e alinhamento das diretrizes do programa. Item oficial da solução diagnóstica/estratégica.
                     </div>
                   </div>
                 </div>
@@ -2225,19 +2245,18 @@ function App() {
                 <div className="sep-label">Programa</div>
               </div>
               <div className="pedagogy">
-                <div className="pedagogy-label">Os pilares de conteúdo</div>
+                <div className="pedagogy-label">Estrutura comum a todos os módulos</div>
                 <p>
-                  Os temas são os mesmos para todos os grupos, com sequência e exemplos
-                  calibrados para a realidade de cada um.
+                  Cada módulo combina uma <strong>base on-demand obrigatória de 2 horas</strong> — gravação única para todos os públicos —
+                  com uma <strong>trilha ao vivo de 3 a 6 encontros</strong>, prioritariamente prática (casos, decisões e aplicação na rotina),
+                  calibrada por público a partir do diagnóstico do E2W. O default comercial é 3 encontros; o número final é definido pelo E2W.
                 </p>
               </div>
               <div className="mods-list">
                 {MODULES.map((module) => {
                   const settings = moduleSettings[module.id];
                   const moduleParams = adminModuleParams[module.id];
-                  const activeGroups = Object.entries(CLUSTERS).filter(
-                    ([clusterId]) => clusters[clusterId] && settings.clusters[clusterId].on
-                  );
+                  const onDemandHours = module.onDemandHours ?? ON_DEMAND_HOURS_PADRAO;
 
                   return (
                     <div className={`mod-card ${mods[module.id] ? "active" : ""}`} key={module.id}>
@@ -2258,136 +2277,87 @@ function App() {
                           </div>
                           <div className="mod-title">{module.title}</div>
                           <div className="mod-sub">{module.subtitle}</div>
-                          <div className="mod-structure">{moduleParams.durationHours}h por turma</div>
+                          <div className="mod-structure">
+                            Base on-demand {onDemandHours}h · trilha ao vivo de {ENCONTROS_MIN}–{ENCONTROS_MAX} encontros por público
+                          </div>
                         </div>
                       </div>
 
                       <div className="mod-body">
-                        <div className="mod-opts-row">
-                          <div className="mod-opt-group">
-                            <div className="mod-opt-label">Conteúdo</div>
-                            <div className="mod-opt-btns">
-                              <label className={`opt-btn ${settings.content === "base" ? "sel" : ""}`}>
-                                <input
-                                  type="radio"
-                                  checked={settings.content === "base"}
-                                  onChange={() =>
-                                    updateModuleSetting(module.id, (current) => ({
-                                      ...current,
-                                      content: "base",
-                                    }))
-                                  }
-                                />
-                                Base
-                              </label>
-                              <label
-                                className={`opt-btn ${settings.content === "customizado" ? "sel" : ""}`}
-                              >
-                                <input
-                                  type="radio"
-                                  checked={settings.content === "customizado"}
-                                  onChange={() =>
-                                    updateModuleSetting(module.id, (current) => ({
-                                      ...current,
-                                      content: "customizado",
-                                    }))
-                                  }
-                                />
-                                Customizado <span className="opt-btn-tag">+20%</span>
-                              </label>
-                            </div>
-                            <div className="opt-legend">
-                              {settings.content === "base"
-                                ? "Mesmo conteúdo para todos os grupos, com a mesma estrutura, os mesmos materiais e a mesma narrativa de aprendizagem."
-                                : (
-                                  <>
-                                    Conteúdo adaptado para cada grupo, com linguagem, exemplos e
-                                    casos ajustados ao contexto de cada público.{" "}
-                                    <strong>Esse formato adiciona 20% ao valor do módulo.</strong>
-                                  </>
-                                )}
-                            </div>
+                        <div className="mod-baseline">
+                          <div className="mod-baseline-head">
+                            <span className="mod-baseline-label">Base on-demand</span>
+                            <span className="mod-baseline-pill">Obrigatória</span>
                           </div>
-
-                          <div className="mod-opt-group">
-                            <div className="mod-opt-label">Formato</div>
-                            <div className="mod-opt-btns">
-                              <label className={`opt-btn ${settings.format === "ao_vivo" ? "sel" : ""}`}>
-                                <input
-                                  type="radio"
-                                  checked={settings.format === "ao_vivo"}
-                                  onChange={() =>
-                                    updateModuleSetting(module.id, (current) => ({
-                                      ...current,
-                                      format: "ao_vivo",
-                                    }))
-                                  }
-                                />
-                                Remoto ao vivo
-                              </label>
-                              <label className={`opt-btn ${settings.format === "gravado" ? "sel" : ""}`}>
-                                <input
-                                  type="radio"
-                                  checked={settings.format === "gravado"}
-                                  onChange={() =>
-                                    updateModuleSetting(module.id, (current) => ({
-                                      ...current,
-                                      format: "gravado",
-                                    }))
-                                  }
-                                />
-                                On-demand <span className="opt-btn-tag">{formatCurrency(moduleParams.hourlyRate)}/h</span>
-                              </label>
+                          <div className="mod-baseline-grid">
+                            <div className="mod-baseline-cell">
+                              <span className="mod-baseline-cell-val">{onDemandHours}h</span>
+                              <span className="mod-baseline-cell-lbl">Duração</span>
                             </div>
-                            <div className="opt-legend">
-                              {settings.format === "ao_vivo"
-                                ? "Sessões síncronas remotas, com facilitação ao vivo e interação entre participantes. Requer definição de turmas por grupo."
-                                : "Conteúdos gravados para disponibilização em LMS interno. Produção única para todos, incluindo roteiro, gravação e edição."}
+                            <div className="mod-baseline-cell">
+                              <span className="mod-baseline-cell-val">Gravação única</span>
+                              <span className="mod-baseline-cell-lbl">Remoto, igual para todos os públicos</span>
+                            </div>
+                            <div className="mod-baseline-cell mod-baseline-cell-cost">
+                              <span className="mod-baseline-cell-val">{formatCurrency(onDemandHours * moduleParams.hourlyRate)}</span>
+                              <span className="mod-baseline-cell-lbl">
+                                {onDemandHours}h × {formatCurrency(moduleParams.hourlyRate)}/h · uma vez por módulo
+                              </span>
                             </div>
                           </div>
                         </div>
 
-                        {settings.format === "gravado" ? (
-                          <div className="gravado-resumo">
-                            <div className="gr-item">
-                              <div className="gr-val">
-                                {activeGroups.reduce(
-                                  (sum, [clusterId]) => sum + clusterSizes[clusterId],
-                                  0
-                                )}
-                              </div>
-                              <div className="gr-label">pessoas</div>
-                            </div>
-                            <div className="gr-item">
-                              <div className="gr-val">{moduleParams.durationHours}h</div>
-                              <div className="gr-label">produção</div>
-                            </div>
-                            <div className="gr-item">
-                              <div className="gr-val">{ENCONTROS}</div>
-                              <div className="gr-label">encontros</div>
-                            </div>
+                        <div className="mod-table">
+                          <div className="mod-table-head">
+                            <span>Grupo</span>
+                            <span>Pessoas</span>
+                            <span>Encontros ao vivo</span>
+                            <span>Turmas</span>
+                            <span>Horas ao vivo</span>
                           </div>
-                        ) : (
-                          <div className="mod-table">
-                            <div className="mod-table-head">
-                              <span>Grupo</span>
-                              <span>Pessoas</span>
-                              <span>Turmas</span>
-                              <span>Pessoas/turma</span>
-                              <span>Horas</span>
-                            </div>
 
-                            {Object.entries(CLUSTERS).map(([clusterId, cluster]) => {
-                              const clusterConfig = settings.clusters[clusterId];
-                              const on = clusters[clusterId] && clusterConfig.on;
+                          {module.groups.map((clusterId) => {
+                            const cluster = CLUSTERS[clusterId];
+                            const clusterConfig = settings.clusters[clusterId];
+                            const on = clusters[clusterId] && clusterConfig.on;
+                            const sessionHours = getModuleSessionHours(clusterId, adminPricing);
+                            const liveHours = on
+                              ? clusterConfig.encontros * sessionHours * clusterConfig.turmas
+                              : 0;
 
-                              return (
-                                <div className={`mod-table-row ${on ? "" : "off"}`} key={`${module.id}-${clusterId}`}>
-                                  <span>
-                                    <label className="t-check">
+                            return (
+                              <div className={`mod-table-row ${on ? "" : "off"}`} key={`${module.id}-${clusterId}`}>
+                                <span>
+                                  <label className="t-check">
+                                    <input
+                                      type="checkbox"
+                                      checked={clusterConfig.on}
+                                      onChange={(event) =>
+                                        updateModuleSetting(module.id, (current) => ({
+                                          ...current,
+                                          clusters: {
+                                            ...current.clusters,
+                                            [clusterId]: {
+                                              ...current.clusters[clusterId],
+                                              on: event.target.checked,
+                                            },
+                                          },
+                                        }))
+                                      }
+                                    />
+                                    {cluster.label}
+                                  </label>
+                                </span>
+                                <span>{on ? clusterSizes[clusterId] : "N/A"}</span>
+                                <span>
+                                  {on ? (
+                                    <span className="mod-cell-stack">
                                       <input
-                                        type="checkbox"
-                                        checked={clusterConfig.on}
+                                        className="t-input"
+                                        type="number"
+                                        min={ENCONTROS_MIN}
+                                        max={ENCONTROS_MAX}
+                                        value={clusterConfig.encontros}
                                         onChange={(event) =>
                                           updateModuleSetting(module.id, (current) => ({
                                             ...current,
@@ -2395,77 +2365,74 @@ function App() {
                                               ...current.clusters,
                                               [clusterId]: {
                                                 ...current.clusters[clusterId],
-                                                on: event.target.checked,
+                                                encontros: clampNumber(
+                                                  event.target.value,
+                                                  current.clusters[clusterId].encontros,
+                                                  ENCONTROS_MIN,
+                                                  ENCONTROS_MAX
+                                                ),
                                               },
                                             },
                                           }))
                                         }
                                       />
-                                      {cluster.label}
-                                    </label>
-                                  </span>
-                                  <span>{on ? clusterSizes[clusterId] : "N/A"}</span>
-                                  <span>
-                                    {on ? (
-                                      <span className="mod-cell-stack">
-                                        <input
-                                          className="t-input"
-                                          type="number"
-                                          min="1"
-                                          max="20"
-                                          value={clusterConfig.turmas}
-                                          onChange={(event) =>
-                                            updateModuleSetting(module.id, (current) => ({
-                                              ...current,
-                                              clusters: {
-                                                ...current.clusters,
-                                                [clusterId]: {
-                                                  ...current.clusters[clusterId],
-                                                  turmas: clampNumber(
-                                                    event.target.value,
-                                                    current.clusters[clusterId].turmas,
-                                                    1,
-                                                    20
-                                                  ),
-                                                },
-                                              },
-                                            }))
-                                          }
-                                        />
-                                      </span>
-                                    ) : (
-                                      "N/A"
-                                    )}
-                              </span>
-                              <span>
-                                {on ? (
-                                  <span className="mod-people-inline">
-                                    <span>{formatPeopleByTurma(clusterSizes[clusterId], clusterConfig.turmas)}</span>
-                                  </span>
-                                ) : (
-                                  "N/A"
-                                )}
-                              </span>
-                              <span>
-                                {on ? (
-                                  <span className="mod-hours-inline">
-                                    <span>{`${clusterConfig.turmas * moduleParams.durationHours}h`}</span>
-                                    <span className="mod-hours-detail">
-                                      {formatPerSessionBreakdown(
-                                        clusterConfig.turmas * moduleParams.durationHours,
-                                        getModuleSessionHours(clusterId, adminPricing)
-                                      )}
+                                      <span className="mod-hours-detail">calibrado pelo E2W</span>
                                     </span>
-                                  </span>
-                                ) : (
-                                  "N/A"
-                                )}
-                              </span>
-                            </div>
-                          );
-                        })}
-                          </div>
-                        )}
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </span>
+                                <span>
+                                  {on ? (
+                                    <span className="mod-cell-stack">
+                                      <input
+                                        className="t-input"
+                                        type="number"
+                                        min="1"
+                                        max="20"
+                                        value={clusterConfig.turmas}
+                                        onChange={(event) =>
+                                          updateModuleSetting(module.id, (current) => ({
+                                            ...current,
+                                            clusters: {
+                                              ...current.clusters,
+                                              [clusterId]: {
+                                                ...current.clusters[clusterId],
+                                                turmas: clampNumber(
+                                                  event.target.value,
+                                                  current.clusters[clusterId].turmas,
+                                                  1,
+                                                  20
+                                                ),
+                                              },
+                                            },
+                                          }))
+                                        }
+                                      />
+                                      <span className="mod-hours-detail">
+                                        {formatPeopleByTurma(clusterSizes[clusterId], clusterConfig.turmas)} pessoas/turma
+                                      </span>
+                                    </span>
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </span>
+                                <span>
+                                  {on ? (
+                                    <span className="mod-hours-inline">
+                                      <span>{`${liveHours}h`}</span>
+                                      <span className="mod-hours-detail">
+                                        {clusterConfig.encontros} × {sessionHours}h × {clusterConfig.turmas} turma(s)
+                                      </span>
+                                    </span>
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   );
@@ -2610,7 +2577,7 @@ function App() {
           <div className="hero-grid"></div>
           <div className="hero-inner">
             <h1 className="hero-title">Documento executivo da proposta</h1>
-            <p className="hero-sub">{proposalDate}</p>
+            <p className="hero-sub">Metodologia proprietária Mastertech · {proposalDate}</p>
           </div>
         </div>
 
@@ -2688,15 +2655,11 @@ function App() {
                 <div className="proposal-principle-card" key={principle.title}>
                   <div className="proposal-principle-title-wrap">
                     <div className="proposal-principle-title">{principle.title}</div>
-                    {index === 2 && scAtivo ? (
+                    {index === 1 ? (
                       <div className="proposal-principle-tag">E2W</div>
                     ) : null}
                   </div>
-                  <p className="proposal-principle-text">
-                    {index === 2 && scAtivo
-                      ? `${principle.text} O E2W é o sistema proprietário da Mastertech que sustenta essa camada, alinhando metas entre colaborador e liderança, acompanhando evolução ao longo da jornada e transformando essas evidências em leitura gerencial para a organização.`
-                      : principle.text}
-                  </p>
+                  <p className="proposal-principle-text">{principle.text}</p>
                 </div>
               ))}
             </div>
@@ -2713,36 +2676,32 @@ function App() {
                   Os serviços e produtos
                 </h2>
                 <p className="proposal-caput">
-                  {scAtivo
-                    ? "A proposta combina uma jornada principal, formada por workshop e trilha por públicos, com o E2W como camada sistêmica de sustentação."
-                    : "A proposta combina workshop executivo e trilha por públicos como núcleo da jornada nesta configuração."}
+                  A metodologia proprietária Mastertech se sustenta em quatro camadas: workshop executivo,
+                  E2W como base técnica inegociável, base on-demand obrigatória por módulo e trilha ao vivo
+                  customizada de 3 a 6 encontros por público.
                 </p>
               </div>
             </div>
 
             <div className="proposal-layer-stack">
-              {PROPOSAL_STRUCTURE_CAPABILITIES.filter((item) => (scAtivo ? true : item.layer !== "E2W")).map(
-                (item, index, arr) => (
-                  <div
-                    className={`proposal-layer proposal-layer-${item.layer.toLowerCase().replace(/\s+/g, "-")} ${
-                      index === arr.length - 1 ? "is-emphasis" : ""
-                    }`}
-                    key={item.layer}
-                  >
-                    <div className="proposal-layer-front">{item.layer}</div>
-                    <div className="proposal-layer-composition">{item.composition}</div>
-                    <div className="proposal-layer-role">{item.role}</div>
-                  </div>
-                )
-              )}
+              {PROPOSAL_STRUCTURE_CAPABILITIES.map((item, index, arr) => (
+                <div
+                  className={`proposal-layer proposal-layer-${item.layer.toLowerCase().replace(/\s+/g, "-")} ${
+                    index === arr.length - 1 ? "is-emphasis" : ""
+                  }`}
+                  key={item.layer}
+                >
+                  <div className="proposal-layer-front">{item.layer}</div>
+                  <div className="proposal-layer-composition">{item.composition}</div>
+                  <div className="proposal-layer-role">{item.role}</div>
+                </div>
+              ))}
             </div>
 
             <div className="proposal-structure-note">
-              {scAtivo
-                ? allModulesSelected
-                  ? "E2W incluído por 12 meses nesta configuração."
-                  : `${activeParticipants} licenças previstas para o E2W nesta configuração.`
-                : "E2W não incluído nesta configuração."}
+              {allModulesSelected
+                ? "E2W incluído por 12 meses na contratação completa do programa."
+                : `${activeParticipants} licenças previstas para o E2W nesta configuração.`}
             </div>
           </section>
 
