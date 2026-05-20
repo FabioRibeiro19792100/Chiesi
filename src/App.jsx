@@ -793,6 +793,18 @@ function App() {
         return;
       }
 
+      const hasLocalAdminState =
+        window.localStorage.getItem(ADMIN_STORAGE_KEY) ||
+        window.localStorage.getItem(ADMIN_STORAGE_BACKUP_KEY);
+      const hasLocalScenarioState =
+        window.localStorage.getItem(SCENARIO_STORAGE_KEY) ||
+        window.localStorage.getItem(SCENARIO_STORAGE_BACKUP_KEY);
+
+      if (hasLocalAdminState || hasLocalScenarioState) {
+        setHasHydratedPersistence(true);
+        return;
+      }
+
       try {
         const response = await fetch(PERSIST_ENDPOINT, {
           headers: { Accept: "application/json" },
