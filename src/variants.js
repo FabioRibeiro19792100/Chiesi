@@ -20,6 +20,9 @@ export const VARIANTS = {
     id: "omni",
     config: omniConfig,
     readOnly: true,
+    // Mostra o teto de investimento (trilha no maximo de sessoes) abaixo do
+    // total. A proposta completa nao exibe esse bloco.
+    showMaxEstimate: true,
     copy: {
       PROPOSAL_CALENDAR: [
         {

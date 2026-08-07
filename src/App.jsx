@@ -1312,6 +1312,26 @@ function App() {
   }
 
   const totalInvestment = investmentLines.reduce((sum, item) => sum + item.value, 0);
+
+  // Teto de investimento: mesma configuracao, com a trilha ao vivo no maximo de
+  // encontros que a metodologia permite. So a trilha escala — base on-demand,
+  // workshop e E2W nao variam com o numero de encontros.
+  let currentLiveValue = 0;
+  let currentLiveHours = 0;
+  let maxLiveValue = 0;
+  let maxLiveHours = 0;
+  Object.values(moduleDetails).forEach((details) => {
+    details.clusterRows.forEach((row) => {
+      const factor = ENCONTROS_MAX / row.encontros;
+      currentLiveValue += row.value;
+      currentLiveHours += row.hours;
+      maxLiveValue += row.value * factor;
+      maxLiveHours += row.hours * factor;
+    });
+  });
+  const maxInvestment = totalInvestment - currentLiveValue + maxLiveValue;
+  const maxTotalHours = totalHours - currentLiveHours + maxLiveHours;
+  const showMaxEstimate = Boolean(VARIANT.showMaxEstimate) && maxInvestment > totalInvestment;
   const configInvestmentLines = [...investmentLines].sort((a, b) => {
     const aEco = a.name === ECOSYSTEM_LINE_NAME;
     const bEco = b.name === ECOSYSTEM_LINE_NAME;
@@ -3073,6 +3093,18 @@ function App() {
                 <div className="proposal-investment-value">{formatCurrency(totalInvestment)}</div>
               </div>
             </div>
+
+            {showMaxEstimate ? (
+              <div className="proposal-ceiling">
+                <div className="proposal-ceiling-head">
+                  <div className="proposal-card-label">Estimativa de gasto máximo</div>
+                  <div className="proposal-ceiling-value">{formatCurrency(maxInvestment)}</div>
+                </div>
+                <p className="proposal-ceiling-text">
+                  {`A trilha ao vivo varia de ${ENCONTROS_MIN} a ${ENCONTROS_MAX} encontros, calibrados pelo diagnóstico do E2W. Esta proposta considera o default comercial. No cenário máximo, com ${ENCONTROS_MAX} encontros, a carga passa de ${formatHours(totalHours)} para ${formatHours(maxTotalHours)} e o investimento total chega a ${formatCurrency(maxInvestment)}. A base on-demand e o E2W não variam com o número de encontros.`}
+                </p>
+              </div>
+            ) : null}
           </section>
 
           <section className="proposal-section fade section-anchor" id="proposal-calendar">
