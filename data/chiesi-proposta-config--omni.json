@@ -14,7 +14,7 @@
       "workshopHours": 1,
       "workshopMeetings": 1,
       "comiteMeetingHours": 1,
-      "ecosystemImplant": 12870,
+      "ecosystemImplant": 2870,
       "ecosystemLicense": 38
     },
     "adminModuleParams": {
@@ -31,7 +31,7 @@
       "m3": {
         "title": "Comunicação Digital",
         "durationHours": 12,
-        "hourlyRate": 3181.25
+        "hourlyRate": 4468.75
       },
       "m4": {
         "title": "Mentalidade Ágil",
