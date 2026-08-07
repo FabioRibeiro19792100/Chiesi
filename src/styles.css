@@ -3975,6 +3975,15 @@ button {
     background: #fff;
   }
 
+  /* A animacao de entrada usa fill-mode both e deixa um transform residual.
+     Elemento transformado e monolitico na paginacao do Chrome, o que impedia
+     qualquer fluxo entre secoes no PDF. Impressao nao anima. */
+  :root[data-variant="omni"] .fade {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   .cover,
   .mobile-block,
   .nav,
@@ -4113,10 +4122,58 @@ button {
     break-before: page;
   }
 
+  /* Versão omni: as seções fluem e se acomodam na página em vez de abrir
+     uma nova a cada tema. Nenhuma e cortada ao meio — break-inside: avoid
+     acima ja garante que a secao inteira desce quando nao couber. */
+  :root[data-variant="omni"] .proposal-section + .proposal-section {
+    page-break-before: auto;
+    break-before: auto;
+    margin-top: 10mm;
+  }
+
+  /* A folha A4 mede ~794px, entao as media queries responsivas (max-width:
+     900px e 1120px) valem na impressao e empilham os grids em uma coluna,
+     esticando cada secao para quase uma pagina inteira. Aqui restauramos o
+     layout de duas colunas, que e o desenho real do documento. */
+  /* Chrome trata break-inside: avoid em blocos grandes de forma conservadora
+     e joga a secao inteira para a pagina seguinte, deixando metade do papel
+     em branco. Aqui a secao pode quebrar; o que nao pode partir sao as pecas
+     (linhas de tabela, cards, camadas), protegidas mais abaixo. */
+  :root[data-variant="omni"] .proposal-section {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+
+  :root[data-variant="omni"] .proposal-summary-grid,
+  :root[data-variant="omni"] .proposal-faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Nenhuma pergunta do apendice e cortada entre duas paginas. */
+  :root[data-variant="omni"] .proposal-faq-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  :root[data-variant="omni"] p,
+  :root[data-variant="omni"] .proposal-caput,
+  :root[data-variant="omni"] .proposal-faq-answer,
+  :root[data-variant="omni"] .proposal-ceiling-text {
+    orphans: 3;
+    widows: 3;
+  }
+
   .proposal-head {
     grid-template-columns: 48px minmax(0, 1fr);
     gap: 14px;
     margin-bottom: 6mm;
+  }
+
+  /* Titulo nunca fica sozinho no pe da pagina, separado do seu conteudo. */
+  :root[data-variant="omni"] .proposal-head {
+    page-break-after: avoid;
+    break-after: avoid;
   }
 
   .proposal-icon {
@@ -4189,6 +4246,16 @@ button {
   }
 
   .proposal-layer {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Pecas que nao podem partir quando a secao flui entre paginas. */
+  :root[data-variant="omni"] .proposal-summary-card,
+  :root[data-variant="omni"] .proposal-principle-card,
+  :root[data-variant="omni"] .proposal-public-card,
+  :root[data-variant="omni"] .proposal-step-item,
+  :root[data-variant="omni"] .proposal-ceiling {
     page-break-inside: avoid;
     break-inside: avoid;
   }

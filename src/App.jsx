@@ -837,6 +837,12 @@ const PERSIST_ENDPOINT = `/__persist/chiesi-proposta-config${
 }`;
 const VERSIONED_PERSISTENCE = VARIANT.config || {};
 
+// Expoe a variante ativa no <html> para o CSS poder escopar regras por versao
+// (hoje: a paginacao do PDF, que difere entre a proposta completa e a omni).
+if (typeof document !== "undefined") {
+  document.documentElement.dataset.variant = VARIANT_ID;
+}
+
 // ?reset=1 limpa o estado local apenas da variante corrente, para abrir a
 // proposta com os numeros do arquivo quando o navegador tem cenario antigo.
 if (
