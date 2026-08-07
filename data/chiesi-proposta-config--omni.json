@@ -1,0 +1,188 @@
+{
+  "version": 3,
+  "savedAt": "2026-08-07T00:00:00.000Z",
+  "admin": {
+    "version": 3,
+    "clusterSizes": {
+      "comite": 10,
+      "escritorio": 150,
+      "fabrica": 50,
+      "fv": 30
+    },
+    "adminPricing": {
+      "workshopHourly": 7800,
+      "workshopHours": 1,
+      "workshopMeetings": 1,
+      "comiteMeetingHours": 1,
+      "ecosystemImplant": 12870,
+      "ecosystemLicense": 38
+    },
+    "adminModuleParams": {
+      "m1": {
+        "title": "Transformação Digital",
+        "durationHours": 16,
+        "hourlyRate": 2340
+      },
+      "m2": {
+        "title": "IA & Copilot no dia a dia",
+        "durationHours": 16,
+        "hourlyRate": 2990
+      },
+      "m3": {
+        "title": "Comunicação Digital",
+        "durationHours": 12,
+        "hourlyRate": 2340
+      },
+      "m4": {
+        "title": "Mentalidade Ágil",
+        "durationHours": 8,
+        "hourlyRate": 2080
+      },
+      "m5": {
+        "title": "Liderança na Transformação",
+        "durationHours": 12,
+        "hourlyRate": 3250
+      }
+    }
+  },
+  "scenario": {
+    "version": 3,
+    "clusters": {
+      "comite": false,
+      "escritorio": false,
+      "fabrica": false,
+      "fv": true
+    },
+    "mods": {
+      "workshop": false,
+      "m1": false,
+      "m2": false,
+      "m3": true,
+      "m4": false,
+      "m5": false
+    },
+    "workshopTurmas": 1,
+    "moduleSettings": {
+      "m1": {
+        "clusters": {
+          "comite": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "escritorio": {
+            "on": false,
+            "turmas": 3,
+            "encontros": 3
+          },
+          "fabrica": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "fv": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          }
+        }
+      },
+      "m2": {
+        "clusters": {
+          "comite": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "escritorio": {
+            "on": false,
+            "turmas": 3,
+            "encontros": 3
+          },
+          "fabrica": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "fv": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          }
+        }
+      },
+      "m3": {
+        "clusters": {
+          "comite": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "escritorio": {
+            "on": false,
+            "turmas": 3,
+            "encontros": 3
+          },
+          "fabrica": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "fv": {
+            "on": true,
+            "turmas": 1,
+            "encontros": 3
+          }
+        }
+      },
+      "m4": {
+        "clusters": {
+          "comite": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "escritorio": {
+            "on": false,
+            "turmas": 3,
+            "encontros": 3
+          },
+          "fabrica": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "fv": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          }
+        }
+      },
+      "m5": {
+        "clusters": {
+          "comite": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "escritorio": {
+            "on": false,
+            "turmas": 3,
+            "encontros": 3
+          },
+          "fabrica": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          },
+          "fv": {
+            "on": false,
+            "turmas": 1,
+            "encontros": 3
+          }
+        }
+      }
+    }
+  }
+}

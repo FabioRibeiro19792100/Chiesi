@@ -17,7 +17,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import versionedConfig from "../data/chiesi-proposta-config.json";
+import { DEFAULT_VARIANT_ID, VARIANTS } from "./variants.js";
 
 const PRECO_HORA_WORKSHOP = 8580;
 const PRECO_SC_IMPL = 15600;
@@ -257,7 +257,7 @@ const ADMIN_INDEX = [
   { id: "admin-programas", label: "Programas" },
 ];
 
-const PROPOSAL_INDEX = [
+const PROPOSAL_INDEX_BASE = [
   { id: "proposal-briefing", label: "Síntese do briefing recebido" },
   { id: "proposal-logic", label: "Como pensamos a proposta" },
   { id: "proposal-structure", label: "A estrutura da proposta" },
@@ -471,7 +471,7 @@ const SOLUCAO = [
   },
 ];
 
-const CONTENT_LOGIC_CARDS = [
+const CONTENT_LOGIC_CARDS_BASE = [
   {
     title: "Base comum on-demand obrigatória",
     icon: "grid",
@@ -489,7 +489,7 @@ const CONTENT_LOGIC_CARDS = [
   },
 ];
 
-const PROPOSAL_PRINCIPLES = [
+const PROPOSAL_PRINCIPLES_BASE = [
   {
     title: "Base on-demand obrigatória",
     text: "Toda jornada começa por uma gravação única de 2 horas por módulo, comum a todos os públicos. Essa base é parte inegociável da metodologia Mastertech.",
@@ -626,7 +626,7 @@ const PROPOSAL_FAQ = [
   },
 ];
 
-const PROPOSAL_CALENDAR = [
+const PROPOSAL_CALENDAR_BASE = [
   {
     phase: "2º semestre de 2026",
     title: "Workshop executivo e fechamento do desenho",
@@ -649,7 +649,7 @@ const PROPOSAL_CALENDAR = [
   },
 ];
 
-const PROPOSAL_STRUCTURE_CAPABILITIES = [
+const PROPOSAL_STRUCTURE_CAPABILITIES_BASE = [
   {
     layer: "Workshop executivo",
     composition: "Comitê Executivo · 1h",
@@ -671,6 +671,33 @@ const PROPOSAL_STRUCTURE_CAPABILITIES = [
     role: "Encontros prioritariamente práticos — casos, decisões e aplicação na rotina de escritório, fábrica e força de vendas. Default comercial: 3 encontros. Comitê participa apenas em Liderança na Transformação.",
   },
 ];
+
+function resolveVariantId() {
+  if (typeof window === "undefined") return DEFAULT_VARIANT_ID;
+  const requested = new URLSearchParams(window.location.search).get("v");
+  return requested && Object.prototype.hasOwnProperty.call(VARIANTS, requested)
+    ? requested
+    : DEFAULT_VARIANT_ID;
+}
+
+const VARIANT_ID = resolveVariantId();
+const VARIANT = VARIANTS[VARIANT_ID];
+const VARIANT_COPY = VARIANT.copy || {};
+const VARIANT_TEXT = VARIANT_COPY.text || {};
+const VARIANT_READ_ONLY = Boolean(VARIANT.readOnly);
+
+// Texto da variante ativa, com o texto original como fallback. Na variante
+// default o fallback e sempre usado, entao a proposta atual nao muda.
+function vtext(key, fallback) {
+  return VARIANT_TEXT[key] ?? fallback;
+}
+
+const CONTENT_LOGIC_CARDS = VARIANT_COPY.CONTENT_LOGIC_CARDS ?? CONTENT_LOGIC_CARDS_BASE;
+const PROPOSAL_PRINCIPLES = VARIANT_COPY.PROPOSAL_PRINCIPLES ?? PROPOSAL_PRINCIPLES_BASE;
+const PROPOSAL_CALENDAR = VARIANT_COPY.PROPOSAL_CALENDAR ?? PROPOSAL_CALENDAR_BASE;
+const PROPOSAL_STRUCTURE_CAPABILITIES =
+  VARIANT_COPY.PROPOSAL_STRUCTURE_CAPABILITIES ?? PROPOSAL_STRUCTURE_CAPABILITIES_BASE;
+const PROPOSAL_INDEX = VARIANT_COPY.PROPOSAL_INDEX ?? PROPOSAL_INDEX_BASE;
 
 function CardIcon({ type, size = "md" }) {
   const icons = {
@@ -772,13 +799,39 @@ function createInitialAdminModuleParams() {
   );
 }
 
-const ADMIN_STORAGE_KEY = "chiesi-proposta-admin-config-v3";
-const ADMIN_STORAGE_BACKUP_KEY = "chiesi-proposta-admin-config-v3-backup";
-const SCENARIO_STORAGE_KEY = "chiesi-proposta-scenario-config-v3";
-const SCENARIO_STORAGE_BACKUP_KEY = "chiesi-proposta-scenario-config-v3-backup";
+// Sufixo vazio na variante default: as chaves saem identicas as de sempre e o
+// estado de quem ja abriu a proposta continua valendo. Cada variante escreve e
+// le apenas as proprias chaves.
+const STORAGE_SUFFIX = VARIANT_ID === DEFAULT_VARIANT_ID ? "" : `--${VARIANT_ID}`;
+const ADMIN_STORAGE_KEY = `chiesi-proposta-admin-config-v3${STORAGE_SUFFIX}`;
+const ADMIN_STORAGE_BACKUP_KEY = `${ADMIN_STORAGE_KEY}-backup`;
+const SCENARIO_STORAGE_KEY = `chiesi-proposta-scenario-config-v3${STORAGE_SUFFIX}`;
+const SCENARIO_STORAGE_BACKUP_KEY = `${SCENARIO_STORAGE_KEY}-backup`;
 const STORAGE_VERSION = 3;
-const PERSIST_ENDPOINT = "/__persist/chiesi-proposta-config";
-const VERSIONED_PERSISTENCE = versionedConfig || {};
+const PERSIST_ENDPOINT = `/__persist/chiesi-proposta-config${
+  VARIANT_ID === DEFAULT_VARIANT_ID ? "" : `?v=${VARIANT_ID}`
+}`;
+const VERSIONED_PERSISTENCE = VARIANT.config || {};
+
+// ?reset=1 limpa o estado local apenas da variante corrente, para abrir a
+// proposta com os numeros do arquivo quando o navegador tem cenario antigo.
+if (
+  typeof window !== "undefined" &&
+  new URLSearchParams(window.location.search).get("reset") === "1"
+) {
+  [
+    ADMIN_STORAGE_KEY,
+    ADMIN_STORAGE_BACKUP_KEY,
+    SCENARIO_STORAGE_KEY,
+    SCENARIO_STORAGE_BACKUP_KEY,
+  ].forEach((key) => {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      // Sem storage disponivel: segue com os defaults do arquivo.
+    }
+  });
+}
 
 function createInitialAdminState() {
   return {
@@ -905,6 +958,9 @@ function App() {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("admin") === "1";
   });
+  // Variantes somente leitura sao artefatos fechados: nada e gravado e a tela
+  // de personalizacao fica oculta. ?admin=1 reabre a edicao para ajuste interno.
+  const editable = !VARIANT_READ_ONLY || adminMode;
   const [screen, setScreen] = useState("contexto");
   const [proposalReady, setProposalReady] = useState(false);
   const [entryMode, setEntryMode] = useState("cover");
@@ -995,6 +1051,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!editable) return;
     if (typeof window === "undefined" || !hasHydratedPersistence) return;
     const nextAdminState = {
       version: STORAGE_VERSION,
@@ -1015,9 +1072,11 @@ function App() {
     adminPricing,
     adminModuleParams,
     hasHydratedPersistence,
+    editable,
   ]);
 
   useEffect(() => {
+    if (!editable) return;
     if (typeof window === "undefined" || !hasHydratedPersistence) return;
     const nextScenarioState = {
       version: STORAGE_VERSION,
@@ -1040,10 +1099,12 @@ function App() {
     workshopTurmas,
     moduleSettings,
     hasHydratedPersistence,
+    editable,
   ]);
 
   useEffect(() => {
     if (!import.meta.env.DEV) return;
+    if (!editable) return;
     if (typeof window === "undefined" || !hasHydratedPersistence) return;
 
     const payload = {
@@ -1275,9 +1336,10 @@ function App() {
     const allActiveAudiencesCovered =
       clusterRows.length > 0 &&
       clusterRows.length === activeClusterEntries.filter(([cid]) => module.groups.includes(cid)).length;
+    // Com um unico publico ativo, "todos os publicos" nao descreve nada: nomeia o grupo.
     const audiences = clusterRows.length === 0
       ? "Sem público ativo"
-      : allActiveAudiencesCovered
+      : allActiveAudiencesCovered && activeClusterEntries.length > 1
         ? "Todos os públicos do módulo"
         : clusterRows.map((row) => row.cluster).join(" · ");
     const liveSummary = clusterRows.length
@@ -1299,7 +1361,10 @@ function App() {
 
   offerRows.push({
     name: "E2W",
-    audiences: "Todos os públicos",
+    audiences:
+      activeClusterEntries.length === 1
+        ? activeClusterEntries[0][1].label
+        : "Todos os públicos",
     formatMain: "Sistema (inegociável)",
     formatSub: null,
     loadMain: "12 meses",
@@ -1630,9 +1695,11 @@ function App() {
           <button className={`nav-tab ${screen === "solucao" ? "active" : ""}`} onClick={() => showScreen("solucao")}>
             DESENHO DA SOLUÇÃO
           </button>
-          <button className={`nav-tab ${screen === "config" ? "active" : ""}`} onClick={() => showScreen("config")}>
-            PERSONALIZAR PROPOSTA
-          </button>
+          {editable ? (
+            <button className={`nav-tab ${screen === "config" ? "active" : ""}`} onClick={() => showScreen("config")}>
+              PERSONALIZAR PROPOSTA
+            </button>
+          ) : null}
           <button
             className={`nav-tab ${screen === "proposta" ? "active" : ""}`}
             onClick={openProposalTab}
@@ -1654,7 +1721,10 @@ function App() {
           <div className="hero-inner">
             <h1 className="hero-title">Visão geral</h1>
             <p className="hero-sub">
-              O que identificamos sobre a organização, os públicos e o escopo do programa.
+              {vtext(
+                "contextoHeroSub",
+                "O que identificamos sobre a organização, os públicos e o escopo do programa."
+              )}
             </p>
           </div>
         </div>
@@ -1687,17 +1757,20 @@ function App() {
 
             <section className="section section-anchor" id="contexto-grupos">
               <div className="section-label">Abrangência</div>
-              <h2 className="section-title">Públicos participantes</h2>
+              <h2 className="section-title">
+                {vtext("contextoGruposTitle", "Públicos participantes")}
+              </h2>
               <div className="section-body">
                 <p>
-                  Cada grupo traz perguntas diferentes para o tema da transformação digital.
-                  Essa variação pede uma arquitetura calibrada por público e sustenta uma jornada
-                  com linguagem comum e aplicações específicas.
+                  {vtext(
+                    "contextoGruposIntro",
+                    "Cada grupo traz perguntas diferentes para o tema da transformação digital. Essa variação pede uma arquitetura calibrada por público e sustenta uma jornada com linguagem comum e aplicações específicas."
+                  )}
                 </p>
               </div>
-              <div className="num-grid">
-                {Object.entries(CLUSTERS).map(([clusterId, cluster]) => (
-                  <div className="num-item" key={cluster.label}>
+              <div className={`num-grid ${activeClusterEntries.length === 1 ? "is-single" : ""}`}>
+                {activeClusterEntries.map(([clusterId, cluster]) => (
+                  <div className="num-item" key={clusterId}>
                     <div className="num-text">
                       <strong>{cluster.label}</strong>
                       <div className="num-meta">{clusterSizes[clusterId]} colaboradores</div>
@@ -1997,9 +2070,10 @@ function App() {
               <h2 className="section-title">O desenvolvimento do programa</h2>
               <div className="section-body">
                 <p className="editorial-caput">
-                  O programa combina uma base on-demand obrigatória de 2 horas por módulo —
-                  gravação única para todos os públicos — com uma trilha ao vivo de 3 a 6
-                  encontros por público, calibrada pelo E2W. Default comercial: 3 encontros.
+                  {vtext(
+                    "solucaoTrilhaCaput",
+                    "O programa combina uma base on-demand obrigatória de 2 horas por módulo — gravação única para todos os públicos — com uma trilha ao vivo de 3 a 6 encontros por público, calibrada pelo E2W. Default comercial: 3 encontros."
+                  )}
                 </p>
               </div>
               <div className="content-logic-grid">
@@ -2014,59 +2088,66 @@ function App() {
               <div className="content-logic-note">
                 <div className="content-logic-note-label">Como acontece</div>
                 <p className="content-logic-note-text">
-                  Cada módulo começa pela base on-demand obrigatória de 2 horas, comum a todos os públicos.
-                  Em seguida cada público percorre uma trilha ao vivo de 3 a 6 encontros — prioritariamente
-                  prática, com casos reais e aplicação na rotina — calibrada pelo diagnóstico do E2W.
-                  O default comercial é 3 encontros.
+                  {vtext(
+                    "solucaoComoAcontece",
+                    "Cada módulo começa pela base on-demand obrigatória de 2 horas, comum a todos os públicos. Em seguida cada público percorre uma trilha ao vivo de 3 a 6 encontros — prioritariamente prática, com casos reais e aplicação na rotina — calibrada pelo diagnóstico do E2W. O default comercial é 3 encontros."
+                  )}
                 </p>
               </div>
-              <div className="matrix-intro">
-                <div className="matrix-intro-label">Leitura comparativa</div>
-                <p className="matrix-intro-text">
-                  A matriz abaixo mostra como essa base comum se desdobra por público. O
-                  conteúdo central percorre todos os grupos e a ênfase de cada trilha responde
-                  às lacunas prioritárias de cada contexto.
-                </p>
-              </div>
-              <div className="group-matrix-shell">
-                <table className="group-matrix-table">
-                  <colgroup>
-                    <col className="group-matrix-col group-matrix-col-criterion" />
-                    <col className="group-matrix-col group-matrix-col-group" />
-                    <col className="group-matrix-col group-matrix-col-group" />
-                    <col className="group-matrix-col group-matrix-col-group" />
-                    <col className="group-matrix-col group-matrix-col-group" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th className="group-matrix-corner">Critério</th>
-                      {Object.values(CLUSTERS).map((cluster) => (
-                        <th className="group-matrix-colhead" key={`head-${cluster.label}`}>
-                          {cluster.label}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th className="group-matrix-rowlabel">Ênfase dos encontros</th>
-                      {Object.values(CLUSTERS).map((cluster) => (
-                        <td className="group-matrix-cell" key={`focus-${cluster.label}`}>
-                          {cluster.focus}
-                        </td>
-                      ))}
-                    </tr>
-                    <tr>
-                      <th className="group-matrix-rowlabel">Aprofundamento orientado por</th>
-                      {Object.values(CLUSTERS).map((cluster) => (
-                        <td className="group-matrix-cell" key={`deepening-${cluster.label}`}>
-                          {cluster.deepening}
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              {activeClusterEntries.length > 1 ? (
+                <>
+                  <div className="matrix-intro">
+                    <div className="matrix-intro-label">Leitura comparativa</div>
+                    <p className="matrix-intro-text">
+                      A matriz abaixo mostra como essa base comum se desdobra por público. O
+                      conteúdo central percorre todos os grupos e a ênfase de cada trilha responde
+                      às lacunas prioritárias de cada contexto.
+                    </p>
+                  </div>
+                  <div className="group-matrix-shell">
+                    <table className="group-matrix-table">
+                      <colgroup>
+                        <col className="group-matrix-col group-matrix-col-criterion" />
+                        {activeClusterEntries.map(([clusterId]) => (
+                          <col
+                            className="group-matrix-col group-matrix-col-group"
+                            key={`col-${clusterId}`}
+                            style={{ width: `${83 / activeClusterEntries.length}%` }}
+                          />
+                        ))}
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th className="group-matrix-corner">Critério</th>
+                          {activeClusterEntries.map(([clusterId, cluster]) => (
+                            <th className="group-matrix-colhead" key={`head-${clusterId}`}>
+                              {cluster.label}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th className="group-matrix-rowlabel">Ênfase dos encontros</th>
+                          {activeClusterEntries.map(([clusterId, cluster]) => (
+                            <td className="group-matrix-cell" key={`focus-${clusterId}`}>
+                              {cluster.focus}
+                            </td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <th className="group-matrix-rowlabel">Aprofundamento orientado por</th>
+                          {activeClusterEntries.map(([clusterId, cluster]) => (
+                            <td className="group-matrix-cell" key={`deepening-${clusterId}`}>
+                              {cluster.deepening}
+                            </td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : null}
             </section>
 
             <section className="section section-anchor" id="solucao-acompanhamento">
@@ -2121,9 +2202,15 @@ function App() {
                 ))}
               </div>
               <div className="cta-row">
-                <button className="btn-cta" onClick={() => showScreen("config")}>
-                  Personalizar proposta →
-                </button>
+                {editable ? (
+                  <button className="btn-cta" onClick={() => showScreen("config")}>
+                    Personalizar proposta →
+                  </button>
+                ) : (
+                  <button className="btn-cta" onClick={openProposalTab}>
+                    Ver a proposta →
+                  </button>
+                )}
               </div>
             </section>
           </div>
@@ -2749,8 +2836,10 @@ function App() {
                 <div className="proposal-kicker">Síntese do briefing recebido</div>
                 <h2 className="proposal-title">Ponto de partida</h2>
                 <p className="proposal-caput">
-                  Esta proposta nasce de uma leitura objetiva do briefing: contexto da organização,
-                  natureza do desafio e escopo esperado para a jornada.
+                  {vtext(
+                    "proposalBriefingCaput",
+                    "Esta proposta nasce de uma leitura objetiva do briefing: contexto da organização, natureza do desafio e escopo esperado para a jornada."
+                  )}
                 </p>
               </div>
             </div>
@@ -2784,8 +2873,10 @@ function App() {
                 <div className="proposal-kicker">Como pensamos a proposta</div>
                 <h2 className="proposal-title">A lógica estrutural</h2>
                 <p className="proposal-caput">
-                  A solução foi desenhada para preservar coerência institucional, responder a
-                  públicos distintos e transformar aprendizado em operação concreta.
+                  {vtext(
+                    "proposalLogicCaput",
+                    "A solução foi desenhada para preservar coerência institucional, responder a públicos distintos e transformar aprendizado em operação concreta."
+                  )}
                 </p>
               </div>
             </div>
@@ -2816,9 +2907,10 @@ function App() {
                   Os serviços e produtos
                 </h2>
                 <p className="proposal-caput">
-                  A metodologia proprietária Mastertech se sustenta em quatro camadas: workshop executivo,
-                  E2W como base técnica inegociável, base on-demand obrigatória por módulo e trilha ao vivo
-                  customizada de 3 a 6 encontros por público.
+                  {vtext(
+                    "proposalStructureCaput",
+                    "A metodologia proprietária Mastertech se sustenta em quatro camadas: workshop executivo, E2W como base técnica inegociável, base on-demand obrigatória por módulo e trilha ao vivo customizada de 3 a 6 encontros por público."
+                  )}
                 </p>
               </div>
             </div>
@@ -2851,15 +2943,26 @@ function App() {
                 <UsersRound size={34} strokeWidth={1.0} />
               </div>
               <div>
-                <div className="proposal-kicker">Públicos participantes</div>
-                <h2 className="proposal-title">Objetivos de cada área</h2>
+                <div className="proposal-kicker">
+                  {vtext("proposalPublicsKicker", "Públicos participantes")}
+                </div>
+                <h2 className="proposal-title">
+                  {vtext("proposalPublicsTitle", "Objetivos de cada área")}
+                </h2>
                 <p className="proposal-caput">
-                  Os grupos entram na mesma jornada com volume e foco dominante ajustados à realidade de cada área.
+                  {vtext(
+                    "proposalPublicsCaput",
+                    "Os grupos entram na mesma jornada com volume e foco dominante ajustados à realidade de cada área."
+                  )}
                 </p>
               </div>
             </div>
 
-            <div className="proposal-public-card-grid">
+            <div
+              className={`proposal-public-card-grid ${
+                activeClusterEntries.length === 1 ? "is-single" : ""
+              }`}
+            >
               {activeClusterEntries.map(([clusterId, cluster]) => (
                 <div className="proposal-public-card" key={`proposal-public-row-${clusterId}`}>
                   <div className="proposal-public-card-top">
@@ -2957,7 +3060,10 @@ function App() {
                 <div className="proposal-kicker">Execução</div>
                 <h2 className="proposal-title">Sugestão de calendário</h2>
                 <p className="proposal-caput">
-                  O calendário abaixo organiza a proposta em marcos claros, do fechamento do desenho ao acompanhamento do programa.
+                  {vtext(
+                    "proposalCalendarCaput",
+                    "O calendário abaixo organiza a proposta em marcos claros, do fechamento do desenho ao acompanhamento do programa."
+                  )}
                 </p>
               </div>
             </div>
