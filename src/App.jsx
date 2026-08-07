@@ -523,7 +523,7 @@ const PROPOSAL_EXECUTION_STEPS = [
   },
 ];
 
-const PROPOSAL_FAQ = [
+const PROPOSAL_FAQ_BASE = [
   {
     question: "Quem é a Mastertech e que tipo de atuação sustenta esta proposta?",
     answer:
@@ -698,6 +698,30 @@ const PROPOSAL_CALENDAR = VARIANT_COPY.PROPOSAL_CALENDAR ?? PROPOSAL_CALENDAR_BA
 const PROPOSAL_STRUCTURE_CAPABILITIES =
   VARIANT_COPY.PROPOSAL_STRUCTURE_CAPABILITIES ?? PROPOSAL_STRUCTURE_CAPABILITIES_BASE;
 const PROPOSAL_INDEX = VARIANT_COPY.PROPOSAL_INDEX ?? PROPOSAL_INDEX_BASE;
+
+// O apendice Q&A e longo e majoritariamente comum a todas as versoes. Em vez
+// de duplicar a lista inteira, cada variante remove ou reescreve os itens que
+// nao valem no seu escopo — o restante segue a base e nao sai de sincronia.
+function applyFaqPatch(base, config) {
+  if (!config) return base;
+  const omit = new Set(config.omit || []);
+  const patch = config.patch || {};
+
+  if (import.meta.env.DEV) {
+    const questions = new Set(base.map((item) => item.question));
+    [...omit, ...Object.keys(patch)].forEach((question) => {
+      if (!questions.has(question)) {
+        console.warn(`[variants] pergunta do Q&A nao encontrada na base: "${question}"`);
+      }
+    });
+  }
+
+  return base
+    .filter((item) => !omit.has(item.question))
+    .map((item) => (patch[item.question] ? { ...item, ...patch[item.question] } : item));
+}
+
+const PROPOSAL_FAQ = applyFaqPatch(PROPOSAL_FAQ_BASE, VARIANT_COPY.PROPOSAL_FAQ_PATCH);
 
 function CardIcon({ type, size = "md" }) {
   const icons = {

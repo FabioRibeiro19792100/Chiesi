@@ -95,6 +95,35 @@ export const VARIANTS = {
         },
       ],
 
+      // O Comite Executivo nao participa desta versao, e os itens escritos no
+      // plural de publicos passam a falar da forca de vendas.
+      PROPOSAL_FAQ_PATCH: {
+        omit: ["Por que o Comitê Executivo opera com encontros de 1 hora?"],
+        patch: {
+          "Qual é o papel do diagnóstico dentro da metodologia?": {
+            answer:
+              "O diagnóstico organiza prioridades, profundidade e recortes da solução. Ele dá precisão à jornada e orienta as escolhas que tornam a trilha aderente à realidade da força de vendas.",
+          },
+          "Como a solução é calibrada por público?": {
+            question: "Como a solução é calibrada para a força de vendas?",
+            answer:
+              "A base on-demand nivela linguagem e fundamentos, enquanto a trilha ao vivo é ajustada conforme a realidade, a maturidade e a rotina comercial do grupo, a partir do diagnóstico do E2W.",
+          },
+          "Como a Mastertech garante aplicação prática ao longo da jornada?": {
+            answer:
+              "A aplicação prática está presente no desenho metodológico e na organização dos encontros em torno de situações reais da rotina comercial. Isso aproxima conteúdo, operação e tomada de decisão.",
+          },
+          "Como a evolução dos participantes é acompanhada?": {
+            answer:
+              "A evolução é acompanhada por indicadores de progresso e consolidação de evidências ao longo do percurso. Isso permite observar aprofundamento, aderência e movimento de desenvolvimento no grupo.",
+          },
+          "Como a lógica de investimento se conecta ao desenho da proposta?": {
+            answer:
+              "O investimento acompanha a arquitetura da solução: base on-demand, trilha ao vivo calibrada pelo E2W e camada de sistema e governança. O valor reflete a estrutura desta versão da jornada.",
+          },
+        },
+      },
+
       PROPOSAL_INDEX: [
         { id: "proposal-briefing", label: "Síntese do briefing recebido" },
         { id: "proposal-logic", label: "Como pensamos a proposta" },
